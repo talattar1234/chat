@@ -1,9 +1,31 @@
+// פונקציה להמרת Blob ל-Base64
+const blobToBase64 = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(",")[1]); // מסיר את ה-prefix
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
+
 /**
  * פונקציה שממירה אודיו לטקסט
  * @param audio - קובץ אודיו או Blob
  * @returns Promise עם הטקסט שהומר
  */
 export const speechToText = async (audio: File | Blob): Promise<string> => {
+  // המרה לפורמטים שונים לשירותים שונים
+  const arrayBuffer = await audio.arrayBuffer();
+  const base64Audio = await blobToBase64(audio);
+
+  console.log("Audio formats prepared:", {
+    blobSize: audio.size,
+    arrayBufferSize: arrayBuffer.byteLength,
+    base64Length: base64Audio.length,
+  });
   // סימולציה של עיכוב רשת
   await new Promise((resolve) =>
     setTimeout(resolve, 2000 + Math.random() * 3000)

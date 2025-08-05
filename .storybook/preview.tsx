@@ -1,3 +1,4 @@
+import React from "react";
 import type { Preview } from "@storybook/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";

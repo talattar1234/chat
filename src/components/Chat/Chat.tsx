@@ -200,8 +200,13 @@ const Chat: React.FC<ChatProps> = ({
                   sx={{
                     p: 2,
                     bgcolor:
-                      message.sender === "user" ? "primary.main" : "grey.100",
-                    color: message.sender === "user" ? "white" : "text.primary",
+                      message.sender === "user"
+                        ? "primary.main"
+                        : "background.paper",
+                    color:
+                      message.sender === "user"
+                        ? "primary.contrastText"
+                        : "text.primary",
                     borderRadius: 2,
                     maxWidth: "100%",
                   }}
@@ -318,7 +323,7 @@ const Chat: React.FC<ChatProps> = ({
                 elevation={1}
                 sx={{
                   p: 1.5,
-                  bgcolor: "grey.100",
+                  bgcolor: "background.paper",
                   borderRadius: 2,
                   display: "flex",
                   alignItems: "center",
@@ -494,14 +499,14 @@ const Chat: React.FC<ChatProps> = ({
                   width: "6px",
                 },
                 "&::-webkit-scrollbar-track": {
-                  background: "#f1f1f1",
+                  background: "divider",
                   borderRadius: "3px",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                  background: "#c1c1c1",
+                  background: "text.secondary",
                   borderRadius: "3px",
                   "&:hover": {
-                    background: "#a8a8a8",
+                    background: "text.primary",
                   },
                 },
               }}

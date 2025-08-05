@@ -284,7 +284,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
               {formatTime(recordingTime)}
             </Typography>
 
-            <Typography variant="caption" sx={{ color: "grey.600" }}>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
               מקליט...
             </Typography>
           </Box>
@@ -305,7 +305,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                     style={{
                       width: "100%",
                       height: "100%",
-                      border: "1px solid #e0e0e0",
+                      border: "1px solid",
+                      borderColor: "divider",
                       borderRadius: "4px",
                       overflow: "hidden",
                     }}
@@ -340,14 +341,17 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                         height: 8,
                         borderRadius: "50%",
                         bgcolor: !wavesurferReady
-                          ? "grey.400"
+                          ? "text.disabled"
                           : isPlaying
                           ? "success.main"
                           : "primary.main",
                         animation: isPlaying ? "pulse 1s infinite" : "none",
                       }}
                     />
-                    <Typography variant="caption" sx={{ color: "grey.600" }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.secondary" }}
+                    >
                       {!wavesurferReady
                         ? "טוען..."
                         : isPlaying
@@ -374,11 +378,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleClose}
-            startIcon={<CloseIcon />}
-            disabled={isProcessing}
-          >
+          <Button onClick={handleClose} startIcon={<CloseIcon />}>
             ביטול
           </Button>
           <Button
