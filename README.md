@@ -1,56 +1,65 @@
 # Chat Application
 
-פרויקט React עם TypeScript ו-Material-UI הכולל רכיב Chat מתקדם עם תמיכה בהעלאת קבצים. תומך ב-Node 22 ו-Storybook 8.
+A React project with TypeScript and Material-UI featuring an advanced Chat component with file upload support. Supports Node 22 and Storybook 8.
 
-## תכונות
+## Features
 
-- ✅ רכיב Chat מלא עם MUI
-- ✅ תמיכה בהודעות משתמש ו-AI
-- ✅ העלאת קבצים (txt, csv, pdf, word) עד 10MB
-- ✅ כפתור שליחה ו-Enter לשליחה
-- ✅ Storybook עם דוגמאות
-- ✅ תמיכה בעברית ו-RTL
-- ✅ TypeScript מלא
+- ✅ Full Chat component with MUI
+- ✅ Support for user and AI messages
+- ✅ File upload (txt, csv, pdf, word) up to 10MB
+- ✅ Send button and Enter key for sending
+- ✅ Storybook with examples
+- ✅ Hebrew and RTL support
+- ✅ Full TypeScript support
+- ✅ Multi-language support (Hebrew/English)
+- ✅ Audio recording and speech-to-text
 
-## התקנה
+## Installation
 
 ```bash
-# התקן את התלויות
+# Install dependencies
 npm install
 
-# או עם yarn
+# Or with yarn
 yarn install
 
-# התקן Storybook (גרסה 8.1.0)
+# Install Storybook (version 8.1.0)
 npx storybook@latest init --yes
 ```
 
-## הפעלה
+## Running
 
 ```bash
-# הפעל את האפליקציה
+# Start the application
 npm start
 
-# הפעל את Storybook (גרסה 8.1.0)
+# Start Storybook (version 8.1.0)
 npm run storybook
 
-# בניית Storybook לפרודקשן
+# Build Storybook for production
 npm run build-storybook
 ```
 
-## מבנה הפרויקט
+## Project Structure
 
 ```
 src/
 ├── components/
-│   └── Chat/
-│       ├── Chat.tsx          # רכיב Chat הראשי
-│       └── Chat.stories.tsx  # Storybook stories
-├── App.tsx                   # אפליקציה ראשית
-└── index.tsx                 # נקודת כניסה
+│   ├── Chat/
+│   │   ├── Chat.tsx          # Main Chat component
+│   │   ├── Chat.labels.ts    # Chat labels and translations
+│   │   └── Chat.stories.tsx  # Storybook stories
+│   └── AudioRecorder/
+│       ├── AudioRecorder.tsx # Audio recording component
+│       ├── AudioRecorder.labels.ts # Audio recorder labels
+│       └── AudioRecorder.stories.tsx # Audio recorder stories
+├── utils/
+│   └── speechToText.ts       # Speech-to-text utility
+├── App.tsx                   # Main application
+└── index.tsx                 # Entry point
 ```
 
-## שימוש ברכיב Chat
+## Using the Chat Component
 
 ```tsx
 import Chat, { Message } from "./components/Chat/Chat";
@@ -58,15 +67,15 @@ import Chat, { Message } from "./components/Chat/Chat";
 const messages: Message[] = [
   {
     id: "1",
-    text: "שלום!",
+    text: "Hello!",
     sender: "ai",
     timestamp: new Date(),
   },
 ];
 
 const handleMessageEnter = (message: string, files?: File[]) => {
-  console.log("הודעה חדשה:", message);
-  console.log("קבצים:", files);
+  console.log("New message:", message);
+  console.log("Files:", files);
 };
 
 <Chat
@@ -75,18 +84,20 @@ const handleMessageEnter = (message: string, files?: File[]) => {
   isLoading={false}
   maxFileSize={10 * 1024 * 1024} // 10MB
   allowedFileTypes={[".txt", ".csv", ".pdf", ".doc", ".docx"]}
+  lang="en" // Optional: "he" | "en", defaults to "he"
 />;
 ```
 
-## Props של רכיב Chat
+## Chat Component Props
 
-| Prop               | Type                                        | Default      | Description                  |
-| ------------------ | ------------------------------------------- | ------------ | ---------------------------- |
-| `messages`         | `Message[]`                                 | -            | מערך הודעות                  |
-| `onMessageEnter`   | `(message: string, files?: File[]) => void` | -            | פונקציה שנקראת כשנשלחת הודעה |
-| `isLoading`        | `boolean`                                   | `false`      | מצב טעינה                    |
-| `maxFileSize`      | `number`                                    | **required** | גודל מקסימלי לקובץ (בבייטים) |
-| `allowedFileTypes` | `string[]`                                  | **required** | סוגי קבצים מותרים            |
+| Prop               | Type                                        | Default      | Description                          |
+| ------------------ | ------------------------------------------- | ------------ | ------------------------------------ |
+| `messages`         | `Message[]`                                 | -            | Array of messages                    |
+| `onMessageEnter`   | `(message: string, files?: File[]) => void` | -            | Function called when message is sent |
+| `isLoading`        | `boolean`                                   | `false`      | Loading state                        |
+| `maxFileSize`      | `number`                                    | **required** | Maximum file size (in bytes)         |
+| `allowedFileTypes` | `string[]`                                  | **required** | Allowed file types                   |
+| `lang`             | `"he" \| "en"`                              | `"he"`       | Language for labels                  |
 
 ## Message Interface
 
@@ -96,30 +107,81 @@ interface Message {
   text: string;
   sender: "user" | "ai";
   timestamp: Date;
-  files?: File[];
+  files?: FileInfo[];
+}
+
+interface FileInfo {
+  name: string;
+  type: string;
+  size: number;
 }
 ```
 
-## תכונות נוספות
+## AudioRecorder Component
 
-- **עיצוב מותאם**: תמיכה מלאה ב-RTL לעברית
-- **וולידציה**: בדיקת סוגי קבצים וגודל
-- **UI/UX**: עיצוב מודרני עם Material-UI
-- **נגישות**: תמיכה במקלדת וטאבים
-- **תיעוד**: Storybook 8.1.0 עם דוגמאות אינטראקטיביות
-- **AI Typing Indicator**: אנימציה שמראה שה-AI כותב
-- **Progress Bar**: אינדיקטור ויזואלי לגודל קבצים
-- **כפתור מחיקה**: מחיקת כל הקבצים בלחיצה אחת
+The Chat component includes an integrated audio recorder with speech-to-text functionality:
 
-## פיתוח
+```tsx
+<AudioRecorder
+  onTextResult={(text) => {
+    // Handle transcribed text
+    setInputText((prev) => prev + text);
+  }}
+  onError={(error) => {
+    // Handle recording errors
+    console.error(error);
+  }}
+  lang="en" // Optional: "he" | "en", defaults to "he"
+/>
+```
+
+## Additional Features
+
+- **Custom Design**: Full RTL support for Hebrew
+- **Validation**: File type and size checking
+- **UI/UX**: Modern design with Material-UI
+- **Accessibility**: Keyboard and tab support
+- **Documentation**: Storybook 8.1.0 with interactive examples
+- **AI Typing Indicator**: Animation showing AI is typing
+- **Progress Bar**: Visual indicator for file size
+- **Delete Button**: Delete all files with one click
+- **Multi-language**: Hebrew and English labels
+- **Audio Recording**: Built-in microphone recording
+- **Speech-to-Text**: Convert audio to text
+
+## Development
 
 ```bash
-# הרץ בדיקות
+# Run tests
 npm test
 
-# בנייה לפרודקשן
+# Build for production
 npm run build
 
-# בניית Storybook
+# Build Storybook
 npm run build-storybook
 ```
+
+## Language Support
+
+The application supports both Hebrew and English:
+
+- **Hebrew (default)**: RTL layout, Hebrew labels
+- **English**: LTR layout, English labels
+- **Dynamic switching**: Change language via `lang` prop
+
+## File Upload Features
+
+- **Supported formats**: txt, csv, pdf, doc, docx
+- **Size validation**: Configurable maximum file size
+- **Visual feedback**: Progress bar and file chips
+- **Error handling**: Clear error messages for invalid files
+- **Batch upload**: Multiple files at once
+
+## Audio Recording Features
+
+- **Real-time recording**: Visual feedback during recording
+- **Waveform visualization**: See audio waveform
+- **Playback controls**: Play, pause, and review recordings
+- **Speech-to-text**: Automatic transcription
+- **Error handling**: Clear error messages for recording issues
