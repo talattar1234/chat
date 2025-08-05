@@ -23,6 +23,7 @@ import {
 } from "@mui/icons-material";
 import { speechToText } from "../../utils/speechToText";
 import WaveSurfer from "wavesurfer.js";
+import { audioRecorderLabels } from "./AudioRecorder.labels";
 
 // בדיקה שהפונקציה נטענה
 console.log("speechToText function loaded:", typeof speechToText);
@@ -30,16 +31,22 @@ console.log("speechToText function loaded:", typeof speechToText);
 interface AudioRecorderProps {
   onTextResult: (text: string) => void;
   onError?: (error: string) => void;
+  lang?: "he" | "en"; // optional - defaults to "he"
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onTextResult,
   onError,
+  lang = "he",
 }) => {
   console.log("AudioRecorder props:", {
     onTextResult: typeof onTextResult,
     onError: typeof onError,
+    lang,
   });
+
+  const t = audioRecorderLabels[lang];
+
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
@@ -109,7 +116,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       // לא צריכים מעקב אחר רמות הקול כרגע
     } catch (error) {
       console.error("Error starting recording:", error);
-      onError?.("לא ניתן לגשת למיקרופון");
+      onError?.(t.microphoneAccessError);
     }
   };
 
@@ -158,7 +165,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     } catch (error) {
       console.error("Speech to text error:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "שגיאה בהמרת האודיו";
+        error instanceof Error ? error.message : t.audioConversionError;
       setSpeechError(errorMessage);
       onError?.(errorMessage);
       // לא סוגרים את החלון - נותנים למשתמש לנסות שוב או לבטל
@@ -285,7 +292,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             </Typography>
 
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              מקליט...
+              {t.recording}
             </Typography>
           </Box>
         )}
@@ -293,7 +300,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       {/* Dialog להצגת האודיו */}
       <Dialog open={showDialog} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>הקלטת אודיו</DialogTitle>
+        <DialogTitle>{t.audioRecording}</DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             {audioUrl && (
@@ -330,7 +337,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                     disabled={!wavesurferReady}
                     sx={{ minWidth: 120 }}
                   >
-                    {isPlaying ? "השהה" : "נגן"}
+                    {isPlaying ? t.pause : t.play}
                   </Button>
 
                   {/* אינדיקטור סטטוס */}
@@ -353,10 +360,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                       sx={{ color: "text.secondary" }}
                     >
                       {!wavesurferReady
-                        ? "טוען..."
+                        ? t.loading
                         : isPlaying
-                        ? "מנגן"
-                        : "מוכן לנגינה"}
+                        ? t.playing
+                        : t.readyToPlay}
                     </Typography>
                   </Box>
                 </Box>
@@ -366,7 +373,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             {isProcessing && (
               <Alert severity="info" sx={{ mt: 2 }}>
                 <LinearProgress sx={{ mb: 1 }} />
-                ממיר אודיו לטקסט...
+                {t.convertingAudio}
               </Alert>
             )}
 
@@ -379,7 +386,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} startIcon={<CloseIcon />}>
-            ביטול
+            {t.cancel}
           </Button>
           <Button
             onClick={() => {
@@ -390,7 +397,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             startIcon={<CheckIcon />}
             disabled={isProcessing}
           >
-            אישור
+            {t.confirm}
           </Button>
         </DialogActions>
       </Dialog>

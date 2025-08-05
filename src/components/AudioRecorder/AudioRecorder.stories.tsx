@@ -8,10 +8,6 @@ const meta: Meta<typeof AudioRecorder> = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {
-    onTextResult: { action: "textResult" },
-    onError: { action: "error" },
-  },
 };
 
 export default meta;
@@ -19,4 +15,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
+};
+
+export const EnglishLabels: Story = {
+  args: {
+    lang: "en",
+  },
 };

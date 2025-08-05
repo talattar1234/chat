@@ -29,13 +29,20 @@ import {
   Mic as MicIcon,
 } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder/AudioRecorder";
+import { chatLabels } from "./Chat.labels";
+
+export interface FileInfo {
+  name: string;
+  type: string;
+  size: number;
+}
 
 export interface Message {
   id: string;
   text: string;
   sender: "user" | "ai";
   timestamp: Date;
-  files?: File[];
+  files?: FileInfo[];
 }
 
 export interface ChatProps {
@@ -44,6 +51,7 @@ export interface ChatProps {
   isLoading?: boolean;
   maxFileSize: number; // required - in bytes
   allowedFileTypes: string[]; // required - no default
+  lang?: "he" | "en"; // optional - defaults to "he"
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -52,6 +60,7 @@ const Chat: React.FC<ChatProps> = ({
   isLoading = false,
   maxFileSize,
   allowedFileTypes,
+  lang = "he",
 }) => {
   const [inputText, setInputText] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -59,6 +68,8 @@ const Chat: React.FC<ChatProps> = ({
   const [totalFileSize, setTotalFileSize] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const t = chatLabels[lang];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -83,15 +94,17 @@ const Chat: React.FC<ChatProps> = ({
       const totalSizeMB = (totalFileSize / (1024 * 1024)).toFixed(2);
       const maxSizeMB = (maxFileSize / (1024 * 1024)).toFixed(2);
       setError(
-        `סך כל הקבצים גדול מדי: ${totalSizeMB}MB (מקסימום: ${maxSizeMB}MB). אנא הסר קבצים כדי לשלוח את ההודעה.`
+        t.totalFilesTooLarge
+          .replace("{totalSize}", totalSizeMB)
+          .replace("{maxSize}", maxSizeMB)
       );
     } else if (totalFileSize > 0) {
       setError(""); // Clear error when size is within limit
     }
-  }, [totalFileSize, maxFileSize]);
+  }, [totalFileSize, maxFileSize, t]);
 
   const handleSendMessage = () => {
-    if (!inputText.trim() && selectedFiles.length === 0) return;
+    if (!inputText.trim()) return;
 
     onMessageEnter?.(inputText.trim(), selectedFiles);
     setInputText("");
@@ -110,6 +123,11 @@ const Chat: React.FC<ChatProps> = ({
     const files = Array.from(event.target.files || []);
     setError("");
 
+    // Clear the input value to allow selecting the same files again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
     // Validate file types
     const invalidFiles = files.filter((file) => {
       const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
@@ -118,7 +136,10 @@ const Chat: React.FC<ChatProps> = ({
 
     if (invalidFiles.length > 0) {
       setError(
-        `סוגי קבצים לא נתמכים: ${invalidFiles.map((f) => f.name).join(", ")}`
+        t.unsupportedFileTypes.replace(
+          "{fileNames}",
+          invalidFiles.map((f) => f.name).join(", ")
+        )
       );
       return;
     }
@@ -279,7 +300,9 @@ const Chat: React.FC<ChatProps> = ({
                       textAlign: message.sender === "user" ? "left" : "right",
                     }}
                   >
-                    {message.timestamp.toLocaleTimeString("he-IL")}
+                    {message.timestamp.toLocaleTimeString(
+                      lang === "he" ? "he-IL" : "en-US"
+                    )}
                   </Typography>
                 </Paper>
                 {message.sender === "user" && (
@@ -472,7 +495,7 @@ const Chat: React.FC<ChatProps> = ({
                     },
                   }}
                 >
-                  AI חושב...
+                  {t.aiThinking}
                 </Typography>
               </Paper>
             </Box>
@@ -536,7 +559,7 @@ const Chat: React.FC<ChatProps> = ({
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                   <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                    גודל קבצים
+                    {t.fileSize}
                   </Typography>
                   {totalFileSize > maxFileSize && (
                     <WarningIcon
@@ -562,7 +585,7 @@ const Chat: React.FC<ChatProps> = ({
                     {formatFileSize(totalFileSize)} /{" "}
                     {formatFileSize(maxFileSize)}
                   </Typography>
-                  <Tooltip title="מחק את כל הקבצים">
+                  <Tooltip title={t.deleteAllFiles}>
                     <IconButton
                       size="small"
                       onClick={clearAllFiles}
@@ -641,12 +664,12 @@ const Chat: React.FC<ChatProps> = ({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="הקלד הודעה..."
+            placeholder={t.placeholder}
             disabled={isLoading}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="העלה קבצים">
+                  <Tooltip title={t.uploadFiles}>
                     <IconButton
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isLoading}
@@ -673,15 +696,14 @@ const Chat: React.FC<ChatProps> = ({
               console.error("AudioRecorder error:", error);
               setError(error);
             }}
+            lang={lang}
           />
 
           <IconButton
             color="primary"
             onClick={handleSendMessage}
             disabled={
-              isLoading ||
-              (!inputText.trim() && selectedFiles.length === 0) ||
-              totalFileSize > maxFileSize
+              isLoading || !inputText.trim() || totalFileSize > maxFileSize
             }
             sx={{ minWidth: 56, height: 56 }}
           >
@@ -709,7 +731,7 @@ const Chat: React.FC<ChatProps> = ({
           }}
         >
           <Typography variant="caption" sx={{ opacity: 0.7 }}>
-            קבצים נתמכים: {allowedFileTypes.join(", ")}
+            {t.supportedFiles} {allowedFileTypes.join(", ")}
           </Typography>
           {selectedFiles.length > 0 && (
             <Typography variant="caption" sx={{ opacity: 0.7 }}>

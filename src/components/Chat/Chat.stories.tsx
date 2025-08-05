@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Chat, { Message } from "./Chat";
+import Chat, { Message, FileInfo } from "./Chat";
 
 const meta: Meta<typeof Chat> = {
   title: "Components/Chat",
@@ -8,12 +8,7 @@ const meta: Meta<typeof Chat> = {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-  argTypes: {
-    onMessageEnter: { action: "messageEnter" },
-    isLoading: { control: "boolean" },
-    maxFileSize: { control: "number" },
-    allowedFileTypes: { control: "object" },
-  },
+  argTypes: {},
 };
 
 export default meta;
@@ -41,6 +36,28 @@ const sampleMessages: Message[] = [
   },
 ];
 
+// English messages for English labels story
+const englishMessages: Message[] = [
+  {
+    id: "1",
+    text: "Hello! How can I help you today?",
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:00:00"),
+  },
+  {
+    id: "2",
+    text: "I want to ask about React and TypeScript",
+    sender: "user",
+    timestamp: new Date("2024-01-15T10:01:00"),
+  },
+  {
+    id: "3",
+    text: "React is a JavaScript library for building user interfaces. TypeScript adds static types to JavaScript, which improves code development and maintenance.",
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:02:00"),
+  },
+];
+
 const messagesWithFiles: Message[] = [
   ...sampleMessages,
   {
@@ -49,7 +66,11 @@ const messagesWithFiles: Message[] = [
     sender: "user",
     timestamp: new Date("2024-01-15T10:03:00"),
     files: [
-      new File(["PDF content"], "document.pdf", { type: "application/pdf" }),
+      {
+        name: "document.pdf",
+        type: "application/pdf",
+        size: 1024 * 1024, // 1MB
+      },
     ],
   },
   {
@@ -65,6 +86,15 @@ export const Default: Story = {
     messages: sampleMessages,
     allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
     maxFileSize: 10 * 1024 * 1024, // 10MB
+  },
+};
+
+export const EnglishLabels: Story = {
+  args: {
+    messages: englishMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    lang: "en",
   },
 };
 
@@ -186,9 +216,11 @@ export const AITypingWithFiles: Story = {
         sender: "user",
         timestamp: new Date("2024-01-15T10:03:00"),
         files: [
-          new File(["PDF content"], "react-questions.pdf", {
+          {
+            name: "react-questions.pdf",
             type: "application/pdf",
-          }),
+            size: 2 * 1024 * 1024, // 2MB
+          },
         ],
       },
     ],
