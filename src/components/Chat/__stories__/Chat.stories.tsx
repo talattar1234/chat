@@ -117,7 +117,7 @@ export const Loading: Story = {
         timestamp: new Date("2024-01-15T10:03:00"),
       },
     ],
-    isLoading: true, // כפתור מושבת, אין אינדיקטור
+    isLoading: true, // Button disabled, no indicator
     allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
     maxFileSize: 10 * 1024 * 1024, // 10MB
   },
@@ -200,7 +200,7 @@ export const AITyping: Story = {
         timestamp: new Date("2024-01-15T10:03:00"),
       },
     ],
-    isLoading: false, // זה יגרום לאינדיקטור "AI חושב" להופיע
+    isLoading: false, // This will cause the "AI thinking" indicator to appear
     allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
     maxFileSize: 10 * 1024 * 1024, // 10MB
   },
@@ -224,7 +224,7 @@ export const AITypingWithFiles: Story = {
         ],
       },
     ],
-    isLoading: false, // זה יגרום לאינדיקטור "AI חושב" להופיע
+    isLoading: false, // This will cause the "AI thinking" indicator to appear
     allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
     maxFileSize: 10 * 1024 * 1024, // 10MB
   },
@@ -258,7 +258,7 @@ export const WaitingForAI: Story = {
         timestamp: new Date("2024-01-15T10:03:00"),
       },
     ],
-    isLoading: false, // המשתמש יכול לכתוב בזמן שה-AI חושב
+    isLoading: false, // User can write while AI is thinking
     allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
     maxFileSize: 10 * 1024 * 1024, // 10MB
   },

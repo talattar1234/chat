@@ -1,10 +1,9 @@
 virtualization?
 special background?
-check files format
-speach to text
-check with rtl/ltr
-make all examples in english
+
+Somthing Cool
+
+
 לטפל בשגיאות
-למשל אם השירות לא פועל כמו שצריך של speech
 או הודעה שגיאה בצאט
 רספונסיבי

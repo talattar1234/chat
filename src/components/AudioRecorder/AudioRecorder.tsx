@@ -25,7 +25,7 @@ import { speechToText } from "../../utils/speechToText";
 import WaveSurfer from "wavesurfer.js";
 import { audioRecorderLabels } from "./AudioRecorder.labels";
 
-// בדיקה שהפונקציה נטענה
+// Check if the function is loaded
 console.log("speechToText function loaded:", typeof speechToText);
 
 interface AudioRecorderProps {
@@ -55,7 +55,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [showDialog, setShowDialog] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  // לא צריכים audioLevels כרגע
+  // Don't need audioLevels for now
   const [isPlaying, setIsPlaying] = useState(false);
   const [wavesurferReady, setWavesurferReady] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
@@ -65,11 +65,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const dataArrayRef = useRef<Uint8Array | null>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  // לא צריכים audioLevelsIntervalRef כרגע
+  // Don't need audioLevelsIntervalRef for now
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
 
-  // ניקוי resources
+  // Cleanup resources
   useEffect(() => {
     return () => {
       if (recordingIntervalRef.current) {
@@ -88,9 +88,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // לא צריכים AudioContext כרגע - נטפל בו מאוחר יותר
+      // Don't need AudioContext for now - will handle it later
 
-      // התחלת הקלטה
+      // Start recording
       mediaRecorderRef.current = new MediaRecorder(stream);
       const chunks: Blob[] = [];
 
@@ -108,14 +108,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       mediaRecorderRef.current.start();
       setIsRecording(true);
       setRecordingTime(0);
-      // לא צריכים setAudioLevels כרגע
+      // Don't need setAudioLevels for now
 
-      // התחלת מעקב אחר זמן הקלטה
+      // Start tracking recording time
       recordingIntervalRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
 
-      // לא צריכים מעקב אחר רמות הקול כרגע
+      // Don't need to track audio levels for now
     } catch (error) {
       console.error("Error starting recording:", error);
       onError?.(t.microphoneAccessError);
@@ -136,9 +136,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   };
 
-  // פונקציה ריקה - נטפל בה מאוחר יותר
+  // Empty function - will handle it later
   const startAudioLevelsTracking = () => {
-    // TODO: להוסיף audio visualization מאוחר יותר
+    // TODO: Add audio visualization later
   };
 
   const handleConfirm = async () => {
@@ -150,7 +150,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     console.log("Starting speech to text conversion...");
     console.log("Audio blob size:", audioBlob.size);
     setIsProcessing(true);
-    setSpeechError(null); // איפוס שגיאות קודמות כשמנסים שוב
+    setSpeechError(null); // Reset previous errors when trying again
 
     try {
       console.log("Calling speechToText...");
@@ -161,7 +161,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       onTextResult(text);
       console.log("Text sent to parent component");
 
-      // רק אם הצליח - סוגרים את החלון
+      // Only if successful - close the dialog
       console.log("Calling handleClose...");
       handleClose();
     } catch (error) {
@@ -170,7 +170,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         error instanceof Error ? error.message : t.audioConversionError;
       setSpeechError(errorMessage);
       onError?.(errorMessage);
-      // לא סוגרים את החלון - נותנים למשתמש לנסות שוב או לבטל
+      // Don't close the dialog - let the user try again or cancel
     } finally {
       console.log("Setting isProcessing to false");
       setIsProcessing(false);
@@ -185,11 +185,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       URL.revokeObjectURL(audioUrl);
       setAudioUrl("");
     }
-    // לא צריכים setAudioLevels כרגע
+    // Don't need setAudioLevels for now
     setRecordingTime(0);
     setIsPlaying(false);
     setWavesurferReady(false);
-    setSpeechError(null); // איפוס שגיאות
+    setSpeechError(null); // Reset errors
     if (wavesurferRef.current) {
       wavesurferRef.current.destroy();
       wavesurferRef.current = null;
@@ -205,7 +205,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       .padStart(2, "0")}`;
   };
 
-  // יצירת wavesurfer לנגינה
+  // Create wavesurfer for playback
   const createPlaybackWaveform = (audioUrl: string) => {
     const container = document.getElementById("playback-waveform");
     if (!container) {
@@ -229,7 +229,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
     wavesurfer.load(audioUrl);
 
-    // אירועי נגינה
+    // Playback events
     wavesurfer.on("play", () => setIsPlaying(true));
     wavesurfer.on("pause", () => setIsPlaying(false));
     wavesurfer.on("finish", () => setIsPlaying(false));
@@ -238,10 +238,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     return wavesurfer;
   };
 
-  // יצירת waveform לנגינה כשהדיאלוג נפתח
+  // Create waveform for playback when dialog opens
   useEffect(() => {
     if (showDialog && audioUrl) {
-      // המתנה ארוכה יותר כדי שה-DOM יתעדכן
+      // Longer wait for DOM to update
       setTimeout(() => {
         const wavesurfer = createPlaybackWaveform(audioUrl);
         if (wavesurfer) {

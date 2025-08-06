@@ -1,10 +1,10 @@
-// פונקציה להמרת Blob ל-Base64
+// Function to convert Blob to Base64
 const blobToBase64 = (blob: Blob): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      resolve(result.split(",")[1]); // מסיר את ה-prefix
+      resolve(result.split(",")[1]); // Remove the prefix
     };
     reader.onerror = reject;
     reader.readAsDataURL(blob);
@@ -17,7 +17,7 @@ const blobToBase64 = (blob: Blob): Promise<string> => {
  * @returns Promise עם הטקסט שהומר
  */
 export const speechToText = async (audio: File | Blob): Promise<string> => {
-  // המרה לפורמטים שונים לשירותים שונים
+  // Convert to different formats for different services
   const arrayBuffer = await audio.arrayBuffer();
   const base64Audio = await blobToBase64(audio);
 
@@ -26,12 +26,12 @@ export const speechToText = async (audio: File | Blob): Promise<string> => {
     arrayBufferSize: arrayBuffer.byteLength,
     base64Length: base64Audio.length,
   });
-  // סימולציה של עיכוב רשת
+  // Simulate network delay
   await new Promise((resolve) =>
     setTimeout(resolve, 2000 + Math.random() * 3000)
   );
 
-  // טקסטים רנדומליים בעברית
+  // Random Hebrew texts
   const sampleTexts = [
     "שלום, אני רוצה לשאול על React ו-TypeScript",
     "איך אני יכול להתחיל עם Material-UI?",
@@ -50,11 +50,11 @@ export const speechToText = async (audio: File | Blob): Promise<string> => {
     "מה זה Docker ואיך להשתמש בו?",
   ];
 
-  // בחירת טקסט רנדומלי
+  // Select random text
   const randomText =
     sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
 
-  // סימולציה של שגיאות (10% מהמקרים)
+  // Simulate errors (10% of cases)
   if (Math.random() < 0.1) {
     throw new Error("לא הצלחתי להבין את האודיו, אנא נסה שוב");
   }
@@ -72,12 +72,12 @@ export const speechToTextWithLanguage = async (
   audio: File | Blob,
   language: string = "he-IL"
 ): Promise<string> => {
-  // סימולציה של עיכוב רשת
+  // Simulate network delay
   await new Promise((resolve) =>
     setTimeout(resolve, 1500 + Math.random() * 2000)
   );
 
-  // טקסטים לפי שפה
+  // Texts by language
   const textsByLanguage: Record<string, string[]> = {
     "he-IL": [
       "שלום, אני רוצה לשאול על React ו-TypeScript",
