@@ -7,6 +7,7 @@ export interface ChatLabels {
   deleteAllFiles: string;
   totalFilesTooLarge: string;
   unsupportedFileTypes: string;
+  loadingMessage: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -20,6 +21,8 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     totalFilesTooLarge:
       "סך כל הקבצים גדול מדי: {totalSize}MB (מקסימום: {maxSize}MB). אנא הסר קבצים כדי לשלוח את ההודעה.",
     unsupportedFileTypes: "סוגי קבצים לא נתמכים: {fileNames}",
+    loadingMessage:
+      "AI חושב... - אתה יכול להכין את ההודעה הבאה בזמן שה-AI עונה",
   },
   en: {
     placeholder: "Type a message...",
@@ -31,5 +34,7 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     totalFilesTooLarge:
       "Total file size too large: {totalSize}MB (maximum: {maxSize}MB). Please remove files to send the message.",
     unsupportedFileTypes: "Unsupported file types: {fileNames}",
+    loadingMessage:
+      "AI is thinking... - You can prepare your next message while the AI responds",
   },
 };

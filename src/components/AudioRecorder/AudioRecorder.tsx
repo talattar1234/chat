@@ -32,12 +32,14 @@ interface AudioRecorderProps {
   onTextResult: (text: string) => void;
   onError?: (error: string) => void;
   lang?: "he" | "en"; // optional - defaults to "he"
+  disabled?: boolean; // optional - defaults to false
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onTextResult,
   onError,
   lang = "he",
+  disabled = false,
 }) => {
   console.log("AudioRecorder props:", {
     onTextResult: typeof onTextResult,
@@ -266,7 +268,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         <IconButton
           color={isRecording ? "error" : "primary"}
           onClick={isRecording ? stopRecording : startRecording}
-          disabled={isProcessing}
+          disabled={isProcessing || disabled}
           sx={{
             width: 48,
             height: 48,

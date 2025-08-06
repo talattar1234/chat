@@ -286,3 +286,34 @@ export const LoadingState: Story = {
     lang: "en",
   },
 };
+
+export const LoadingWithFiles: Story = {
+  args: {
+    messages: [
+      {
+        id: "1",
+        text: "Hello! How can I help you today?",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:00:00"),
+      },
+      {
+        id: "2",
+        text: "I want to ask about React and TypeScript",
+        sender: "user",
+        timestamp: new Date("2024-01-15T10:01:00"),
+      },
+    ],
+    isLoading: true, // This will disable all inputs
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    lang: "en",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "This story demonstrates the chat component in loading state. All inputs (text field, file upload, audio recorder, send button) are disabled when isLoading=true.",
+      },
+    },
+  },
+};

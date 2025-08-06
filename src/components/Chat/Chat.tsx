@@ -657,15 +657,11 @@ const Chat: React.FC<ChatProps> = ({
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder={t.placeholder}
-            disabled={isLoading}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <Tooltip title={t.uploadFiles}>
-                    <IconButton
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={isLoading}
-                    >
+                    <IconButton onClick={() => fileInputRef.current?.click()}>
                       <AttachFileIcon />
                     </IconButton>
                   </Tooltip>
@@ -694,9 +690,7 @@ const Chat: React.FC<ChatProps> = ({
           <IconButton
             color="primary"
             onClick={handleSendMessage}
-            disabled={
-              isLoading || !inputText.trim() || totalFileSize > maxFileSize
-            }
+            disabled={!inputText.trim() || totalFileSize > maxFileSize}
             sx={{ minWidth: 56, height: 56 }}
           >
             <SendIcon />
