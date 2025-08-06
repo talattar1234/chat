@@ -317,189 +317,181 @@ const Chat: React.FC<ChatProps> = ({
         <div ref={messagesEndRef} />
 
         {/* AI Typing Indicator */}
-        {messages.length > 0 &&
-          messages[messages.length - 1].sender === "user" &&
-          !isLoading && (
-            <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
-              <Avatar
-                sx={{
-                  bgcolor: "primary.main",
-                  width: 32,
-                  height: 32,
-                  animation: "bounce 2s ease-in-out infinite",
-                  "@keyframes bounce": {
-                    "0%, 20%, 50%, 80%, 100%": {
-                      transform: "translateY(0)",
-                    },
-                    "40%": {
-                      transform: "translateY(-5px)",
-                    },
-                    "60%": {
-                      transform: "translateY(-3px)",
-                    },
+        {isLoading && (
+          <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar
+              sx={{
+                bgcolor: "primary.main",
+                width: 32,
+                height: 32,
+                animation: "bounce 2s ease-in-out infinite",
+                "@keyframes bounce": {
+                  "0%, 20%, 50%, 80%, 100%": {
+                    transform: "translateY(0)",
                   },
-                }}
-              >
-                <AIIcon sx={{ fontSize: 18 }} />
-              </Avatar>
-              <Paper
-                elevation={1}
-                sx={{
-                  p: 1.5,
-                  bgcolor: "background.paper",
-                  borderRadius: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  animation: "slideIn 0.5s ease-out",
-                  "@keyframes slideIn": {
-                    "0%": {
-                      opacity: 0,
-                      transform: "translateY(10px)",
-                    },
-                    "100%": {
-                      opacity: 1,
-                      transform: "translateY(0)",
-                    },
+                  "40%": {
+                    transform: "translateY(-5px)",
                   },
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 0.5 }}>
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: "linear-gradient(45deg, #1976d2, #42a5f5)",
-                      animation:
-                        "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
-                      animationDelay: "0s, 0s, 0s, 0s",
-                      boxShadow: "0 0 10px rgba(25, 118, 210, 0.3)",
-                      "@keyframes colorShift": {
-                        "0%, 100%": {
-                          background:
-                            "linear-gradient(45deg, #1976d2, #42a5f5)",
-                        },
-                        "50%": {
-                          background:
-                            "linear-gradient(45deg, #42a5f5, #1976d2)",
-                        },
-                      },
-                      "@keyframes rotate": {
-                        "0%": {
-                          transform: "rotate(0deg)",
-                        },
-                        "100%": {
-                          transform: "rotate(360deg)",
-                        },
-                      },
-                      "@keyframes zoom": {
-                        "0%, 100%": {
-                          transform: "scale(1)",
-                        },
-                        "50%": {
-                          transform: "scale(1.2)",
-                        },
-                      },
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: "linear-gradient(45deg, #1976d2, #42a5f5)",
-                      animation:
-                        "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
-                      animationDelay: "0.3s, 0s, 0.5s, 0.3s",
-                      boxShadow: "0 0 10px rgba(25, 118, 210, 0.3)",
-                      "@keyframes colorShift": {
-                        "0%, 100%": {
-                          background:
-                            "linear-gradient(45deg, #1976d2, #42a5f5)",
-                        },
-                        "50%": {
-                          background:
-                            "linear-gradient(45deg, #42a5f5, #1976d2)",
-                        },
-                      },
-                      "@keyframes rotate": {
-                        "0%": {
-                          transform: "rotate(0deg)",
-                        },
-                        "100%": {
-                          transform: "rotate(360deg)",
-                        },
-                      },
-                      "@keyframes zoom": {
-                        "0%, 100%": {
-                          transform: "scale(1)",
-                        },
-                        "50%": {
-                          transform: "scale(1.2)",
-                        },
-                      },
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: "linear-gradient(45deg, #1976d2, #42a5f5)",
-                      animation:
-                        "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
-                      animationDelay: "0.6s, 0s, 1s, 0.6s",
-                      boxShadow: "0 0 10px rgba(25, 118, 210, 0.3)",
-                      "@keyframes colorShift": {
-                        "0%, 100%": {
-                          background:
-                            "linear-gradient(45deg, #1976d2, #42a5f5)",
-                        },
-                        "50%": {
-                          background:
-                            "linear-gradient(45deg, #42a5f5, #1976d2)",
-                        },
-                      },
-                      "@keyframes rotate": {
-                        "0%": {
-                          transform: "rotate(0deg)",
-                        },
-                        "100%": {
-                          transform: "rotate(360deg)",
-                        },
-                      },
-                      "@keyframes zoom": {
-                        "0%, 100%": {
-                          transform: "scale(1)",
-                        },
-                        "50%": {
-                          transform: "scale(1.2)",
-                        },
-                      },
-                    }}
-                  />
-                </Box>
-                <Typography
-                  variant="body2"
+                  "60%": {
+                    transform: "translateY(-3px)",
+                  },
+                },
+              }}
+            >
+              <AIIcon sx={{ fontSize: 18 }} />
+            </Avatar>
+            <Paper
+              elevation={1}
+              sx={{
+                p: 1.5,
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                animation: "slideIn 0.5s ease-out",
+                "@keyframes slideIn": {
+                  "0%": {
+                    opacity: 0,
+                    transform: "translateY(10px)",
+                  },
+                  "100%": {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  },
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 0.5 }}>
+                <Box
                   sx={{
-                    opacity: 0.7,
-                    animation: "fadeInOut 2s ease-in-out infinite",
-                    "@keyframes fadeInOut": {
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                    animation:
+                      "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
+                    animationDelay: "0s, 0s, 0s, 0s",
+                    boxShadow: "0 0 10px rgba(25, 118, 210, 0.3)",
+                    "@keyframes colorShift": {
                       "0%, 100%": {
-                        opacity: 0.7,
+                        background: "linear-gradient(45deg, #1976d2, #42a5f5)",
                       },
                       "50%": {
-                        opacity: 1,
+                        background: "linear-gradient(45deg, #42a5f5, #1976d2)",
+                      },
+                    },
+                    "@keyframes rotate": {
+                      "0%": {
+                        transform: "rotate(0deg)",
+                      },
+                      "100%": {
+                        transform: "rotate(360deg)",
+                      },
+                    },
+                    "@keyframes zoom": {
+                      "0%, 100%": {
+                        transform: "scale(1)",
+                      },
+                      "50%": {
+                        transform: "scale(1.2)",
                       },
                     },
                   }}
-                >
-                  {t.aiThinking}
-                </Typography>
-              </Paper>
-            </Box>
-          )}
+                />
+                <Box
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                    animation:
+                      "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
+                    animationDelay: "0.3s, 0s, 0.5s, 0.3s",
+                    boxShadow: "0 0 10px rgba(25, 118, 210, 0.3)",
+                    "@keyframes colorShift": {
+                      "0%, 100%": {
+                        background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                      },
+                      "50%": {
+                        background: "linear-gradient(45deg, #42a5f5, #1976d2)",
+                      },
+                    },
+                    "@keyframes rotate": {
+                      "0%": {
+                        transform: "rotate(0deg)",
+                      },
+                      "100%": {
+                        transform: "rotate(360deg)",
+                      },
+                    },
+                    "@keyframes zoom": {
+                      "0%, 100%": {
+                        transform: "scale(1)",
+                      },
+                      "50%": {
+                        transform: "scale(1.2)",
+                      },
+                    },
+                  }}
+                />
+                <Box
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                    animation:
+                      "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
+                    animationDelay: "0.6s, 0s, 1s, 0.6s",
+                    boxShadow: "0 0 10px rgba(25, 118, 210, 0.3)",
+                    "@keyframes colorShift": {
+                      "0%, 100%": {
+                        background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+                      },
+                      "50%": {
+                        background: "linear-gradient(45deg, #42a5f5, #1976d2)",
+                      },
+                    },
+                    "@keyframes rotate": {
+                      "0%": {
+                        transform: "rotate(0deg)",
+                      },
+                      "100%": {
+                        transform: "rotate(360deg)",
+                      },
+                    },
+                    "@keyframes zoom": {
+                      "0%, 100%": {
+                        transform: "scale(1)",
+                      },
+                      "50%": {
+                        transform: "scale(1.2)",
+                      },
+                    },
+                  }}
+                />
+              </Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  opacity: 0.7,
+                  animation: "fadeInOut 2s ease-in-out infinite",
+                  "@keyframes fadeInOut": {
+                    "0%, 100%": {
+                      opacity: 0.7,
+                    },
+                    "50%": {
+                      opacity: 1,
+                    },
+                  },
+                }}
+              >
+                {t.aiThinking}
+              </Typography>
+            </Paper>
+          </Box>
+        )}
       </Box>
 
       <Divider />
