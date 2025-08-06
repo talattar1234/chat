@@ -20,6 +20,7 @@ import {
   Delete as DeleteIcon,
   Check as CheckIcon,
   Close as CloseIcon,
+  CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import { speechToText } from "../../utils/speechToText";
 import WaveSurfer from "wavesurfer.js";
@@ -31,6 +32,7 @@ console.log("speechToText function loaded:", typeof speechToText);
 interface AudioRecorderProps {
   onTextResult: (text: string) => void;
   onError?: (error: string) => void;
+  onRecordingChange?: (isRecording: boolean) => void;
   lang?: "he" | "en"; // optional - defaults to "he"
   disabled?: boolean; // optional - defaults to false
 }
@@ -38,6 +40,7 @@ interface AudioRecorderProps {
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   onTextResult,
   onError,
+  onRecordingChange,
   lang = "he",
   disabled = false,
 }) => {
@@ -55,7 +58,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [showDialog, setShowDialog] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  // Don't need audioLevels for now
+  const [audioLevels, setAudioLevels] = useState<number[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [wavesurferReady, setWavesurferReady] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
@@ -65,15 +68,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const dataArrayRef = useRef<Uint8Array | null>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  // Don't need audioLevelsIntervalRef for now
+  const audioLevelsIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Cleanup resources
   useEffect(() => {
     return () => {
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
+      }
+      if (audioLevelsIntervalRef.current) {
+        clearInterval(audioLevelsIntervalRef.current);
       }
       if (audioUrl) {
         URL.revokeObjectURL(audioUrl);
@@ -88,7 +95,16 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Don't need AudioContext for now - will handle it later
+      // Create AudioContext for real-time visualization
+      audioContextRef.current = new AudioContext();
+      const source = audioContextRef.current.createMediaStreamSource(stream);
+      analyserRef.current = audioContextRef.current.createAnalyser();
+      analyserRef.current.fftSize = 512; // Higher resolution for better sensitivity
+      analyserRef.current.smoothingTimeConstant = 0.3; // Smoother transitions
+      source.connect(analyserRef.current);
+
+      const bufferLength = analyserRef.current.frequencyBinCount;
+      dataArrayRef.current = new Uint8Array(bufferLength);
 
       // Start recording
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -107,15 +123,20 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       mediaRecorderRef.current.start();
       setIsRecording(true);
+      onRecordingChange?.(true);
       setRecordingTime(0);
-      // Don't need setAudioLevels for now
+
+      // Initialize with empty levels to fill the waveform immediately
+      const initialLevels = new Array(80).fill(0.02);
+      setAudioLevels(initialLevels);
 
       // Start tracking recording time
       recordingIntervalRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
 
-      // Don't need to track audio levels for now
+      // Start tracking audio levels for visualization
+      startAudioLevelsTracking();
     } catch (error) {
       console.error("Error starting recording:", error);
       onError?.(t.microphoneAccessError);
@@ -129,16 +150,107 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         .getTracks()
         .forEach((track) => track.stop());
       setIsRecording(false);
+      onRecordingChange?.(false);
 
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
+      if (audioLevelsIntervalRef.current) {
+        clearInterval(audioLevelsIntervalRef.current);
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
     }
   };
 
-  // Empty function - will handle it later
+  const confirmRecording = () => {
+    stopRecording();
+    // The dialog will open automatically when recording stops
+  };
+
+  const cancelRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      // Temporarily remove the onstop handler to prevent dialog from opening
+      const originalOnStop = mediaRecorderRef.current.onstop;
+      mediaRecorderRef.current.onstop = null;
+
+      // Stop the recording
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
+
+      // Reset all state
+      setIsRecording(false);
+      onRecordingChange?.(false);
+      setAudioLevels([]);
+      setRecordingTime(0);
+      setAudioBlob(null);
+      setAudioUrl("");
+      setShowDialog(false);
+      setSpeechError(null);
+      setIsProcessing(false);
+      setIsPlaying(false);
+      setWavesurferReady(false);
+
+      // Clear intervals
+      if (recordingIntervalRef.current) {
+        clearInterval(recordingIntervalRef.current);
+        recordingIntervalRef.current = null;
+      }
+      if (audioLevelsIntervalRef.current) {
+        clearInterval(audioLevelsIntervalRef.current);
+        audioLevelsIntervalRef.current = null;
+      }
+
+      // Close audio context
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
+
+      // Clean up wavesurfer
+      if (wavesurferRef.current) {
+        wavesurferRef.current.destroy();
+        wavesurferRef.current = null;
+      }
+
+      // Revoke object URL if exists
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+    }
+  };
+
   const startAudioLevelsTracking = () => {
-    // TODO: Add audio visualization later
+    audioLevelsIntervalRef.current = setInterval(() => {
+      if (analyserRef.current && dataArrayRef.current) {
+        analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+
+        // Calculate audio level with much higher sensitivity
+        // Focus on mid-range frequencies (human speech) for better sensitivity
+        const midRangeStart = Math.floor(dataArrayRef.current.length * 0.1);
+        const midRangeEnd = Math.floor(dataArrayRef.current.length * 0.8);
+        const midRangeData = dataArrayRef.current.slice(
+          midRangeStart,
+          midRangeEnd
+        );
+
+        const average =
+          midRangeData.reduce((a, b) => a + b) / midRangeData.length;
+        // Much lower amplification for less sensitive response
+        const amplifiedLevel = (average / 255) * 8; // Amplify by 8x (reduced from 15x)
+        // Add a small baseline to make even quiet sounds visible
+        const normalizedLevel = Math.min(1, Math.max(0.02, amplifiedLevel)); // Minimum 0.02 for visibility
+
+        setAudioLevels((prev) => {
+          // Replace the oldest level with the new one to maintain fixed width
+          const newLevels = [...prev.slice(1), normalizedLevel];
+          return newLevels;
+        });
+      }
+    }, 50); // Update every 50ms for even smoother animation
   };
 
   const handleConfirm = async () => {
@@ -185,7 +297,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       URL.revokeObjectURL(audioUrl);
       setAudioUrl("");
     }
-    // Don't need setAudioLevels for now
+    setAudioLevels([]);
     setRecordingTime(0);
     setIsPlaying(false);
     setWavesurferReady(false);
@@ -261,42 +373,153 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   };
 
+  // Render live waveform during recording
+  const renderLiveWaveform = () => {
+    if (!isRecording) return null;
+
+    return (
+      <Box
+        sx={{
+          height: 48, // Smaller height to fit in the row
+          flex: 1, // Take all available space
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: "4px",
+          overflow: "hidden",
+          position: "relative",
+          bgcolor: "background.paper",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            gap: "1px",
+            px: 1,
+            width: "100%",
+          }}
+        >
+          {audioLevels.map((level, index) => (
+            <Box
+              key={index}
+              sx={{
+                flex: 1,
+                minWidth: "1px",
+                maxWidth: "3px",
+                height: `${Math.max(3, level * 40)}px`, // Smaller height
+                bgcolor: "primary.main",
+                borderRadius: "1px",
+                transition: "height 0.03s ease",
+                opacity: 0.6 + level * 0.4,
+                boxShadow:
+                  level > 0.5 ? "0 0 4px rgba(25, 118, 210, 0.5)" : "none",
+              }}
+            />
+          ))}
+        </Box>
+      </Box>
+    );
+  };
+
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        {/* כפתור מיקרופון/עצירה */}
-        <IconButton
-          color={isRecording ? "error" : "primary"}
-          onClick={isRecording ? stopRecording : startRecording}
-          disabled={isProcessing || disabled}
-          sx={{
-            width: 48,
-            height: 48,
-            animation: isRecording ? "pulse 1s infinite" : "none",
-            "@keyframes pulse": {
-              "0%": { transform: "scale(1)" },
-              "50%": { transform: "scale(1.1)" },
-              "100%": { transform: "scale(1)" },
-            },
-          }}
-        >
-          {isRecording ? <StopIcon /> : <MicIcon />}
-        </IconButton>
+        {!isRecording ? (
+          /* כפתור מיקרופון להתחלת הקלטה */
+          <IconButton
+            color="primary"
+            onClick={startRecording}
+            disabled={isProcessing || disabled}
+            sx={{
+              width: 48,
+              height: 48,
+            }}
+          >
+            <MicIcon />
+          </IconButton>
+        ) : (
+          /* בזמן הקלטה - טיימר, waveform, וכפתורים */
+          <>
+            {/* טיימר בזמן הקלטה */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{ minWidth: 60, fontWeight: "bold" }}
+              >
+                {formatTime(recordingTime)}
+              </Typography>
 
-        {/* טיימר בזמן הקלטה */}
-        {isRecording && (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-            <Typography
-              variant="body2"
-              sx={{ minWidth: 60, fontWeight: "bold" }}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                {/* עיגול אדום מהבהב */}
+                <Box
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    bgcolor: "error.main",
+                    animation: "blink 1s infinite",
+                    "@keyframes blink": {
+                      "0%": { opacity: 1 },
+                      "50%": { opacity: 0.3 },
+                      "100%": { opacity: 1 },
+                    },
+                  }}
+                />
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  {t.recording}
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Live waveform during recording - takes remaining space */}
+            {renderLiveWaveform()}
+
+            {/* כפתור ביטול */}
+            <IconButton
+              color="error"
+              onClick={cancelRecording}
+              disabled={isProcessing}
+              sx={{
+                width: 48,
+                height: 48,
+                animation: "pulse 1s infinite",
+                "@keyframes pulse": {
+                  "0%": { transform: "scale(1)" },
+                  "50%": { transform: "scale(1.1)" },
+                  "100%": { transform: "scale(1)" },
+                },
+                boxShadow: "0 0 20px rgba(244, 67, 54, 0.5)",
+                backgroundColor: "rgba(244, 67, 54, 0.1)",
+              }}
             >
-              {formatTime(recordingTime)}
-            </Typography>
+              <CloseIcon />
+            </IconButton>
 
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              {t.recording}
-            </Typography>
-          </Box>
+            {/* כפתור אישור */}
+            <IconButton
+              color="success"
+              onClick={confirmRecording}
+              disabled={isProcessing}
+              sx={{
+                width: 48,
+                height: 48,
+                animation: "pulse 1s infinite",
+                "@keyframes pulse": {
+                  "0%": { transform: "scale(1)" },
+                  "50%": { transform: "scale(1.1)" },
+                  "100%": { transform: "scale(1)" },
+                },
+                boxShadow: "0 0 20px rgba(76, 175, 80, 0.5)",
+                backgroundColor: "rgba(76, 175, 80, 0.1)",
+              }}
+            >
+              <CheckCircleIcon />
+            </IconButton>
+          </>
         )}
       </Box>
 

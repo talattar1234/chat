@@ -66,6 +66,7 @@ const Chat: React.FC<ChatProps> = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>("");
   const [totalFileSize, setTotalFileSize] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -683,6 +684,9 @@ const Chat: React.FC<ChatProps> = ({
             onError={(error) => {
               console.error("AudioRecorder error:", error);
               setError(error);
+            }}
+            onRecordingChange={(recording) => {
+              setIsRecording(recording);
             }}
             lang={lang}
           />
