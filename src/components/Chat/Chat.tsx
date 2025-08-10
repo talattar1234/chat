@@ -28,6 +28,7 @@ import {
   DeleteSweep as DeleteSweepIcon,
   Mic as MicIcon,
   ContentCopy as CopyIcon,
+  Add as AddIcon,
 } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder/AudioRecorder";
 import { chatLabels } from "./Chat.labels";
@@ -49,6 +50,7 @@ export interface Message {
 export interface ChatProps {
   messages: Message[];
   onMessageEnter?: (message: string, files?: File[]) => void;
+  onNewChatClick?: () => void;
   isLoading?: boolean;
   maxFileSize: number; // required - in bytes
   allowedFileTypes: string[]; // required - no default
@@ -58,6 +60,7 @@ export interface ChatProps {
 const Chat: React.FC<ChatProps> = ({
   messages,
   onMessageEnter,
+  onNewChatClick,
   isLoading = false,
   maxFileSize,
   allowedFileTypes,
@@ -208,9 +211,65 @@ const Chat: React.FC<ChatProps> = ({
   };
 
   return (
-    <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Messages Area */}
-      <Box sx={{ flex: 1, overflow: "auto", p: 2 }}>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+      }}
+    >
+      {/* Messages Area with Sticky Header */}
+      <Box
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          p: 2,
+          pt: 0, // Remove top padding since we have the sticky header inside
+        }}
+      >
+        {/* Sticky Header with New Chat Button */}
+        {onNewChatClick && (
+          <Box
+            sx={{
+              position: "sticky",
+              top: 0,
+              zIndex: 10,
+              p: 1,
+              mb: 1,
+              background: "rgba(255, 255, 255, 0.6)",
+              backdropFilter: "blur(1px)",
+              borderBottom: 1,
+              borderColor: "divider",
+              display: "flex",
+              justifyContent: "flex-end",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+              borderRadius: 1,
+            }}
+          >
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={onNewChatClick}
+              size="small"
+              sx={{
+                borderRadius: 1.5,
+                textTransform: "none",
+                fontWeight: "medium",
+                py: 0.5,
+                px: 1.5,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                },
+              }}
+            >
+              {t.newChat}
+            </Button>
+          </Box>
+        )}
+
         <List>
           {messages.map((message) => (
             <ListItem

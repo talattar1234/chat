@@ -36,6 +36,18 @@ const App: React.FC = () => {
     }, 1000);
   };
 
+  const handleNewChatClick = () => {
+    // Clear all messages and start a new chat
+    setMessages([
+      {
+        id: "1",
+        text: "שלום! ברוך הבא לצ'אט החדש שלנו. איך אני יכול לעזור לך היום?",
+        sender: "ai",
+        timestamp: new Date(),
+      },
+    ]);
+  };
+
   return (
     <Container maxWidth="md" sx={{ height: "100vh", p: 0 }}>
       <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -51,6 +63,7 @@ const App: React.FC = () => {
           <Chat
             messages={messages}
             onMessageEnter={handleMessageEnter}
+            onNewChatClick={handleNewChatClick}
             isLoading={false}
             allowedFileTypes={[".txt", ".csv", ".pdf", ".doc", ".docx"]}
             maxFileSize={10 * 1024 * 1024} // 10MB
