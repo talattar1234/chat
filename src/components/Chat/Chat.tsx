@@ -27,6 +27,7 @@ import {
   Warning as WarningIcon,
   DeleteSweep as DeleteSweepIcon,
   Mic as MicIcon,
+  ContentCopy as CopyIcon,
 } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder/AudioRecorder";
 import { chatLabels } from "./Chat.labels";
@@ -69,6 +70,7 @@ const Chat: React.FC<ChatProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   const t = chatLabels[lang];
 
@@ -189,6 +191,22 @@ const Chat: React.FC<ChatProps> = ({
     }
   };
 
+  const handleCopyMessage = (text: string, messageId: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopiedMessageId(messageId);
+        // Clear the copied state after 2 seconds
+        setTimeout(() => {
+          setCopiedMessageId(null);
+        }, 2000);
+      })
+      .catch(() => {
+        // Handle error silently or show a brief error message
+        console.error("Failed to copy to clipboard");
+      });
+  };
+
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Messages Area */}
@@ -292,19 +310,52 @@ const Chat: React.FC<ChatProps> = ({
                     </Box>
                   )}
 
-                  <Typography
-                    variant="caption"
+                  <Box
                     sx={{
-                      display: "block",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                       mt: 1,
-                      opacity: 0.7,
-                      textAlign: message.sender === "user" ? "left" : "right",
                     }}
                   >
-                    {message.timestamp.toLocaleTimeString(
-                      lang === "he" ? "he-IL" : "en-US"
+                    {message.sender === "ai" && (
+                      <Tooltip
+                        title={
+                          copiedMessageId === message.id
+                            ? t.copiedToClipboard
+                            : t.copyToClipboard
+                        }
+                      >
+                        <IconButton
+                          size="small"
+                          onClick={() =>
+                            handleCopyMessage(message.text, message.id)
+                          }
+                          sx={{
+                            p: 0.5,
+                            color: "text.secondary",
+                            "&:hover": {
+                              backgroundColor: "action.hover",
+                              color: "text.primary",
+                            },
+                          }}
+                        >
+                          <CopyIcon sx={{ fontSize: 16 }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
-                  </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        opacity: 0.7,
+                        textAlign: message.sender === "user" ? "left" : "right",
+                      }}
+                    >
+                      {message.timestamp.toLocaleTimeString(
+                        lang === "he" ? "he-IL" : "en-US"
+                      )}
+                    </Typography>
+                  </Box>
                 </Paper>
                 {message.sender === "user" && (
                   <Avatar sx={{ bgcolor: "secondary.main", mt: 1 }}>

@@ -8,6 +8,9 @@ export interface ChatLabels {
   totalFilesTooLarge: string;
   unsupportedFileTypes: string;
   loadingMessage: string;
+  copyToClipboard: string;
+  copiedToClipboard: string;
+  copyFailed: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -23,6 +26,9 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     unsupportedFileTypes: "סוגי קבצים לא נתמכים: {fileNames}",
     loadingMessage:
       "AI חושב... - אתה יכול להכין את ההודעה הבאה בזמן שה-AI עונה",
+    copyToClipboard: "העתק ללוח",
+    copiedToClipboard: "הועתק ללוח!",
+    copyFailed: "שגיאה בהעתקה",
   },
   en: {
     placeholder: "Type a message...",
@@ -36,5 +42,8 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     unsupportedFileTypes: "Unsupported file types: {fileNames}",
     loadingMessage:
       "AI is thinking... - You can prepare your next message while the AI responds",
+    copyToClipboard: "Copy to clipboard",
+    copiedToClipboard: "Copied to clipboard!",
+    copyFailed: "Copy failed",
   },
 };
