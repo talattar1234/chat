@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import {
   Send as SendIcon,
+  Stop as StopIcon,
   AttachFile as AttachFileIcon,
   Delete as DeleteIcon,
   Person as PersonIcon,
@@ -55,6 +56,7 @@ export interface Message {
 export interface ChatProps {
   messages: Message[];
   onMessageEnter?: (message: string, files?: File[]) => void;
+  onStopClick?: () => void;
   onNewChatClick?: () => void;
   isLoading?: boolean;
   maxFileSize: number; // required - in bytes
@@ -65,6 +67,7 @@ export interface ChatProps {
 const Chat: React.FC<ChatProps> = ({
   messages,
   onMessageEnter,
+  onStopClick,
   onNewChatClick,
   isLoading = false,
   maxFileSize,
@@ -161,6 +164,10 @@ const Chat: React.FC<ChatProps> = ({
     setInputText("");
     setSelectedFiles([]);
     setError("");
+  };
+
+  const handleStopClick = () => {
+    onStopClick?.();
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -918,14 +925,27 @@ const Chat: React.FC<ChatProps> = ({
             lang={lang}
           />
 
-          <IconButton
-            color="primary"
-            onClick={handleSendMessage}
-            disabled={!inputText.trim() || totalFileSize > maxFileSize}
-            sx={{ minWidth: 56, height: 56 }}
-          >
-            <SendIcon />
-          </IconButton>
+          <Tooltip title={isLoading ? t.stopGeneration : t.placeholder}>
+            <IconButton
+              color={isLoading ? "error" : "primary"}
+              onClick={isLoading ? handleStopClick : handleSendMessage}
+              disabled={
+                isLoading
+                  ? false
+                  : !inputText.trim() || totalFileSize > maxFileSize
+              }
+              sx={{
+                minWidth: 56,
+                height: 56,
+                ...(isLoading && {
+                  border: "2px solid #f44336",
+                  borderRadius: "50%",
+                }),
+              }}
+            >
+              {isLoading ? <StopIcon /> : <SendIcon />}
+            </IconButton>
+          </Tooltip>
         </Box>
 
         {/* Hidden file input */}

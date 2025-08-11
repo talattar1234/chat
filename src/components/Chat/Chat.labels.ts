@@ -14,6 +14,7 @@ export interface ChatLabels {
   newChat: string;
   exportChat: string;
   menu: string;
+  stopGeneration: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -35,6 +36,7 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     newChat: "צ'אט חדש",
     exportChat: "ייצא צ'אט",
     menu: "תפריט",
+    stopGeneration: "עצור יצירה",
   },
   en: {
     placeholder: "Type a message...",
@@ -54,5 +56,6 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     newChat: "New Chat",
     exportChat: "Export Chat",
     menu: "Menu",
+    stopGeneration: "Stop Generation",
   },
 };
