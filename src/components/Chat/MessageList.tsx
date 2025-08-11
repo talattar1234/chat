@@ -78,7 +78,40 @@ const MessageList = React.memo<MessageListProps>(
     );
 
     return (
-      <List>
+      <List
+        sx={{
+          "&::-webkit-scrollbar": {
+            width: "10px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.05)"
+                : "rgba(0, 0, 0, 0.05)",
+            borderRadius: "5px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.35)"
+                : "rgba(0, 0, 0, 0.35)",
+            borderRadius: "5px",
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.2)"
+                : "1px solid rgba(0, 0, 0, 0.2)",
+            "&:hover": {
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.55)"
+                  : "rgba(0, 0, 0, 0.55)",
+            },
+          },
+          "&::-webkit-scrollbar-corner": {
+            background: "transparent",
+          },
+        }}
+      >
         {messages.map((message) => (
           <ListItem
             key={message.id}
@@ -190,21 +223,52 @@ const MessageList = React.memo<MessageListProps>(
                       flexWrap: "wrap",
                       gap: 0.5,
                       p: 0.5,
-                      "&::-webkit-scrollbar": { width: "4px" },
+                      "&::-webkit-scrollbar": {
+                        width: "8px",
+                      },
                       "&::-webkit-scrollbar-track": {
-                        background: "transparent",
+                        background: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.05)"
+                            : "rgba(0, 0, 0, 0.05)",
+                        borderRadius: "4px",
                       },
                       "&::-webkit-scrollbar-thumb": {
-                        background:
-                          message.sender === "user"
-                            ? "rgba(255,255,255,0.3)"
-                            : "rgba(0,0,0,0.2)",
-                        borderRadius: "2px",
+                        background: (theme) => {
+                          if (message.sender === "user") {
+                            return theme.palette.mode === "dark"
+                              ? "rgba(255, 255, 255, 0.4)"
+                              : "rgba(255, 255, 255, 0.5)";
+                          } else {
+                            return theme.palette.mode === "dark"
+                              ? "rgba(255, 255, 255, 0.3)"
+                              : "rgba(0, 0, 0, 0.3)";
+                          }
+                        },
+                        borderRadius: "4px",
+                        border: (theme) => {
+                          if (message.sender === "user") {
+                            return theme.palette.mode === "dark"
+                              ? "1px solid rgba(255, 255, 255, 0.3)"
+                              : "1px solid rgba(255, 255, 255, 0.4)";
+                          } else {
+                            return theme.palette.mode === "dark"
+                              ? "1px solid rgba(255, 255, 255, 0.2)"
+                              : "1px solid rgba(0, 0, 0, 0.2)";
+                          }
+                        },
                         "&:hover": {
-                          background:
-                            message.sender === "user"
-                              ? "rgba(255,255,255,0.5)"
-                              : "rgba(0,0,0,0.3)",
+                          background: (theme) => {
+                            if (message.sender === "user") {
+                              return theme.palette.mode === "dark"
+                                ? "rgba(255, 255, 255, 0.6)"
+                                : "rgba(255, 255, 255, 0.7)";
+                            } else {
+                              return theme.palette.mode === "dark"
+                                ? "rgba(255, 255, 255, 0.5)"
+                                : "rgba(0, 0, 0, 0.5)";
+                            }
+                          },
                         },
                       },
                     }}

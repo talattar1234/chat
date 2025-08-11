@@ -143,6 +143,36 @@ const Chat: React.FC<ChatProps> = ({
             ? "linear-gradient(135deg, #0f0f0f 0%, #0a0a0a 30%, #0a0a0a 70%, #0f0f0f 100%), linear-gradient(45deg, #1a1a2e 0%, transparent 20%, transparent 80%, #16213e 100%)"
             : "linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #fff8f0 100%)",
           position: "relative",
+          "&::-webkit-scrollbar": {
+            width: "12px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.05)"
+                : "rgba(0, 0, 0, 0.05)",
+            borderRadius: "6px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.3)"
+                : "rgba(0, 0, 0, 0.3)",
+            borderRadius: "6px",
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.2)"
+                : "1px solid rgba(0, 0, 0, 0.2)",
+            "&:hover": {
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.5)"
+                  : "rgba(0, 0, 0, 0.5)",
+            },
+          },
+          "&::-webkit-scrollbar-corner": {
+            background: "transparent",
+          },
           "&::before": {
             content: '""',
             position: "absolute",
