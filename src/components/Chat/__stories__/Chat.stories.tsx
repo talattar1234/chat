@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Chat, { Message, FileInfo } from "../Chat";
+import { Box } from "@mui/material";
 
 const meta: Meta<typeof Chat> = {
   title: "Components/Chat",
@@ -9,6 +10,7 @@ const meta: Meta<typeof Chat> = {
   },
   tags: ["autodocs"],
   argTypes: {},
+  decorators: [],
 };
 
 export default meta;
@@ -313,6 +315,100 @@ export const LoadingWithFiles: Story = {
       description: {
         story:
           "This story demonstrates the chat component in loading state. All inputs (text field, file upload, audio recorder, send button) are disabled when isLoading=true.",
+      },
+    },
+  },
+};
+
+export const BeautifulBackground: Story = {
+  args: {
+    messages: [
+      {
+        id: "1",
+        text: "שלום! ברוך הבא לצ'אט היפה שלנו! 🌟",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:00:00"),
+      },
+      {
+        id: "2",
+        text: "וואו! הרקע נראה ממש יפה! איך עשית את זה?",
+        sender: "user",
+        timestamp: new Date("2024-01-15T10:01:00"),
+      },
+      {
+        id: "3",
+        text: "תודה! השתמשתי בגרדיאנט עדין עם צבעים חמים וקרירים, ועליו הוספתי ציורים עדינים של עיגולים וכוכבים בצבע לבן שקוף. זה נותן תחושה נעימה כמו בוואטסאפ! ✨",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:02:00"),
+      },
+      {
+        id: "4",
+        text: "זה באמת נראה מקצועי! איזה עוד אפקטים יש?",
+        sender: "user",
+        timestamp: new Date("2024-01-15T10:03:00"),
+      },
+      {
+        id: "5",
+        text: "יש לנו גרדיאנט עדין שמשתנה מירוק בהיר לכחול בהיר ולכתום בהיר, ציורים עדינים של עיגולים וכוכבים בגדלים שונים, ואפילו כוכב קטן באזור הקלט! הכל מעוצב עם SVG ו-CSS מתקדם. 🎨",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:04:00"),
+      },
+    ],
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "צ'אט עם רקע עדין וציורים דקים כמו בוואטסאפ, כולל גרדיאנט עדין וציורי SVG של עיגולים וכוכבים. תומך ב-light ו-dark theme.",
+      },
+    },
+  },
+};
+
+export const DarkThemeBackground: Story = {
+  args: {
+    messages: [
+      {
+        id: "1",
+        text: "שלום! ברוך הבא לצ'אט שלנו! 🌙",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:00:00"),
+      },
+      {
+        id: "2",
+        text: "וואו! הרקע נראה ממש יפה ב-dark mode! איך זה עובד?",
+        sender: "user",
+        timestamp: new Date("2024-01-15T10:01:00"),
+      },
+      {
+        id: "3",
+        text: "תודה! השתמשתי ב-useTheme hook של Material-UI כדי לזהות את ה-theme הנוכחי. ב-dark mode, הגרדיאנט משתנה לגוונים כהים יותר והציורים הופכים עדינים יותר כדי לא להפריע לקריאות! ✨",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:02:00"),
+      },
+      {
+        id: "4",
+        text: "זה באמת חכם! איזה צבעים יש ב-dark mode?",
+        sender: "user",
+        timestamp: new Date("2024-01-15T10:03:00"),
+      },
+      {
+        id: "5",
+        text: "ב-dark mode יש לנו גרדיאנט כמעט שחור עם טיפת צבעים זוהרים עדינים (כחול, סגול, צהוב). הכוכבים קטנים מאוד ועדינים (0.03-0.01 שקיפות) ומפוזרים בכל המסך. זה נותן תחושה של שמיים זרועי כוכבים! 🌙✨",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:04:00"),
+      },
+    ],
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "צ'אט עם רקע עדין ב-dark theme, כולל גרדיאנט כהה וציורי SVG עדינים יותר.",
       },
     },
   },

@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   Tooltip,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -57,6 +58,8 @@ const Chat: React.FC<ChatProps> = ({
   allowedFileTypes,
   lang = "he",
 }) => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -136,6 +139,20 @@ const Chat: React.FC<ChatProps> = ({
           overflow: "auto",
           p: 2,
           pt: 0, // Remove top padding since we have the sticky header inside
+          background: isDark
+            ? "linear-gradient(135deg, #0f0f0f 0%, #0a0a0a 30%, #0a0a0a 70%, #0f0f0f 100%), linear-gradient(45deg, #1a1a2e 0%, transparent 20%, transparent 80%, #16213e 100%)"
+            : "linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #fff8f0 100%)",
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+
+            pointerEvents: "none",
+          },
         }}
       >
         {/* Sticky Header with Menu */}
@@ -427,25 +444,55 @@ const Chat: React.FC<ChatProps> = ({
         )}
       </Box>
 
-      <Divider />
+      <Divider
+        sx={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent)",
+          height: "1px",
+          border: "none",
+        }}
+      />
 
       {/* Input Area */}
-      <ChatInput
-        onMessageEnter={onMessageEnter || (() => {})}
-        onStopClick={onStopClick}
-        isLoading={isLoading}
-        maxFileSize={maxFileSize}
-        allowedFileTypes={allowedFileTypes}
-        lang={lang}
-        placeholder={t.placeholder}
-        fileSizeLabel={t.fileSize}
-        deleteAllFilesLabel={t.deleteAllFiles}
-        uploadFilesLabel={t.uploadFiles}
-        supportedFilesLabel={t.supportedFiles}
-        totalFilesTooLarge={t.totalFilesTooLarge}
-        unsupportedFileTypes={t.unsupportedFileTypes}
-        stopGenerationLabel={t.stopGeneration}
-      />
+      <Box
+        sx={{
+          background: isDark
+            ? "linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%), linear-gradient(45deg, rgba(25, 118, 210, 0.05) 0%, rgba(156, 39, 176, 0.05) 50%, rgba(255, 193, 7, 0.05) 100%)"
+            : "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+          borderTop: isDark
+            ? "1px solid rgba(255,255,255,0.1)"
+            : "1px solid rgba(0,0,0,0.05)",
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "1px",
+            background: isDark
+              ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)"
+              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)",
+          },
+        }}
+      >
+        <ChatInput
+          onMessageEnter={onMessageEnter || (() => {})}
+          onStopClick={onStopClick}
+          isLoading={isLoading}
+          maxFileSize={maxFileSize}
+          allowedFileTypes={allowedFileTypes}
+          lang={lang}
+          placeholder={t.placeholder}
+          fileSizeLabel={t.fileSize}
+          deleteAllFilesLabel={t.deleteAllFiles}
+          uploadFilesLabel={t.uploadFiles}
+          supportedFilesLabel={t.supportedFiles}
+          totalFilesTooLarge={t.totalFilesTooLarge}
+          unsupportedFileTypes={t.unsupportedFileTypes}
+          stopGenerationLabel={t.stopGeneration}
+        />
+      </Box>
     </Box>
   );
 };

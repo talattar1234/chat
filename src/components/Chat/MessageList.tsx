@@ -108,13 +108,20 @@ const MessageList = React.memo<MessageListProps>(
                   bgcolor:
                     message.sender === "user"
                       ? "primary.main"
-                      : "background.paper",
+                      : (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.08)"
+                            : "background.paper",
                   color:
                     message.sender === "user"
                       ? "primary.contrastText"
                       : "text.primary",
                   borderRadius: 2,
                   maxWidth: "100%",
+                  border: (theme) =>
+                    message.sender === "ai" && theme.palette.mode === "dark"
+                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      : "none",
                 }}
               >
                 <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
