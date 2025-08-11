@@ -163,17 +163,43 @@ const Chat: React.FC<ChatProps> = ({
             zIndex: 10,
             p: 0.5,
             mb: 1,
-            background: "rgba(255, 255, 255, 0.6)",
-            backdropFilter: "blur(1px)",
-            borderBottom: 1,
-            borderColor: "divider",
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.08)"
+                : "rgba(255, 255, 255, 0.6)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.1)"
+                : "1px solid rgba(0, 0, 0, 0.08)",
             display: "flex",
             justifyContent: "flex-end",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
-            borderRadius: 1,
+            boxShadow: (theme) =>
+              theme.palette.mode === "dark"
+                ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                : "0 4px 20px rgba(0, 0, 0, 0.05)",
+            borderRadius: "18px",
             width: "fit-content",
             alignSelf: "flex-end",
             ml: "auto",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              borderRadius: "18px",
+              padding: "1px",
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                  : "linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.02))",
+              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              maskComposite: "exclude",
+              WebkitMask:
+                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              zIndex: -1,
+            },
           }}
         >
           <Tooltip title={t.menu}>
@@ -265,28 +291,44 @@ const Chat: React.FC<ChatProps> = ({
               <AIIcon sx={{ fontSize: 18 }} />
             </Avatar>
             <Paper
-              elevation={1}
+              elevation={0}
               sx={{
                 p: 1.5,
-                borderRadius: 2,
+                borderRadius: "18px",
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                bgcolor: "background.paper",
+                bgcolor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.08)"
+                    : "rgba(255, 255, 255, 0.95)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 position: "relative",
+                border: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "1px solid rgba(255, 255, 255, 0.1)"
+                    : "1px solid rgba(0, 0, 0, 0.08)",
+                boxShadow: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                    : "0 4px 20px rgba(0, 0, 0, 0.05)",
                 "&::before": {
                   content: '""',
                   position: "absolute",
-                  inset: "-2px",
-                  borderRadius: "10px",
-                  padding: "2px",
-                  background:
-                    "linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff, #5f27cd)",
-                  backgroundSize: "400% 400%",
-                  animation: "gradientShift 3s ease infinite",
-                  zIndex: -1,
+                  inset: 0,
+                  borderRadius: "18px",
+                  padding: "1px",
+                  background: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                      : "linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.02))",
                   mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                   maskComposite: "exclude",
+                  WebkitMask:
+                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  WebkitMaskComposite: "xor",
+                  zIndex: -1,
                 },
                 animation: "slideIn 0.5s ease-out",
                 "@keyframes slideIn": {

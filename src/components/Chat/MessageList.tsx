@@ -102,26 +102,77 @@ const MessageList = React.memo<MessageListProps>(
                 </Avatar>
               )}
               <Paper
-                elevation={1}
+                elevation={0}
                 sx={{
                   p: 2,
-                  bgcolor:
+                  bgcolor: (theme) => {
+                    if (message.sender === "user") {
+                      return theme.palette.mode === "dark"
+                        ? "rgba(0, 122, 255, 0.15)"
+                        : "rgba(0, 122, 255, 0.25)";
+                    } else {
+                      return theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.08)"
+                        : "rgba(255, 255, 255, 0.95)";
+                    }
+                  },
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  color: (theme) =>
                     message.sender === "user"
-                      ? "primary.main"
-                      : (theme) =>
-                          theme.palette.mode === "dark"
-                            ? "rgba(255, 255, 255, 0.08)"
-                            : "background.paper",
-                  color:
-                    message.sender === "user"
-                      ? "primary.contrastText"
+                      ? theme.palette.mode === "dark"
+                        ? "#ffffff"
+                        : "#000000"
                       : "text.primary",
-                  borderRadius: 2,
+                  borderRadius: "18px",
                   maxWidth: "100%",
-                  border: (theme) =>
-                    message.sender === "ai" && theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
-                      : "none",
+                  border: (theme) => {
+                    if (message.sender === "user") {
+                      return theme.palette.mode === "dark"
+                        ? "1px solid rgba(0, 122, 255, 0.3)"
+                        : "1px solid rgba(0, 122, 255, 0.4)";
+                    } else {
+                      return theme.palette.mode === "dark"
+                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        : "1px solid rgba(0, 0, 0, 0.15)";
+                    }
+                  },
+                  boxShadow: (theme) => {
+                    if (message.sender === "user") {
+                      return theme.palette.mode === "dark"
+                        ? "0 4px 20px rgba(0, 122, 255, 0.15)"
+                        : "0 4px 20px rgba(0, 122, 255, 0.2)";
+                    } else {
+                      return theme.palette.mode === "dark"
+                        ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                        : "0 4px 20px rgba(0, 0, 0, 0.15)";
+                    }
+                  },
+                  position: "relative",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "18px",
+                    padding: "1px",
+                    background: (theme) => {
+                      if (message.sender === "user") {
+                        return theme.palette.mode === "dark"
+                          ? "linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 122, 255, 0.1))"
+                          : "linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 122, 255, 0.2))";
+                      } else {
+                        return theme.palette.mode === "dark"
+                          ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                          : "linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.12))";
+                      }
+                    },
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    zIndex: -1,
+                  },
                 }}
               >
                 <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
