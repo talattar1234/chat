@@ -1,43 +1,26 @@
-import React, { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   Box,
   Paper,
-  TextField,
-  IconButton,
   Typography,
   Avatar,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Divider,
-  Chip,
-  Alert,
-  Button,
-  InputAdornment,
-  Tooltip,
-  LinearProgress,
   Menu,
   MenuItem,
   ListItemIcon,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import {
-  Send as SendIcon,
-  Stop as StopIcon,
-  AttachFile as AttachFileIcon,
-  Delete as DeleteIcon,
   Person as PersonIcon,
   SmartToy as AIIcon,
-  Warning as WarningIcon,
-  DeleteSweep as DeleteSweepIcon,
-  Mic as MicIcon,
-  ContentCopy as CopyIcon,
   Add as AddIcon,
   MoreVert as MoreVertIcon,
   Download as DownloadIcon,
 } from "@mui/icons-material";
-import AudioRecorder from "../AudioRecorder/AudioRecorder";
 import { chatLabels } from "./Chat.labels";
+import ChatInput from "./ChatInput";
+import MessageList from "./MessageList";
 
 export interface FileInfo {
   name: string;
@@ -74,32 +57,38 @@ const Chat: React.FC<ChatProps> = ({
   allowedFileTypes,
   lang = "he",
 }) => {
-  const [inputText, setInputText] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [error, setError] = useState<string>("");
-  const [totalFileSize, setTotalFileSize] = useState(0);
-  const [isRecording, setIsRecording] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const t = chatLabels[lang];
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  // Memoized callbacks
+  const handleCopyMessage = useCallback((text: string, messageId: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopiedMessageId(messageId);
+        setTimeout(() => setCopiedMessageId(null), 2000);
+      })
+      .catch(() => {
+        console.error("Failed to copy to clipboard");
+      });
+  }, []);
+
+  const handleMenuOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setMenuAnchorEl(event.currentTarget);
-  };
+  }, []);
 
-  const handleMenuClose = () => {
+  const handleMenuClose = useCallback(() => {
     setMenuAnchorEl(null);
-  };
+  }, []);
 
-  const handleNewChat = () => {
+  const handleNewChat = useCallback(() => {
     handleMenuClose();
     onNewChatClick?.();
-  };
+  }, [handleMenuClose, onNewChatClick]);
 
-  const handleExportChat = () => {
+  const handleExportChat = useCallback(() => {
     handleMenuClose();
 
     // Create a text file with chat history
@@ -123,144 +112,7 @@ const Chat: React.FC<ChatProps> = ({
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  React.useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // Update total file size when selected files change
-  React.useEffect(() => {
-    const totalSize = selectedFiles.reduce(
-      (total, file) => total + file.size,
-      0
-    );
-    setTotalFileSize(totalSize);
-  }, [selectedFiles]);
-
-  // Update error message when total file size changes
-  React.useEffect(() => {
-    if (totalFileSize > maxFileSize) {
-      const totalSizeMB = (totalFileSize / (1024 * 1024)).toFixed(2);
-      const maxSizeMB = (maxFileSize / (1024 * 1024)).toFixed(2);
-      setError(
-        t.totalFilesTooLarge
-          .replace("{totalSize}", totalSizeMB)
-          .replace("{maxSize}", maxSizeMB)
-      );
-    } else if (totalFileSize > 0) {
-      setError(""); // Clear error when size is within limit
-    }
-  }, [totalFileSize, maxFileSize, t]);
-
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
-
-    onMessageEnter?.(inputText.trim(), selectedFiles);
-    setInputText("");
-    setSelectedFiles([]);
-    setError("");
-  };
-
-  const handleStopClick = () => {
-    onStopClick?.();
-  };
-
-  const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    setError("");
-
-    // Clear the input value to allow selecting the same files again
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-
-    // Validate file types
-    const invalidFiles = files.filter((file) => {
-      const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
-      return !allowedFileTypes.includes(fileExtension);
-    });
-
-    if (invalidFiles.length > 0) {
-      setError(
-        t.unsupportedFileTypes.replace(
-          "{fileNames}",
-          invalidFiles.map((f) => f.name).join(", ")
-        )
-      );
-      return;
-    }
-
-    // Calculate total size of new files + existing files
-    const newFilesTotalSize = files.reduce(
-      (total, file) => total + file.size,
-      0
-    );
-    const totalSize = totalFileSize + newFilesTotalSize;
-
-    // Add files even if they exceed the limit
-    setSelectedFiles((prev) => [...prev, ...files]);
-  };
-
-  const removeFile = (index: number) => {
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const clearAllFiles = () => {
-    setSelectedFiles([]);
-  };
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
-
-  const getFileIcon = (fileName: string) => {
-    const extension = fileName.split(".").pop()?.toLowerCase();
-    switch (extension) {
-      case "pdf":
-        return "📄";
-      case "doc":
-      case "docx":
-        return "📝";
-      case "txt":
-        return "📄";
-      case "csv":
-        return "📊";
-      default:
-        return "📎";
-    }
-  };
-
-  const handleCopyMessage = (text: string, messageId: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        setCopiedMessageId(messageId);
-        // Clear the copied state after 2 seconds
-        setTimeout(() => {
-          setCopiedMessageId(null);
-        }, 2000);
-      })
-      .catch(() => {
-        // Handle error silently or show a brief error message
-        console.error("Failed to copy to clipboard");
-      });
-  };
+  }, [messages, lang, handleMenuClose]);
 
   return (
     <Box
@@ -356,162 +208,14 @@ const Chat: React.FC<ChatProps> = ({
           </Menu>
         </Box>
 
-        <List>
-          {messages.map((message) => (
-            <ListItem
-              key={message.id}
-              sx={{
-                flexDirection: "column",
-                alignItems:
-                  message.sender === "user" ? "flex-end" : "flex-start",
-                mb: 2,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 1,
-                  maxWidth: "70%",
-                }}
-              >
-                {message.sender === "ai" && (
-                  <Avatar sx={{ bgcolor: "primary.main", mt: 1 }}>
-                    <AIIcon />
-                  </Avatar>
-                )}
-                <Paper
-                  elevation={1}
-                  sx={{
-                    p: 2,
-                    bgcolor:
-                      message.sender === "user"
-                        ? "primary.main"
-                        : "background.paper",
-                    color:
-                      message.sender === "user"
-                        ? "primary.contrastText"
-                        : "text.primary",
-                    borderRadius: 2,
-                    maxWidth: "100%",
-                  }}
-                >
-                  <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
-                    {message.text}
-                  </Typography>
-
-                  {/* Display attached files */}
-                  {message.files && message.files.length > 0 && (
-                    <Box
-                      sx={{
-                        mt: 1,
-                        maxHeight: "80px", // 2 rows for message files
-                        overflow: "auto",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: 0.5,
-                        p: 0.5,
-                        "&::-webkit-scrollbar": {
-                          width: "4px",
-                        },
-                        "&::-webkit-scrollbar-track": {
-                          background: "transparent",
-                        },
-                        "&::-webkit-scrollbar-thumb": {
-                          background:
-                            message.sender === "user"
-                              ? "rgba(255,255,255,0.3)"
-                              : "rgba(0,0,0,0.2)",
-                          borderRadius: "2px",
-                          "&:hover": {
-                            background:
-                              message.sender === "user"
-                                ? "rgba(255,255,255,0.5)"
-                                : "rgba(0,0,0,0.3)",
-                          },
-                        },
-                      }}
-                    >
-                      {message.files.map((file, index) => (
-                        <Chip
-                          key={index}
-                          icon={<span>{getFileIcon(file.name)}</span>}
-                          label={`${file.name} (${formatFileSize(file.size)})`}
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            flexShrink: 0,
-                            color:
-                              message.sender === "user"
-                                ? "inherit"
-                                : "text.primary",
-                            borderColor:
-                              message.sender === "user"
-                                ? "rgba(255,255,255,0.3)"
-                                : "divider",
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  )}
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mt: 1,
-                    }}
-                  >
-                    {message.sender === "ai" && (
-                      <Tooltip
-                        title={
-                          copiedMessageId === message.id
-                            ? t.copiedToClipboard
-                            : t.copyToClipboard
-                        }
-                      >
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            handleCopyMessage(message.text, message.id)
-                          }
-                          sx={{
-                            p: 0.5,
-                            color: "text.secondary",
-                            "&:hover": {
-                              backgroundColor: "action.hover",
-                              color: "text.primary",
-                            },
-                          }}
-                        >
-                          <CopyIcon sx={{ fontSize: 16 }} />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        opacity: 0.7,
-                        textAlign: message.sender === "user" ? "left" : "right",
-                      }}
-                    >
-                      {message.timestamp.toLocaleTimeString(
-                        lang === "he" ? "he-IL" : "en-US"
-                      )}
-                    </Typography>
-                  </Box>
-                </Paper>
-                {message.sender === "user" && (
-                  <Avatar sx={{ bgcolor: "secondary.main", mt: 1 }}>
-                    <PersonIcon />
-                  </Avatar>
-                )}
-              </Box>
-            </ListItem>
-          ))}
-        </List>
-        <div ref={messagesEndRef} />
+        <MessageList
+          messages={messages}
+          lang={lang}
+          copiedMessageId={copiedMessageId}
+          onCopyMessage={handleCopyMessage}
+          copyToClipboardLabel={t.copyToClipboard}
+          copiedToClipboardLabel={t.copiedToClipboard}
+        />
 
         {/* AI Typing Indicator */}
         {isLoading && (
@@ -720,251 +424,22 @@ const Chat: React.FC<ChatProps> = ({
       <Divider />
 
       {/* Input Area */}
-      <Box sx={{ p: 2 }}>
-        {/* Selected Files Display */}
-        {selectedFiles.length > 0 && (
-          <>
-            <Box
-              sx={{
-                mb: 1,
-                maxHeight: "120px", // 3 rows * ~40px each
-                overflow: "auto",
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 1,
-                p: 0.5, // Add some padding for scrollbar
-                "&::-webkit-scrollbar": {
-                  width: "6px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  background: "divider",
-                  borderRadius: "3px",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  background: "text.secondary",
-                  borderRadius: "3px",
-                  "&:hover": {
-                    background: "text.primary",
-                  },
-                },
-              }}
-            >
-              {selectedFiles.map((file, index) => (
-                <Chip
-                  key={index}
-                  icon={<span>{getFileIcon(file.name)}</span>}
-                  label={`${file.name} (${formatFileSize(file.size)})`}
-                  onDelete={() => removeFile(index)}
-                  color="primary"
-                  variant="outlined"
-                  sx={{ flexShrink: 0 }} // Prevent chips from shrinking
-                />
-              ))}
-            </Box>
-
-            {/* File size progress bar */}
-            <Box sx={{ mb: 1 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: 0.5,
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                    {t.fileSize}
-                  </Typography>
-                  {totalFileSize > maxFileSize && (
-                    <WarningIcon
-                      sx={{
-                        fontSize: 16,
-                        color: "error.main",
-                        animation: "pulse 2s infinite",
-                      }}
-                    />
-                  )}
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      opacity: 0.7,
-                      color:
-                        totalFileSize > maxFileSize ? "error.main" : "inherit",
-                      fontWeight:
-                        totalFileSize > maxFileSize ? "bold" : "normal",
-                    }}
-                  >
-                    {formatFileSize(totalFileSize)} /{" "}
-                    {formatFileSize(maxFileSize)}
-                  </Typography>
-                  <Tooltip title={t.deleteAllFiles}>
-                    <IconButton
-                      size="small"
-                      onClick={clearAllFiles}
-                      sx={{
-                        p: 0.5,
-                        color: "error.main",
-                        "&:hover": {
-                          backgroundColor: "error.light",
-                          color: "error.contrastText",
-                        },
-                      }}
-                    >
-                      <DeleteSweepIcon sx={{ fontSize: 16 }} />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </Box>
-              <LinearProgress
-                variant="determinate"
-                value={Math.min((totalFileSize / maxFileSize) * 100, 100)}
-                sx={{
-                  height: 6,
-                  borderRadius: 3,
-                  backgroundColor: "grey.200",
-                  "& .MuiLinearProgress-bar": {
-                    borderRadius: 3,
-                    backgroundColor:
-                      totalFileSize > maxFileSize
-                        ? "error.main"
-                        : "primary.main",
-                    animation:
-                      totalFileSize > maxFileSize
-                        ? "pulse 2s infinite"
-                        : "none",
-                  },
-                  "@keyframes pulse": {
-                    "0%": {
-                      opacity: 1,
-                    },
-                    "50%": {
-                      opacity: 0.7,
-                    },
-                    "100%": {
-                      opacity: 1,
-                    },
-                  },
-                  "@keyframes typing": {
-                    "0%, 60%, 100%": {
-                      transform: "translateY(0)",
-                      opacity: 0.4,
-                    },
-                    "30%": {
-                      transform: "translateY(-10px)",
-                      opacity: 1,
-                    },
-                  },
-                }}
-              />
-            </Box>
-
-            {/* Error Alert - moved below progress bar */}
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-          </>
-        )}
-
-        {/* Input Field */}
-        <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
-          <TextField
-            fullWidth
-            multiline
-            maxRows={4}
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder={t.placeholder}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Tooltip title={t.uploadFiles}>
-                    <IconButton onClick={() => fileInputRef.current?.click()}>
-                      <AttachFileIcon />
-                    </IconButton>
-                  </Tooltip>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          {/* Audio Recorder Component */}
-          <AudioRecorder
-            onTextResult={(text) => {
-              console.log("Chat received text:", text);
-              setInputText((prev) => {
-                const newText = prev + (prev ? " " : "") + text;
-                console.log("New input text:", newText);
-                return newText;
-              });
-            }}
-            onError={(error) => {
-              console.error("AudioRecorder error:", error);
-              setError(error);
-            }}
-            onRecordingChange={(recording) => {
-              setIsRecording(recording);
-            }}
-            lang={lang}
-          />
-
-          <Tooltip title={isLoading ? t.stopGeneration : t.placeholder}>
-            <IconButton
-              color={isLoading ? "error" : "primary"}
-              onClick={isLoading ? handleStopClick : handleSendMessage}
-              disabled={
-                isLoading
-                  ? false
-                  : !inputText.trim() || totalFileSize > maxFileSize
-              }
-              sx={{
-                minWidth: 56,
-                height: 56,
-                ...(isLoading && {
-                  border: "2px solid #f44336",
-                  borderRadius: "50%",
-                }),
-              }}
-            >
-              {isLoading ? <StopIcon /> : <SendIcon />}
-            </IconButton>
-          </Tooltip>
-        </Box>
-
-        {/* Hidden file input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept={allowedFileTypes.join(",")}
-          onChange={handleFileSelect}
-          style={{ display: "none" }}
-        />
-
-        {/* File upload info */}
-        <Box
-          sx={{
-            mt: 1,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="caption" sx={{ opacity: 0.7 }}>
-            {t.supportedFiles} {allowedFileTypes.join(", ")}
-          </Typography>
-          {selectedFiles.length > 0 && (
-            <Typography variant="caption" sx={{ opacity: 0.7 }}>
-              {formatFileSize(totalFileSize)} / {formatFileSize(maxFileSize)}
-            </Typography>
-          )}
-        </Box>
-      </Box>
+      <ChatInput
+        onMessageEnter={onMessageEnter || (() => {})}
+        onStopClick={onStopClick}
+        isLoading={isLoading}
+        maxFileSize={maxFileSize}
+        allowedFileTypes={allowedFileTypes}
+        lang={lang}
+        placeholder={t.placeholder}
+        fileSizeLabel={t.fileSize}
+        deleteAllFilesLabel={t.deleteAllFiles}
+        uploadFilesLabel={t.uploadFiles}
+        supportedFilesLabel={t.supportedFiles}
+        totalFilesTooLarge={t.totalFilesTooLarge}
+        unsupportedFileTypes={t.unsupportedFileTypes}
+        stopGenerationLabel={t.stopGeneration}
+      />
     </Box>
   );
 };
