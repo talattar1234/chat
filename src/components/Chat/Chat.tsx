@@ -541,29 +541,27 @@ const Chat: React.FC<ChatProps> = ({
               elevation={1}
               sx={{
                 p: 1.5,
-                bgcolor: "background.paper",
                 borderRadius: 2,
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                animation: "slideIn 0.5s ease-out",
+                bgcolor: "background.paper",
                 position: "relative",
                 "&::before": {
                   content: '""',
                   position: "absolute",
-                  top: -2,
-                  left: -2,
-                  right: -2,
-                  bottom: -2,
-                  borderRadius: 2.5,
-                  padding: "3px",
+                  inset: "-2px",
+                  borderRadius: "10px",
+                  padding: "2px",
                   background:
                     "linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff, #5f27cd)",
                   backgroundSize: "400% 400%",
-                  animation:
-                    "gradientShift 3s ease infinite, borderGlow 2s ease-in-out infinite",
+                  animation: "gradientShift 3s ease infinite",
                   zIndex: -1,
+                  mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  maskComposite: "exclude",
                 },
+                animation: "slideIn 0.5s ease-out",
                 "@keyframes slideIn": {
                   "0%": {
                     opacity: 0,
@@ -583,16 +581,6 @@ const Chat: React.FC<ChatProps> = ({
                   },
                   "100%": {
                     backgroundPosition: "0% 50%",
-                  },
-                },
-                "@keyframes borderGlow": {
-                  "0%, 100%": {
-                    boxShadow:
-                      "0 0 12px rgba(255, 107, 107, 0.3), 0 0 20px rgba(78, 205, 196, 0.2), 0 0 28px rgba(69, 183, 209, 0.15)",
-                  },
-                  "50%": {
-                    boxShadow:
-                      "0 0 16px rgba(255, 107, 107, 0.5), 0 0 24px rgba(78, 205, 196, 0.4), 0 0 32px rgba(69, 183, 209, 0.3)",
                   },
                 },
               }}
