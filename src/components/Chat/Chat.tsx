@@ -540,6 +540,23 @@ const Chat: React.FC<ChatProps> = ({
                 alignItems: "center",
                 gap: 1,
                 animation: "slideIn 0.5s ease-out",
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: -2,
+                  left: -2,
+                  right: -2,
+                  bottom: -2,
+                  borderRadius: 2.5,
+                  padding: "3px",
+                  background:
+                    "linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff, #5f27cd)",
+                  backgroundSize: "400% 400%",
+                  animation:
+                    "gradientShift 3s ease infinite, borderGlow 2s ease-in-out infinite",
+                  zIndex: -1,
+                },
                 "@keyframes slideIn": {
                   "0%": {
                     opacity: 0,
@@ -548,6 +565,27 @@ const Chat: React.FC<ChatProps> = ({
                   "100%": {
                     opacity: 1,
                     transform: "translateY(0)",
+                  },
+                },
+                "@keyframes gradientShift": {
+                  "0%": {
+                    backgroundPosition: "0% 50%",
+                  },
+                  "50%": {
+                    backgroundPosition: "100% 50%",
+                  },
+                  "100%": {
+                    backgroundPosition: "0% 50%",
+                  },
+                },
+                "@keyframes borderGlow": {
+                  "0%, 100%": {
+                    boxShadow:
+                      "0 0 15px rgba(255, 107, 107, 0.4), 0 0 25px rgba(78, 205, 196, 0.3), 0 0 35px rgba(69, 183, 209, 0.2), 0 0 45px rgba(150, 206, 180, 0.1)",
+                  },
+                  "50%": {
+                    boxShadow:
+                      "0 0 20px rgba(255, 107, 107, 0.6), 0 0 30px rgba(78, 205, 196, 0.5), 0 0 40px rgba(69, 183, 209, 0.4), 0 0 50px rgba(150, 206, 180, 0.3)",
                   },
                 },
               }}
