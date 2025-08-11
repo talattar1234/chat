@@ -17,6 +17,9 @@ import {
   InputAdornment,
   Tooltip,
   LinearProgress,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from "@mui/material";
 import {
   Send as SendIcon,
@@ -29,6 +32,8 @@ import {
   Mic as MicIcon,
   ContentCopy as CopyIcon,
   Add as AddIcon,
+  MoreVert as MoreVertIcon,
+  Download as DownloadIcon,
 } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder/AudioRecorder";
 import { chatLabels } from "./Chat.labels";
@@ -74,8 +79,48 @@ const Chat: React.FC<ChatProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const t = chatLabels[lang];
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleNewChat = () => {
+    handleMenuClose();
+    onNewChatClick?.();
+  };
+
+  const handleExportChat = () => {
+    handleMenuClose();
+
+    // Create a text file with chat history
+    const chatHistory = messages
+      .map((message) => {
+        const timestamp = message.timestamp.toLocaleString(
+          lang === "he" ? "he-IL" : "en-US"
+        );
+        const sender =
+          message.sender === "user" ? (lang === "he" ? "משתמש" : "User") : "AI";
+        return `[${timestamp}] ${sender}: ${message.text}`;
+      })
+      .join("\n\n");
+
+    const blob = new Blob([chatHistory], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `chat-history-${new Date().toISOString().split("T")[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -228,47 +273,81 @@ const Chat: React.FC<ChatProps> = ({
           pt: 0, // Remove top padding since we have the sticky header inside
         }}
       >
-        {/* Sticky Header with New Chat Button */}
-        {onNewChatClick && (
-          <Box
-            sx={{
-              position: "sticky",
-              top: 0,
-              zIndex: 10,
-              p: 1,
-              mb: 1,
-              background: "rgba(255, 255, 255, 0.6)",
-              backdropFilter: "blur(1px)",
-              borderBottom: 1,
-              borderColor: "divider",
-              display: "flex",
-              justifyContent: "flex-end",
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
-              borderRadius: 1,
-            }}
-          >
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={onNewChatClick}
+        {/* Sticky Header with Menu */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+            p: 0.5,
+            mb: 1,
+            background: "rgba(255, 255, 255, 0.6)",
+            backdropFilter: "blur(1px)",
+            borderBottom: 1,
+            borderColor: "divider",
+            display: "flex",
+            justifyContent: "flex-end",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+            borderRadius: 1,
+            width: "fit-content",
+            alignSelf: "flex-end",
+            ml: "auto",
+          }}
+        >
+          <Tooltip title={t.menu}>
+            <IconButton
+              onClick={handleMenuOpen}
               size="small"
               sx={{
-                borderRadius: 1.5,
-                textTransform: "none",
-                fontWeight: "medium",
-                py: 0.5,
-                px: 1.5,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(4px)",
+                p: 0.5,
+                color: "text.secondary",
                 "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  color: "text.primary",
                 },
               }}
             >
-              {t.newChat}
-            </Button>
-          </Box>
-        )}
+              <MoreVertIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
+
+          <Menu
+            anchorEl={menuAnchorEl}
+            open={Boolean(menuAnchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            PaperProps={{
+              sx: {
+                mt: 0.5,
+                minWidth: 150,
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+                borderRadius: 2,
+              },
+            }}
+          >
+            {onNewChatClick && (
+              <MenuItem onClick={handleNewChat}>
+                <ListItemIcon>
+                  <AddIcon fontSize="small" />
+                </ListItemIcon>
+                {t.newChat}
+              </MenuItem>
+            )}
+            <MenuItem onClick={handleExportChat}>
+              <ListItemIcon>
+                <DownloadIcon fontSize="small" />
+              </ListItemIcon>
+              {t.exportChat}
+            </MenuItem>
+          </Menu>
+        </Box>
 
         <List>
           {messages.map((message) => (

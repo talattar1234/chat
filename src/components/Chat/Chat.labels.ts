@@ -12,6 +12,8 @@ export interface ChatLabels {
   copiedToClipboard: string;
   copyFailed: string;
   newChat: string;
+  exportChat: string;
+  menu: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -31,6 +33,8 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     copiedToClipboard: "הועתק ללוח!",
     copyFailed: "שגיאה בהעתקה",
     newChat: "צ'אט חדש",
+    exportChat: "ייצא צ'אט",
+    menu: "תפריט",
   },
   en: {
     placeholder: "Type a message...",
@@ -48,5 +52,7 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     copiedToClipboard: "Copied to clipboard!",
     copyFailed: "Copy failed",
     newChat: "New Chat",
+    exportChat: "Export Chat",
+    menu: "Menu",
   },
 };
