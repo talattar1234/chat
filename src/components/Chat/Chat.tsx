@@ -107,7 +107,13 @@ const Chat: React.FC<ChatProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chat-history-${new Date().toISOString().split("T")[0]}.txt`;
+
+    // Create filename with date and time
+    const now = new Date();
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-");
+    a.download = `chat-history-${dateStr}-${timeStr}.txt`;
+
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
