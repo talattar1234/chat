@@ -304,32 +304,30 @@ const MessageList = React.memo<MessageListProps>(
                     mt: 1,
                   }}
                 >
-                  {message.sender === "ai" && (
-                    <Tooltip
-                      title={
-                        copiedMessageId === message.id
-                          ? copiedToClipboardLabel
-                          : copyToClipboardLabel
+                  <Tooltip
+                    title={
+                      copiedMessageId === message.id
+                        ? copiedToClipboardLabel
+                        : copyToClipboardLabel
+                    }
+                  >
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        handleCopyMessage(message.text, message.id)
                       }
+                      sx={{
+                        p: 0.5,
+                        color: "text.secondary",
+                        "&:hover": {
+                          backgroundColor: "action.hover",
+                          color: "text.primary",
+                        },
+                      }}
                     >
-                      <IconButton
-                        size="small"
-                        onClick={() =>
-                          handleCopyMessage(message.text, message.id)
-                        }
-                        sx={{
-                          p: 0.5,
-                          color: "text.secondary",
-                          "&:hover": {
-                            backgroundColor: "action.hover",
-                            color: "text.primary",
-                          },
-                        }}
-                      >
-                        <CopyIcon sx={{ fontSize: 16 }} />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                      <CopyIcon sx={{ fontSize: 16 }} />
+                    </IconButton>
+                  </Tooltip>
                   <Typography
                     variant="caption"
                     sx={{
@@ -338,7 +336,8 @@ const MessageList = React.memo<MessageListProps>(
                     }}
                   >
                     {message.timestamp.toLocaleTimeString(
-                      lang === "he" ? "he-IL" : "en-US"
+                      lang === "he" ? "he-IL" : "en-US",
+                      { hour12: false }
                     )}
                   </Typography>
                 </Box>
