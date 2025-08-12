@@ -43,6 +43,7 @@ export interface ChatProps {
   onStopClick?: () => void;
   onNewChatClick?: () => void;
   isLoading?: boolean;
+  inputDisabled?: boolean; // optional - disables all input controls
   maxFileSize: number; // required - in bytes
   allowedFileTypes: string[]; // required - no default
   lang?: "he" | "en"; // optional - defaults to "he"
@@ -54,6 +55,7 @@ const Chat: React.FC<ChatProps> = ({
   onStopClick,
   onNewChatClick,
   isLoading = false,
+  inputDisabled = false,
   maxFileSize,
   allowedFileTypes,
   lang = "he",
@@ -552,6 +554,7 @@ const Chat: React.FC<ChatProps> = ({
           onMessageEnter={onMessageEnter || (() => {})}
           onStopClick={onStopClick}
           isLoading={isLoading}
+          disabled={inputDisabled}
           maxFileSize={maxFileSize}
           allowedFileTypes={allowedFileTypes}
           lang={lang}

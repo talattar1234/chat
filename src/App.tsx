@@ -65,6 +65,7 @@ const App: React.FC = () => {
             onMessageEnter={handleMessageEnter}
             onNewChatClick={handleNewChatClick}
             isLoading={false}
+            inputDisabled={false} // Set to true to disable all input controls
             allowedFileTypes={[".txt", ".csv", ".pdf", ".doc", ".docx"]}
             maxFileSize={10 * 1024 * 1024} // 10MB
           />
