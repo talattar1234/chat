@@ -112,6 +112,98 @@ const MessageList = React.memo<MessageListProps>(
           },
         }}
       >
+        {/* Welcome message if no messages */}
+        {messages.length === 0 && (
+          <ListItem
+            sx={{
+              flexDirection: "column",
+              alignItems: "flex-start",
+              mb: 2,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 1,
+                maxWidth: "70%",
+              }}
+            >
+              <Avatar sx={{ bgcolor: "primary.main", mt: 1 }}>
+                <AIIcon />
+              </Avatar>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  bgcolor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.08)"
+                      : "rgba(255, 255, 255, 0.95)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  color: "text.primary",
+                  borderRadius: "18px",
+                  maxWidth: "100%",
+                  border: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      : "1px solid rgba(0, 0, 0, 0.15)",
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                      : "0 4px 20px rgba(0, 0, 0, 0.15)",
+                  position: "relative",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "18px",
+                    padding: "1px",
+                    background: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                        : "linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.12))",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    zIndex: -1,
+                  },
+                }}
+              >
+                <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+                  {lang === "he"
+                    ? "שלום! ברוך הבא לצ'אט שלנו. אני כאן כדי לעזור לך בכל שאלה או בקשה שיש לך. איך אוכל לסייע לך היום?"
+                    : "Hello! Welcome to our chat. I'm here to help you with any questions or requests you may have. How can I assist you today?"}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mt: 1,
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      opacity: 0.7,
+                      textAlign: "right",
+                    }}
+                  >
+                    {new Date().toLocaleTimeString(
+                      lang === "he" ? "he-IL" : "en-US",
+                      { hour12: false }
+                    )}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Box>
+          </ListItem>
+        )}
+
         {messages.map((message) => (
           <ListItem
             key={message.id}
