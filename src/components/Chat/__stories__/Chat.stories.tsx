@@ -592,3 +592,241 @@ export const InteractivePendingCancel: Story = {
     },
   },
 };
+
+// Markdown examples
+const markdownMessages: Message[] = [
+  {
+    id: "1",
+    text: "שלום! הנה דוגמה לתמיכה ב-Markdown:",
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:00:00"),
+  },
+  {
+    id: "2",
+    text: "אני רוצה לראות איך Markdown נראה",
+    sender: "user",
+    timestamp: new Date("2024-01-15T10:01:00"),
+  },
+  {
+    id: "3",
+    text: `# כותרת ראשית
+## כותרת משנה
+### כותרת שלישית
+
+זהו **טקסט מודגש** וזהו *טקסט נטוי*.
+
+\`\`\`javascript
+// דוגמה לקוד
+function hello() {
+  console.log("שלום עולם!");
+}
+\`\`\`
+
+> זהו ציטוט יפה עם גבול בצד שמאל
+
+רשימה:
+- פריט ראשון
+- פריט שני
+- פריט שלישי
+
+[קישור לדוגמה](https://example.com)
+
+\`קוד בתוך שורה\` עם טקסט רגיל.`,
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:02:00"),
+  },
+];
+
+const englishMarkdownMessages: Message[] = [
+  {
+    id: "1",
+    text: "Hello! Here's an example of Markdown support:",
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:00:00"),
+  },
+  {
+    id: "2",
+    text: "I want to see how Markdown looks",
+    sender: "user",
+    timestamp: new Date("2024-01-15T10:01:00"),
+  },
+  {
+    id: "3",
+    text: `# Main Heading
+## Sub Heading
+### Third Level Heading
+
+This is **bold text** and this is *italic text*.
+
+\`\`\`javascript
+// Code example
+function hello() {
+  console.log("Hello World!");
+}
+\`\`\`
+
+> This is a beautiful quote with a left border
+
+List:
+- First item
+- Second item
+- Third item
+
+[Link to example](https://example.com)
+
+\`Inline code\` with regular text.`,
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:02:00"),
+  },
+];
+
+const complexMarkdownMessages: Message[] = [
+  {
+    id: "1",
+    text: "הנה דוגמה מורכבת יותר של Markdown:",
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:00:00"),
+  },
+  {
+    id: "2",
+    text: "אני רוצה לראות דוגמה מורכבת",
+    sender: "user",
+    timestamp: new Date("2024-01-15T10:01:00"),
+  },
+  {
+    id: "3",
+    text: `# מדריך React עם TypeScript
+
+## מה זה React?
+
+React היא **ספריית JavaScript** לבניית ממשקי משתמש. היא פותחה על ידי Facebook.
+
+### יתרונות React:
+
+1. **קומפוננטים** - בנייה מחדש של ממשקים
+2. *Virtual DOM* - ביצועים מהירים
+3. \`JSX\` - תחביר דמוי HTML
+
+## דוגמה לקוד:
+
+\`\`\`typescript
+interface Props {
+  name: string;
+  age: number;
+}
+
+const UserCard: React.FC<Props> = ({ name, age }) => {
+  return (
+    <div className="user-card">
+      <h3>{name}</h3>
+      <p>Age: {age}</p>
+    </div>
+  );
+};
+\`\`\`
+
+> 💡 **טיפ**: השתמש ב-TypeScript עם React לקבלת טיפוסים בטוחים יותר!
+
+### קישורים שימושיים:
+- [React Documentation](https://react.dev)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+
+\`npm install react typescript\` - התקנת החבילות הנדרשות.`,
+    sender: "ai",
+    timestamp: new Date("2024-01-15T10:02:00"),
+  },
+];
+
+export const WithMarkdown: Story = {
+  args: {
+    messages: markdownMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "צ'אט עם תמיכה ב-Markdown. הודעות ה-AI יכולות לכלול כותרות, טקסט מודגש, קוד, ציטוטים ועוד.",
+      },
+    },
+  },
+};
+
+export const WithMarkdownEnglish: Story = {
+  args: {
+    messages: englishMarkdownMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    lang: "en",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Chat with Markdown support. AI messages can include headings, bold text, code, quotes and more.",
+      },
+    },
+  },
+};
+
+export const ComplexMarkdown: Story = {
+  args: {
+    messages: complexMarkdownMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "דוגמה מורכבת של Markdown עם קוד TypeScript, רשימות, ציטוטים וקישורים.",
+      },
+    },
+  },
+};
+
+export const MixedContent: Story = {
+  args: {
+    messages: [
+      ...sampleMessages,
+      {
+        id: "4",
+        text: "הנה דוגמה עם **Markdown** ו-*עיצוב*:",
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:03:00"),
+      },
+      {
+        id: "5",
+        text: "טקסט רגיל ללא Markdown",
+        sender: "user",
+        timestamp: new Date("2024-01-15T10:04:00"),
+      },
+      {
+        id: "6",
+        text: `# כותרת ראשית
+טקסט רגיל עם **טקסט מודגש** ו-*טקסט נטוי*.
+
+\`\`\`javascript
+console.log("Hello World!");
+\`\`\`
+
+> ציטוט יפה
+
+- רשימה
+- עם פריטים`,
+        sender: "ai",
+        timestamp: new Date("2024-01-15T10:05:00"),
+      },
+    ],
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "צ'אט עם תערובת של הודעות רגילות והודעות עם Markdown.",
+      },
+    },
+  },
+};

@@ -15,6 +15,7 @@ import {
   SupportAgent as AIIcon,
   ContentCopy as CopyIcon,
 } from "@mui/icons-material";
+import ReactMarkdown from "react-markdown";
 import { Message } from "./Chat";
 
 interface MessageListProps {
@@ -76,6 +77,160 @@ const MessageList = React.memo<MessageListProps>(
       },
       [onCopyMessage]
     );
+
+    // Custom components for react-markdown that use Material-UI Typography
+    const markdownComponents: any = {
+      p: ({ children, ...props }: any) => (
+        <Typography variant="body1" component="p" sx={{ mb: 1, "&:last-child": { mb: 0 } }} {...props}>
+          {children}
+        </Typography>
+      ),
+      h1: ({ children, ...props }: any) => (
+        <Typography variant="h4" component="h1" sx={{ mb: 1, mt: 2 }} {...props}>
+          {children}
+        </Typography>
+      ),
+      h2: ({ children, ...props }: any) => (
+        <Typography variant="h5" component="h2" sx={{ mb: 1, mt: 2 }} {...props}>
+          {children}
+        </Typography>
+      ),
+      h3: ({ children, ...props }: any) => (
+        <Typography variant="h6" component="h3" sx={{ mb: 1, mt: 2 }} {...props}>
+          {children}
+        </Typography>
+      ),
+      h4: ({ children, ...props }: any) => (
+        <Typography variant="subtitle1" component="h4" sx={{ mb: 1, mt: 1, fontWeight: "bold" }} {...props}>
+          {children}
+        </Typography>
+      ),
+      h5: ({ children, ...props }: any) => (
+        <Typography variant="subtitle2" component="h5" sx={{ mb: 1, mt: 1, fontWeight: "bold" }} {...props}>
+          {children}
+        </Typography>
+      ),
+      h6: ({ children, ...props }: any) => (
+        <Typography variant="body2" component="h6" sx={{ mb: 1, mt: 1, fontWeight: "bold" }} {...props}>
+          {children}
+        </Typography>
+      ),
+      strong: ({ children, ...props }: any) => (
+        <Typography component="span" sx={{ fontWeight: "bold" }} {...props}>
+          {children}
+        </Typography>
+      ),
+      em: ({ children, ...props }: any) => (
+        <Typography component="span" sx={{ fontStyle: "italic" }} {...props}>
+          {children}
+        </Typography>
+      ),
+      code: ({ children, ...props }: any) => (
+        <Typography
+          component="code"
+          sx={{
+            backgroundColor: (theme) => theme.palette.mode === "dark" 
+              ? "rgba(255, 255, 255, 0.1)" 
+              : "rgba(0, 0, 0, 0.1)",
+            padding: "2px 4px",
+            borderRadius: "4px",
+            fontFamily: "monospace",
+            fontSize: "0.875em",
+          }}
+          {...props}
+        >
+          {children}
+        </Typography>
+      ),
+      pre: ({ children, ...props }: any) => (
+        <Box
+          component="pre"
+          sx={{
+            backgroundColor: (theme) => theme.palette.mode === "dark" 
+              ? "rgba(255, 255, 255, 0.05)" 
+              : "rgba(0, 0, 0, 0.05)",
+            padding: 2,
+            borderRadius: 1,
+            overflow: "auto",
+            fontFamily: "monospace",
+            fontSize: "0.875em",
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            mb: 1,
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
+      blockquote: ({ children, ...props }: any) => (
+        <Box
+          component="blockquote"
+          sx={{
+            borderLeft: (theme) => `4px solid ${theme.palette.primary.main}`,
+            paddingLeft: 2,
+            margin: "16px 0",
+            fontStyle: "italic",
+            color: "text.secondary",
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
+      ul: ({ children, ...props }: any) => (
+        <Box component="ul" sx={{ mb: 1, pl: 2 }} {...props}>
+          {children}
+        </Box>
+      ),
+      ol: ({ children, ...props }: any) => (
+        <Box component="ol" sx={{ mb: 1, pl: 2 }} {...props}>
+          {children}
+        </Box>
+      ),
+      li: ({ children, ...props }: any) => (
+        <Typography component="li" variant="body1" sx={{ mb: 0.5 }} {...props}>
+          {children}
+        </Typography>
+      ),
+      a: ({ children, href, ...props }: any) => (
+        <Typography
+          component="a"
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            color: "primary.main",
+            textDecoration: "none",
+            "&:hover": {
+              textDecoration: "underline",
+            },
+          }}
+          {...props}
+        >
+          {children}
+        </Typography>
+      ),
+    };
+
+    // Function to render message content with markdown support
+    const renderMessageContent = (text: string) => {
+      // Check if the text contains markdown patterns
+      const hasMarkdown = /[*_`#\[\]()>|]/.test(text);
+      
+      if (hasMarkdown) {
+        return (
+          <ReactMarkdown components={markdownComponents}>
+            {text}
+          </ReactMarkdown>
+        );
+      } else {
+        return (
+          <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+            {text}
+          </Typography>
+        );
+      }
+    };
 
     return (
       <List
@@ -300,9 +455,7 @@ const MessageList = React.memo<MessageListProps>(
                   },
                 }}
               >
-                <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
-                  {message.text}
-                </Typography>
+                {renderMessageContent(message.text)}
 
                 {/* Display attached files */}
                 {message.files && message.files.length > 0 && (
