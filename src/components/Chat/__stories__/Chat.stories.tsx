@@ -413,3 +413,182 @@ export const DarkThemeBackground: Story = {
     },
   },
 };
+
+export const WithErrorOverlay: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    errorOverlayText:
+      "אירעה שגיאה בחיבור לשרת. אנא בדוק את החיבור לאינטרנט ונסה שוב.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "צ'אט עם חיווי שגיאה בראש הצ'אט. השגיאה מוצגת כבאנר עם אנימציות יפות וכפתור 'נסה שוב'.",
+      },
+    },
+  },
+};
+
+export const WithErrorOverlayEnglish: Story = {
+  args: {
+    messages: englishMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    lang: "en",
+    errorOverlayText:
+      "An error occurred while connecting to the server. Please check your internet connection and try again.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Chat with error banner at the top. The error is displayed with beautiful animations and retry button.",
+      },
+    },
+  },
+};
+
+export const WithErrorOverlayNoRetry: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    errorOverlayText: "השירות זמנית לא זמין. אנא נסה שוב מאוחר יותר.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "צ'אט עם חיווי שגיאה ללא כפתור 'נסה שוב'.",
+      },
+    },
+  },
+};
+
+export const WithErrorOverlayNoDismiss: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    errorOverlayText: "מתחבר לשרת... אנא המתן.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "צ'אט עם חיווי שגיאה עם כפתור 'נסה שוב'.",
+      },
+    },
+  },
+};
+
+export const WithLongErrorText: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    errorOverlayText:
+      "אירעה שגיאה קריטית במערכת. השרת לא מגיב כרגע. אנא בדוק את החיבור לאינטרנט, וודא שהשרת פועל, ונסה שוב. אם הבעיה נמשכת, אנא פנה לתמיכה הטכנית עם פרטי השגיאה הבאים: ERR_CONNECTION_TIMEOUT (קוד שגיאה: 408).",
+    onErrorRetryClick: () => {
+      console.log("Retry clicked");
+      alert("מנסה לתקן את השגיאה הקריטית...");
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "צ'אט עם הודעת שגיאה ארוכה ומפורטת. חיווי השגיאה מתאים את עצמו לתוכן.",
+      },
+    },
+  },
+};
+
+export const InteractiveErrorRetry: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    errorOverlayText:
+      "אירעה שגיאה בחיבור לשרת. לחץ על 'נסה שוב' כדי לבדוק את הפעולה.",
+    onErrorRetryClick: () => {
+      console.log("🎯 Retry button clicked!");
+      alert("✅ כפתור 'נסה שוב' עובד! הפעולה נקראה בהצלחה.");
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "סיפור אינטראקטיבי לבדיקת כפתור 'נסה שוב'. לחץ על הכפתור כדי לראות את הפעולה.",
+      },
+    },
+  },
+};
+
+export const WithPendingOverlay: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    pendingOverlayText: "מתחבר לשרת... אנא המתן.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "צ'אט עם חיווי pending בראש הצ'אט. מוצג עם ספינר בלבד.",
+      },
+    },
+  },
+};
+
+export const WithPendingOverlayEnglish: Story = {
+  args: {
+    messages: englishMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    lang: "en",
+    pendingOverlayText: "Connecting to server... Please wait.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Chat with pending banner at the top. Displayed with spinner only.",
+      },
+    },
+  },
+};
+
+export const WithPendingOverlayNoCancel: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    pendingOverlayText: "מתחבר לשרת...",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "צ'אט עם חיווי pending ללא כפתור 'בטל'.",
+      },
+    },
+  },
+};
+
+export const InteractivePendingCancel: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    pendingOverlayText: "מתחבר לשרת... חיווי pending פעיל.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "סיפור להדגמת חיווי pending עם ספינר.",
+      },
+    },
+  },
+};

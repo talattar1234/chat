@@ -15,6 +15,11 @@ export interface ChatLabels {
   exportChat: string;
   menu: string;
   stopGeneration: string;
+  errorTitle: string;
+  dismissError: string;
+  retryAction: string;
+  pendingTitle: string;
+  cancelAction: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -37,6 +42,11 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     exportChat: "ייצא צ'אט",
     menu: "תפריט",
     stopGeneration: "עצור יצירה",
+    errorTitle: "שגיאה",
+    dismissError: "סגור",
+    retryAction: "נסה שוב",
+    pendingTitle: "בתהליך",
+    cancelAction: "בטל",
   },
   en: {
     placeholder: "Type a message...",
@@ -57,5 +67,10 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     exportChat: "Export Chat",
     menu: "Menu",
     stopGeneration: "Stop Generation",
+    errorTitle: "Error",
+    dismissError: "Dismiss",
+    retryAction: "Retry",
+    pendingTitle: "In Progress",
+    cancelAction: "Cancel",
   },
 };

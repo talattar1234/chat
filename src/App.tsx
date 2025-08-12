@@ -1,78 +1,153 @@
 import React, { useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import {
+  ThemeProvider,
+  createTheme,
+  CssBaseline,
+  Box,
+  Button,
+} from "@mui/material";
 import Chat, { Message } from "./components/Chat/Chat";
 
-const App: React.FC = () => {
+const theme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
+
+function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "שלום! ברוך הבא לצ'אט שלנו. אני כאן כדי לעזור לך בכל שאלה או בקשה שיש לך. איך אוכל לסייע לך היום?",
+      text: "שלום! איך אני יכול לעזור לך היום?",
       sender: "ai",
       timestamp: new Date(),
     },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState<string | undefined>(undefined);
+  const [pendingText, setPendingText] = useState<string | undefined>(undefined);
 
-  const handleMessageEnter = (message: string, files?: File[]) => {
+  const handleMessageEnter = (message: string) => {
+    // Simulate API call
+    setIsLoading(true);
+
     // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
       text: message,
       sender: "user",
       timestamp: new Date(),
-      files,
     };
-
     setMessages((prev) => [...prev, userMessage]);
 
-    // Simulate AI response
+    // Simulate API response after 2 seconds
     setTimeout(() => {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "תודה על ההודעה שלך! אני מעבד את המידע ואחזור אליך בקרוב.",
+        text: `תודה על ההודעה: "${message}". אני כאן כדי לעזור!`,
         sender: "ai",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
-    }, 1000);
+      setIsLoading(false);
+    }, 2000);
   };
 
-  const handleNewChatClick = () => {
-    // Clear all messages and start a new chat
-    setMessages([
-      {
-        id: "1",
-        text: "שלום! ברוך הבא לצ'אט החדש שלנו. אני כאן כדי לעזור לך בכל שאלה או בקשה שיש לך. איך אוכל לסייע לך היום?",
-        sender: "ai",
-        timestamp: new Date(),
-      },
-    ]);
+  const handleSimulateError = () => {
+    setErrorText(
+      "אירעה שגיאה בחיבור לשרת. אנא בדוק את החיבור לאינטרנט ונסה שוב."
+    );
+    setPendingText(undefined);
+  };
+
+  const handleSimulateNetworkError = () => {
+    setErrorText("השירות זמנית לא זמין. אנא נסה שוב מאוחר יותר.");
+    setPendingText(undefined);
+  };
+
+  const handleSimulatePending = () => {
+    setPendingText("מתחבר לשרת... אנא המתן.");
+    setErrorText(undefined);
+  };
+
+  const handleSimulateSending = () => {
+    setPendingText("מתחבר לשרת...");
+    setErrorText(undefined);
+  };
+
+  const handleErrorRetry = () => {
+    setErrorText(undefined);
+    // Here you would typically retry the failed operation
+    console.log("Retrying operation...");
   };
 
   return (
-    <Container maxWidth="md" sx={{ height: "100vh", p: 0 }}>
-      <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        <Box sx={{ p: 2, bgcolor: "primary.main", color: "white" }}>
-          <Typography variant="h5" component="h1">
-            צ'אט אפליקציה
-          </Typography>
-          <Typography variant="body2">
-            דוגמה לשימוש ברכיב Chat עם MUI ו-TypeScript
-          </Typography>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ height: "100vh", position: "relative" }}>
+        {/* Demo Controls */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 10,
+            left: 10,
+            zIndex: 1001,
+            display: "flex",
+            gap: 1,
+            flexWrap: "wrap",
+          }}
+        >
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            onClick={handleSimulateError}
+            sx={{ fontSize: "0.75rem" }}
+          >
+            שגיאת חיבור
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            size="small"
+            onClick={handleSimulateNetworkError}
+            sx={{ fontSize: "0.75rem" }}
+          >
+            שגיאת שירות
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            size="small"
+            onClick={handleSimulatePending}
+            sx={{ fontSize: "0.75rem" }}
+          >
+            מתחבר
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={handleSimulateSending}
+            sx={{ fontSize: "0.75rem" }}
+          >
+            שולח הודעה
+          </Button>
         </Box>
-        <Box sx={{ flex: 1 }}>
-          <Chat
-            messages={messages}
-            onMessageEnter={handleMessageEnter}
-            onNewChatClick={handleNewChatClick}
-            isLoading={false}
-            inputDisabled={false} // Set to true to disable all input controls
-            allowedFileTypes={[".txt", ".csv", ".pdf", ".doc", ".docx"]}
-            maxFileSize={10 * 1024 * 1024} // 10MB
-          />
-        </Box>
+
+        <Chat
+          messages={messages}
+          onMessageEnter={handleMessageEnter}
+          isLoading={isLoading}
+          maxFileSize={10 * 1024 * 1024} // 10MB
+          allowedFileTypes={[".txt", ".pdf", ".doc", ".docx"]}
+          errorOverlayText={errorText}
+          onErrorRetryClick={handleErrorRetry}
+          pendingOverlayText={pendingText}
+        />
       </Box>
-    </Container>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

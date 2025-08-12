@@ -11,6 +11,10 @@ import {
   Tooltip,
   IconButton,
   useTheme,
+  Alert,
+  AlertTitle,
+  Button,
+  CircularProgress,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -18,6 +22,9 @@ import {
   Add as AddIcon,
   MoreVert as MoreVertIcon,
   Download as DownloadIcon,
+  Close as CloseIcon,
+  Refresh as RefreshIcon,
+  Cancel as CancelIcon,
 } from "@mui/icons-material";
 import { chatLabels } from "./Chat.labels";
 import ChatInput from "./ChatInput";
@@ -47,6 +54,9 @@ export interface ChatProps {
   maxFileSize: number; // required - in bytes
   allowedFileTypes: string[]; // required - no default
   lang?: "he" | "en"; // optional - defaults to "he"
+  errorOverlayText?: string; // optional - error message to display as overlay
+  onErrorRetryClick?: () => void; // optional - callback when retry is clicked
+  pendingOverlayText?: string; // optional - pending message to display as overlay
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -59,6 +69,9 @@ const Chat: React.FC<ChatProps> = ({
   maxFileSize,
   allowedFileTypes,
   lang = "he",
+  errorOverlayText,
+  onErrorRetryClick,
+  pendingOverlayText,
 }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -134,6 +147,251 @@ const Chat: React.FC<ChatProps> = ({
         position: "relative",
       }}
     >
+      {/* Error Banner */}
+      {errorOverlayText && (
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
+            mb: 2,
+            animation: "slideDown 0.3s ease-out",
+            "@keyframes slideDown": {
+              "0%": {
+                opacity: 0,
+                transform: "translateY(-20px)",
+              },
+              "100%": {
+                opacity: 1,
+                transform: "translateY(0)",
+              },
+            },
+          }}
+        >
+          <Alert
+            severity="error"
+            sx={{
+              borderRadius: "16px",
+              boxShadow: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.1)",
+              border: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "1px solid rgba(0, 0, 0, 0.1)",
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                  : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              position: "relative",
+              overflow: "hidden",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "2px",
+                background: "linear-gradient(90deg, #f44336, #ff5722, #f44336)",
+                animation: "gradientShift 2s ease-in-out infinite",
+                "@keyframes gradientShift": {
+                  "0%": {
+                    backgroundPosition: "0% 50%",
+                  },
+                  "50%": {
+                    backgroundPosition: "100% 50%",
+                  },
+                  "100%": {
+                    backgroundPosition: "0% 50%",
+                  },
+                },
+              },
+              "& .MuiAlert-icon": {
+                fontSize: "1.5rem",
+                animation: "pulse 2s ease-in-out infinite",
+                "@keyframes pulse": {
+                  "0%, 100%": {
+                    transform: "scale(1)",
+                  },
+                  "50%": {
+                    transform: "scale(1.1)",
+                  },
+                },
+              },
+              "& .MuiAlert-message": {
+                width: "100%",
+              },
+            }}
+            action={
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                {onErrorRetryClick && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<RefreshIcon />}
+                    onClick={onErrorRetryClick}
+                    sx={{
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      borderColor: "error.main",
+                      color: "error.main",
+                      fontSize: "0.7rem",
+                      px: 1.2,
+                      py: 0.3,
+                      minWidth: "80px",
+                      whiteSpace: "nowrap",
+                      height: "28px",
+                      "& .MuiButton-startIcon": {
+                        marginRight: 0.5,
+                        "& .MuiSvgIcon-root": {
+                          fontSize: "0.8rem",
+                        },
+                      },
+                      "&:hover": {
+                        backgroundColor: "error.main",
+                        color: "white",
+                        borderColor: "error.main",
+                      },
+                    }}
+                  >
+                    {t.retryAction}
+                  </Button>
+                )}
+              </Box>
+            }
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                lineHeight: 1.4,
+                color: "text.primary",
+                textAlign: lang === "he" ? "right" : "left",
+                direction: lang === "he" ? "rtl" : "ltr",
+                fontWeight: 500,
+              }}
+            >
+              {errorOverlayText}
+            </Typography>
+          </Alert>
+        </Box>
+      )}
+
+      {/* Pending Banner */}
+      {pendingOverlayText && (
+        <Box
+          sx={{
+            position: "sticky",
+            top: errorOverlayText ? "80px" : 0,
+            zIndex: 999,
+            mb: 2,
+            animation: "slideDown 0.3s ease-out",
+            "@keyframes slideDown": {
+              "0%": {
+                opacity: 0,
+                transform: "translateY(-20px)",
+              },
+              "100%": {
+                opacity: 1,
+                transform: "translateY(0)",
+              },
+            },
+          }}
+        >
+          <Alert
+            severity="info"
+            sx={{
+              borderRadius: "16px",
+              boxShadow: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.1)",
+              border: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "1px solid rgba(0, 0, 0, 0.1)",
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                  : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              position: "relative",
+              overflow: "hidden",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "2px",
+                background: "linear-gradient(90deg, #2196f3, #21cbf3, #2196f3)",
+                animation: "gradientShift 2s ease-in-out infinite",
+                "@keyframes gradientShift": {
+                  "0%": {
+                    backgroundPosition: "0% 50%",
+                  },
+                  "50%": {
+                    backgroundPosition: "100% 50%",
+                  },
+                  "100%": {
+                    backgroundPosition: "0% 50%",
+                  },
+                },
+              },
+              "& .MuiAlert-icon": {
+                fontSize: "1.5rem",
+                animation: "spin 2s linear infinite",
+                "@keyframes spin": {
+                  "0%": {
+                    transform: "rotate(0deg)",
+                  },
+                  "100%": {
+                    transform: "rotate(360deg)",
+                  },
+                },
+              },
+              "& .MuiAlert-message": {
+                width: "100%",
+              },
+            }}
+            icon={
+              <CircularProgress
+                size={24}
+                sx={{
+                  color: "info.main",
+                  animation: "spin 1s linear infinite",
+                  "@keyframes spin": {
+                    "0%": {
+                      transform: "rotate(0deg)",
+                    },
+                    "100%": {
+                      transform: "rotate(360deg)",
+                    },
+                  },
+                }}
+              />
+            }
+
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                lineHeight: 1.4,
+                color: "text.primary",
+                textAlign: lang === "he" ? "right" : "left",
+                direction: lang === "he" ? "rtl" : "ltr",
+                fontWeight: 500,
+              }}
+            >
+              {pendingOverlayText}
+            </Typography>
+          </Alert>
+        </Box>
+      )}
+
       {/* Messages Area with Sticky Header */}
       <Box
         sx={{
