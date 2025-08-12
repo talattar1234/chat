@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import {
   Person as PersonIcon,
-  SmartToy as AIIcon,
+  SupportAgent as AIIcon,
   Add as AddIcon,
   MoreVert as MoreVertIcon,
   Download as DownloadIcon,
@@ -374,7 +374,6 @@ const Chat: React.FC<ChatProps> = ({
                 }}
               />
             }
-
           >
             <Typography
               variant="body2"

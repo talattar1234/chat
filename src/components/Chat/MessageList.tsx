@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import {
   Person as PersonIcon,
-  SmartToy as AIIcon,
+  SupportAgent as AIIcon,
   ContentCopy as CopyIcon,
 } from "@mui/icons-material";
 import { Message } from "./Chat";
