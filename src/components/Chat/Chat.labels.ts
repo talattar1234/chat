@@ -20,6 +20,10 @@ export interface ChatLabels {
   retryAction: string;
   pendingTitle: string;
   cancelAction: string;
+  newChatConfirmationTitle: string;
+  newChatConfirmationMessage: string;
+  newChatConfirmationOK: string;
+  newChatConfirmationCancel: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -47,6 +51,10 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     retryAction: "נסה שוב",
     pendingTitle: "בתהליך",
     cancelAction: "בטל",
+    newChatConfirmationTitle: "צ'אט חדש",
+    newChatConfirmationMessage: "האם ברצונך ליצור צ'אט חדש?",
+    newChatConfirmationOK: "אישור",
+    newChatConfirmationCancel: "ביטול",
   },
   en: {
     placeholder: "Type a message...",
@@ -72,5 +80,9 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     retryAction: "Retry",
     pendingTitle: "In Progress",
     cancelAction: "Cancel",
+    newChatConfirmationTitle: "New Chat",
+    newChatConfirmationMessage: "Do you want to create a new chat?",
+    newChatConfirmationOK: "OK",
+    newChatConfirmationCancel: "Cancel",
   },
 };
