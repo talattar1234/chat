@@ -84,7 +84,7 @@ const MessageList = React.memo<MessageListProps>(
         <Typography
           variant="body1"
           component="p"
-          sx={{ mb: 1, "&:last-child": { mb: 0 } }}
+          sx={{ mb: 1, "&:last-child": { mb: 0 }, wordBreak: "break-word", overflowWrap: "break-word" }}
           {...props}
         >
           {children}
@@ -260,7 +260,14 @@ const MessageList = React.memo<MessageListProps>(
         );
       } else {
         return (
-          <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+            }}
+          >
             {text}
           </Typography>
         );
@@ -270,6 +277,7 @@ const MessageList = React.memo<MessageListProps>(
     return (
       <List
         sx={{
+          overflowX: "hidden",
           "&::-webkit-scrollbar": {
             width: "10px",
           },
@@ -317,6 +325,7 @@ const MessageList = React.memo<MessageListProps>(
                 alignItems: "flex-start",
                 gap: 1,
                 maxWidth: "70%",
+                width: "100%",
               }}
             >
               <Avatar sx={{ bgcolor: "primary.main", mt: 1 }}>
@@ -363,7 +372,14 @@ const MessageList = React.memo<MessageListProps>(
                   },
                 }}
               >
-                <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                  }}
+                >
                   {lang === "he"
                     ? "שלום! ברוך הבא לצ'אט שלנו. אני כאן כדי לעזור לך בכל שאלה או בקשה שיש לך. איך אוכל לסייע לך היום?"
                     : "Hello! Welcome to our chat. I'm here to help you with any questions or requests you may have. How can I assist you today?"}
@@ -409,6 +425,7 @@ const MessageList = React.memo<MessageListProps>(
                 alignItems: "flex-start",
                 gap: 1,
                 maxWidth: "70%",
+                width: "100%",
               }}
             >
               {message.sender === "ai" && (
