@@ -13,7 +13,7 @@ const meta: Meta<typeof AudioRecorder> = {
     (Story) => (
       <Box
         sx={{
-          minHeight: "100vh",
+          minHeight: "100%",
           background:
             "linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #fff8f0 100%)",
           position: "relative",

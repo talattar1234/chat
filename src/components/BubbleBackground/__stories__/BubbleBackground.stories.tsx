@@ -73,8 +73,8 @@ export const DarkTheme: Story = {
     (Story) => (
       <Box
         sx={{
-          height: "100vh",
-          width: "100vw",
+          height: "100%",
+          width: "100%",
           background: "linear-gradient(135deg, #000000 0%, #1a1a1a 100%)",
           position: "relative",
           overflow: "hidden",
@@ -92,8 +92,8 @@ export const LightTheme: Story = {
     (Story) => (
       <Box
         sx={{
-          height: "100vh",
-          width: "100vw",
+          height: "100%",
+          width: "100%",
           background: "linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%)",
           position: "relative",
           overflow: "hidden",

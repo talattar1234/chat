@@ -54,11 +54,11 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme === "dark" ? darkTheme : lightTheme;
+      const theme = context.globals.theme === "dark" ? darkTheme : darkTheme;
       return (
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <div style={{ height: "100vh", width: "100vw" }}>
+          <div style={{ height: "100%", width: "100vw" }}>
             <Story />
           </div>
         </ThemeProvider>

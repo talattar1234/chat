@@ -84,7 +84,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ height: "100vh", position: "relative" }}>
+      <Box sx={{ height: "100%", position: "relative" }}>
         {/* Demo Controls */}
         <Box
           sx={{

@@ -29,6 +29,8 @@ import {
 import { chatLabels } from "./Chat.labels";
 import ChatInput from "./ChatInput";
 import MessageList from "./MessageList";
+import BubbleBackground from "../BubbleBackground";
+import zIndex from "@mui/material/styles/zIndex";
 
 export interface FileInfo {
   name: string;
@@ -145,6 +147,24 @@ const Chat: React.FC<ChatProps> = ({
         position: "relative",
       }}
     >
+      {/* <div
+        style={{
+          pointerEvents: "none",
+          zIndex: 3,
+          position: "absolute",
+          top: 0,
+          opacity: 0.15,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
+        }}
+      >
+        <BubbleBackground />
+      </div> */}
+
       {/* Error Banner */}
       {errorOverlayText && (
         <Box
