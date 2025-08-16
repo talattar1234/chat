@@ -55,6 +55,7 @@ const darkTheme = createTheme({
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [timeFormat, setTimeFormat] = useState<string>("HH:mm");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -127,6 +128,13 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
+  const toggleTimeFormat = () => {
+    const formats = ["HH:mm", "HH:mm:ss", "dd/MM/yyyy HH:mm", "MM/dd/yyyy hh:mm a", "yyyy-MM-dd HH:mm:ss"];
+    const currentIndex = formats.indexOf(timeFormat);
+    const nextIndex = (currentIndex + 1) % formats.length;
+    setTimeFormat(formats[nextIndex]);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -193,6 +201,15 @@ function App() {
           >
             שולח הודעה
           </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={toggleTimeFormat}
+            sx={{ fontSize: "0.75rem" }}
+          >
+            {timeFormat}
+          </Button>
         </Box>
 
         <Chat
@@ -204,6 +221,7 @@ function App() {
           errorOverlayText={errorText}
           onErrorRetryClick={handleErrorRetry}
           pendingOverlayText={pendingText}
+          timeFormat={timeFormat}
         />
       </Box>
     </ThemeProvider>

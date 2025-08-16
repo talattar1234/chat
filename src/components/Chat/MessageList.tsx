@@ -21,6 +21,7 @@ import { Message } from "./Chat";
 interface MessageListProps {
   messages: Message[];
   lang: "he" | "en";
+  timeFormat: string;
   copiedMessageId: string | null;
   onCopyMessage: (text: string, messageId: string) => void;
   copyToClipboardLabel: string;
@@ -31,12 +32,48 @@ const MessageList = React.memo<MessageListProps>(
   ({
     messages,
     lang,
+    timeFormat,
     copiedMessageId,
     onCopyMessage,
     copyToClipboardLabel,
     copiedToClipboardLabel,
   }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Helper function to format date according to custom format
+    const formatDate = useCallback((date: Date, format: string): string => {
+      const pad = (num: number): string => num.toString().padStart(2, '0');
+      const pad3 = (num: number): string => num.toString().padStart(3, '0');
+      
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      const milliseconds = date.getMilliseconds();
+      
+      return format
+        .replace('yyyy', year.toString())
+        .replace('yy', year.toString().slice(-2))
+        .replace('MM', pad(month))
+        .replace('M', month.toString())
+        .replace('dd', pad(day))
+        .replace('d', day.toString())
+        .replace('HH', pad(hours))
+        .replace('H', hours.toString())
+        .replace('hh', pad(hours % 12 || 12))
+        .replace('h', (hours % 12 || 12).toString())
+        .replace('mm', pad(minutes))
+        .replace('m', minutes.toString())
+        .replace('ss', pad(seconds))
+        .replace('s', seconds.toString())
+        .replace('SSS', pad3(milliseconds))
+        .replace('SS', pad(Math.floor(milliseconds / 10)))
+        .replace('S', Math.floor(milliseconds / 100).toString())
+        .replace('a', hours >= 12 ? 'PM' : 'AM')
+        .replace('A', hours >= 12 ? 'PM' : 'AM');
+    }, []);
 
     const scrollToBottom = useCallback(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -405,10 +442,7 @@ const MessageList = React.memo<MessageListProps>(
                       textAlign: "right",
                     }}
                   >
-                    {new Date().toLocaleTimeString(
-                      lang === "he" ? "he-IL" : "en-US",
-                      { hour12: false }
-                    )}
+                    {formatDate(new Date(), timeFormat)}
                   </Typography>
                 </Box>
               </Paper>
@@ -640,10 +674,7 @@ const MessageList = React.memo<MessageListProps>(
                       textAlign: message.sender === "user" ? "left" : "right",
                     }}
                   >
-                    {message.timestamp.toLocaleTimeString(
-                      lang === "he" ? "he-IL" : "en-US",
-                      { hour12: false }
-                    )}
+                    {formatDate(message.timestamp, timeFormat)}
                   </Typography>
                 </Box>
               </Paper>

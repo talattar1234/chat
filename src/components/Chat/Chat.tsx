@@ -59,6 +59,7 @@ export interface ChatProps {
   errorOverlayText?: string; // optional - error message to display as overlay
   onErrorRetryClick?: () => void; // optional - callback when retry is clicked
   pendingOverlayText?: string; // optional - pending message to display as overlay
+  timeFormat?: string; // optional - custom time format string. Supported tokens: yyyy/yy (year), MM/M (month), dd/d (day), HH/H (24h), hh/h (12h), mm/m (minutes), ss/s (seconds), SSS/SS/S (milliseconds), a/A (AM/PM). Defaults to "HH:mm"
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -74,6 +75,7 @@ const Chat: React.FC<ChatProps> = ({
   errorOverlayText,
   onErrorRetryClick,
   pendingOverlayText,
+  timeFormat = "HH:mm",
 }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -109,12 +111,45 @@ const Chat: React.FC<ChatProps> = ({
   }, []);
 
   const handleExportChat = useCallback(() => {
+    // Helper function to format date according to custom format
+    const formatDate = (date: Date, format: string): string => {
+      const pad = (num: number): string => num.toString().padStart(2, '0');
+      const pad3 = (num: number): string => num.toString().padStart(3, '0');
+      
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      const milliseconds = date.getMilliseconds();
+      
+      return format
+        .replace('yyyy', year.toString())
+        .replace('yy', year.toString().slice(-2))
+        .replace('MM', pad(month))
+        .replace('M', month.toString())
+        .replace('dd', pad(day))
+        .replace('d', day.toString())
+        .replace('HH', pad(hours))
+        .replace('H', hours.toString())
+        .replace('hh', pad(hours % 12 || 12))
+        .replace('h', (hours % 12 || 12).toString())
+        .replace('mm', pad(minutes))
+        .replace('m', minutes.toString())
+        .replace('ss', pad(seconds))
+        .replace('s', seconds.toString())
+        .replace('SSS', pad3(milliseconds))
+        .replace('SS', pad(Math.floor(milliseconds / 10)))
+        .replace('S', Math.floor(milliseconds / 100).toString())
+        .replace('a', hours >= 12 ? 'PM' : 'AM')
+        .replace('A', hours >= 12 ? 'PM' : 'AM');
+    };
+
     // Create a text file with chat history
     const chatHistory = messages
       .map((message) => {
-        const timestamp = message.timestamp.toLocaleString(
-          lang === "he" ? "he-IL" : "en-US"
-        );
+        const timestamp = formatDate(message.timestamp, timeFormat);
         const sender =
           message.sender === "user" ? (lang === "he" ? "משתמש" : "User") : "AI";
         return `[${timestamp}] ${sender}: ${message.text}`;
@@ -136,7 +171,7 @@ const Chat: React.FC<ChatProps> = ({
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }, [messages, lang]);
+  }, [messages, lang, timeFormat]);
 
   return (
     <Box
@@ -592,6 +627,7 @@ const Chat: React.FC<ChatProps> = ({
           <MessageList
             messages={messages}
             lang={lang}
+            timeFormat={timeFormat}
             copiedMessageId={copiedMessageId}
             onCopyMessage={handleCopyMessage}
             copyToClipboardLabel={t.copyToClipboard}
