@@ -170,6 +170,7 @@ const Chat: React.FC<ChatProps> = ({
         sx={{
           flex: 1,
           overflow: "auto",
+          overflowX: "hidden",
           background: isDark
             ? "linear-gradient(135deg, #121212 0%, #1e1e1e 30%, #1e1e1e 70%, #121212 100%), linear-gradient(45deg, #2d2d2d 0%, transparent 20%, transparent 80%, #2d2d2d 100%)"
             : "linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #fff8f0 100%)",
@@ -212,6 +213,43 @@ const Chat: React.FC<ChatProps> = ({
             right: 0,
             bottom: 0,
             pointerEvents: "none",
+            background: isDark
+              ? "radial-gradient(circle at 20% 80%, rgba(25, 118, 210, 0.02) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(156, 39, 176, 0.02) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(255, 193, 7, 0.02) 0%, transparent 50%)"
+              : "radial-gradient(circle at 20% 80%, rgba(25, 118, 210, 0.03) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(156, 39, 176, 0.03) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(255, 193, 7, 0.03) 0%, transparent 50%)",
+            animation: "subtleFloat 20s ease-in-out infinite",
+            "@keyframes subtleFloat": {
+              "0%, 100%": {
+                opacity: 0.3,
+                transform: "translateY(0px) scale(1)",
+              },
+              "50%": {
+                opacity: 0.5,
+                transform: "translateY(-10px) scale(1.02)",
+              },
+            },
+          },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            pointerEvents: "none",
+            background: isDark
+              ? "linear-gradient(45deg, transparent 30%, rgba(233, 30, 99, 0.01) 50%, transparent 70%), linear-gradient(-45deg, transparent 30%, rgba(0, 150, 136, 0.01) 50%, transparent 70%)"
+              : "linear-gradient(45deg, transparent 30%, rgba(233, 30, 99, 0.02) 50%, transparent 70%), linear-gradient(-45deg, transparent 30%, rgba(0, 150, 136, 0.02) 50%, transparent 70%)",
+            animation: "colorShift 15s ease-in-out infinite",
+            "@keyframes colorShift": {
+              "0%, 100%": {
+                opacity: 0.2,
+                transform: "rotate(0deg)",
+              },
+              "50%": {
+                opacity: 0.4,
+                transform: "rotate(180deg)",
+              },
+            },
           },
         }}
       >
