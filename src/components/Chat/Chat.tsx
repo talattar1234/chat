@@ -165,341 +165,7 @@ const Chat: React.FC<ChatProps> = ({
         <BubbleBackground />
       </div> */}
 
-      {/* Sticky Header Container */}
-      <Box
-        sx={{
-          position: "sticky",
-          top: 0,
-          zIndex: 1000,
-          background: (theme) =>
-            theme.palette.mode === "dark"
-              ? "rgba(30, 30, 30, 0.65)"
-              : "rgba(255, 255, 255, 0.7)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: (theme) =>
-            theme.palette.mode === "dark"
-              ? "1px solid rgba(255, 255, 255, 0.08)"
-              : "1px solid rgba(0, 0, 0, 0.08)",
-          boxShadow: (theme) =>
-            theme.palette.mode === "dark"
-              ? "0 2px 20px rgba(0, 0, 0, 0.15)"
-              : "0 2px 20px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {/* Top Toolbar */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: 1,
-            px: 2,
-            py: 1,
-            minHeight: "48px",
-          }}
-        >
-          <Tooltip title={t.exportChat}>
-            <IconButton
-              onClick={handleExportChat}
-              size="small"
-              sx={{
-                p: 1,
-                color: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "rgba(255, 255, 255, 0.7)"
-                    : "text.secondary",
-                borderRadius: "8px",
-                "&:hover": {
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.08)"
-                      : "rgba(0, 0, 0, 0.08)",
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.9)"
-                      : "text.primary",
-                },
-              }}
-            >
-              <DownloadIcon sx={{ fontSize: 20 }} />
-            </IconButton>
-          </Tooltip>
-
-          {onNewChatClick && (
-            <Tooltip title={t.newChat}>
-              <IconButton
-                onClick={handleNewChat}
-                size="small"
-                sx={{
-                  p: 1,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.7)"
-                      : "text.secondary",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.08)"
-                        : "rgba(0, 0, 0, 0.08)",
-                    color: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.9)"
-                        : "text.primary",
-                  },
-                }}
-              >
-                <AddIcon sx={{ fontSize: 20 }} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
-
-        {/* Error Banner */}
-        {errorOverlayText && (
-          <Box
-            sx={{
-              px: 2,
-              pb: 2,
-              animation: "slideDown 0.3s ease-out",
-              "@keyframes slideDown": {
-                "0%": {
-                  opacity: 0,
-                  transform: "translateY(-20px)",
-                },
-                "100%": {
-                  opacity: 1,
-                  transform: "translateY(0)",
-                },
-              },
-            }}
-          >
-            <Alert
-              severity="error"
-              sx={{
-                borderRadius: "16px",
-                boxShadow: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-                    : "0 8px 32px rgba(0, 0, 0, 0.1)",
-                border: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "1px solid rgba(255, 255, 255, 0.1)"
-                    : "1px solid rgba(0, 0, 0, 0.1)",
-                background: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
-                    : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                position: "relative",
-                overflow: "hidden",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: "2px",
-                  background:
-                    "linear-gradient(90deg, #f44336, #ff5722, #f44336)",
-                  animation: "gradientShift 2s ease-in-out infinite",
-                  "@keyframes gradientShift": {
-                    "0%": {
-                      backgroundPosition: "0% 50%",
-                    },
-                    "50%": {
-                      backgroundPosition: "100% 50%",
-                    },
-                    "100%": {
-                      backgroundPosition: "0% 50%",
-                    },
-                  },
-                },
-                "& .MuiAlert-icon": {
-                  fontSize: "1.5rem",
-                  animation: "pulse 2s ease-in-out infinite",
-                  "@keyframes pulse": {
-                    "0%, 100%": {
-                      transform: "scale(1)",
-                    },
-                    "50%": {
-                      transform: "scale(1.1)",
-                    },
-                  },
-                },
-                "& .MuiAlert-message": {
-                  width: "100%",
-                },
-              }}
-              action={
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  {onErrorRetryClick && (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={<RefreshIcon />}
-                      onClick={onErrorRetryClick}
-                      sx={{
-                        borderRadius: "8px",
-                        textTransform: "none",
-                        borderColor: "error.main",
-                        color: "error.main",
-                        // fontSize: "0.7rem",
-                        px: 1.2,
-                        py: 0.3,
-                        minWidth: "80px",
-                        whiteSpace: "nowrap",
-                        height: "28px",
-                        "& .MuiButton-startIcon": {
-                          marginRight: 0.5,
-                          // "& .MuiSvgIcon-root": {
-                          //   fontSize: "0.8rem",
-                          // },
-                        },
-                        "&:hover": {
-                          backgroundColor: "error.main",
-                          color: "white",
-                          borderColor: "error.main",
-                        },
-                      }}
-                    >
-                      {t.retryAction}
-                    </Button>
-                  )}
-                </Box>
-              }
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  lineHeight: 1.4,
-                  color: "text.primary",
-                  textAlign: lang === "he" ? "right" : "left",
-                  direction: lang === "he" ? "rtl" : "ltr",
-                  fontWeight: 500,
-                }}
-              >
-                {errorOverlayText}
-              </Typography>
-            </Alert>
-          </Box>
-        )}
-
-        {/* Pending Banner */}
-        {pendingOverlayText && (
-          <Box
-            sx={{
-              px: 2,
-              pb: 2,
-              animation: "slideDown 0.3s ease-out",
-              "@keyframes slideDown": {
-                "0%": {
-                  opacity: 0,
-                  transform: "translateY(-20px)",
-                },
-                "100%": {
-                  opacity: 1,
-                  transform: "translateY(0)",
-                },
-              },
-            }}
-          >
-            <Alert
-              severity="info"
-              sx={{
-                borderRadius: "16px",
-                boxShadow: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-                    : "0 8px 32px rgba(0, 0, 0, 0.1)",
-                border: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "1px solid rgba(255, 255, 255, 0.1)"
-                    : "1px solid rgba(0, 0, 0, 0.1)",
-                background: (theme) =>
-                  theme.palette.mode === "dark"
-                    ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
-                    : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                position: "relative",
-                overflow: "hidden",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: "2px",
-                  background:
-                    "linear-gradient(90deg, #2196f3, #21cbf3, #2196f3)",
-                  animation: "gradientShift 2s ease-in-out infinite",
-                  "@keyframes gradientShift": {
-                    "0%": {
-                      backgroundPosition: "0% 50%",
-                    },
-                    "50%": {
-                      backgroundPosition: "100% 50%",
-                    },
-                    "100%": {
-                      backgroundPosition: "0% 50%",
-                    },
-                  },
-                },
-                "& .MuiAlert-icon": {
-                  fontSize: "1.5rem",
-                  animation: "spin 2s linear infinite",
-                  "@keyframes spin": {
-                    "0%": {
-                      transform: "rotate(0deg)",
-                    },
-                    "100%": {
-                      transform: "rotate(360deg)",
-                    },
-                  },
-                },
-                "& .MuiAlert-message": {
-                  width: "100%",
-                },
-              }}
-              icon={
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    color: "info.main",
-                    animation: "spin 1s linear infinite",
-                    "@keyframes spin": {
-                      "0%": {
-                        transform: "rotate(0deg)",
-                      },
-                      "100%": {
-                        transform: "rotate(360deg)",
-                      },
-                    },
-                  }}
-                />
-              }
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  lineHeight: 1.4,
-                  color: "text.primary",
-                  textAlign: lang === "he" ? "right" : "left",
-                  direction: lang === "he" ? "rtl" : "ltr",
-                  fontWeight: 500,
-                }}
-              >
-                {pendingOverlayText}
-              </Typography>
-            </Alert>
-          </Box>
-        )}
-      </Box>
-
-      {/* Messages Area */}
+      {/* Messages Area with Integrated Toolbar */}
       <Box
         sx={{
           flex: 1,
@@ -549,6 +215,341 @@ const Chat: React.FC<ChatProps> = ({
           },
         }}
       >
+        {/* Sticky Toolbar inside Messages Area */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
+            background: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(30, 30, 30, 0.65)"
+                : "rgba(255, 255, 255, 0.7)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderBottom: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid rgba(255, 255, 255, 0.08)"
+                : "1px solid rgba(0, 0, 0, 0.08)",
+            boxShadow: (theme) =>
+              theme.palette.mode === "dark"
+                ? "0 2px 20px rgba(0, 0, 0, 0.15)"
+                : "0 2px 20px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          {/* Top Toolbar */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 1,
+              px: 2,
+              py: 1,
+              minHeight: "48px",
+            }}
+          >
+            <Tooltip title={t.exportChat}>
+              <IconButton
+                onClick={handleExportChat}
+                size="small"
+                sx={{
+                  p: 1,
+                  color: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.7)"
+                      : "text.secondary",
+                  borderRadius: "8px",
+                  "&:hover": {
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.08)"
+                        : "rgba(0, 0, 0, 0.08)",
+                    color: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.9)"
+                        : "text.primary",
+                  },
+                }}
+              >
+                <DownloadIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+            </Tooltip>
+
+            {onNewChatClick && (
+              <Tooltip title={t.newChat}>
+                <IconButton
+                  onClick={handleNewChat}
+                  size="small"
+                  sx={{
+                    p: 1,
+                    color: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(255, 255, 255, 0.7)"
+                        : "text.secondary",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.08)"
+                          : "rgba(0, 0, 0, 0.08)",
+                      color: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.9)"
+                          : "text.primary",
+                    },
+                  }}
+                >
+                  <AddIcon sx={{ fontSize: 20 }} />
+                </IconButton>
+              </Tooltip>
+            )}
+          </Box>
+
+          {/* Error Banner */}
+          {errorOverlayText && (
+            <Box
+              sx={{
+                px: 2,
+                pb: 2,
+                animation: "slideDown 0.3s ease-out",
+                "@keyframes slideDown": {
+                  "0%": {
+                    opacity: 0,
+                    transform: "translateY(-20px)",
+                  },
+                  "100%": {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  },
+                },
+              }}
+            >
+              <Alert
+                severity="error"
+                sx={{
+                  borderRadius: "16px",
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                      : "0 8px 32px rgba(0, 0, 0, 0.1)",
+                  border: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      : "1px solid rgba(0, 0, 0, 0.1)",
+                  background: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
+                      : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  position: "relative",
+                  overflow: "hidden",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background:
+                      "linear-gradient(90deg, #f44336, #ff5722, #f44336)",
+                    animation: "gradientShift 2s ease-in-out infinite",
+                    "@keyframes gradientShift": {
+                      "0%": {
+                        backgroundPosition: "0% 50%",
+                      },
+                      "50%": {
+                        backgroundPosition: "100% 50%",
+                      },
+                      "100%": {
+                        backgroundPosition: "0% 50%",
+                      },
+                    },
+                  },
+                  "& .MuiAlert-icon": {
+                    fontSize: "1.5rem",
+                    animation: "pulse 2s ease-in-out infinite",
+                    "@keyframes pulse": {
+                      "0%, 100%": {
+                        transform: "scale(1)",
+                      },
+                      "50%": {
+                        transform: "scale(1.1)",
+                      },
+                    },
+                  },
+                  "& .MuiAlert-message": {
+                    width: "100%",
+                  },
+                }}
+                action={
+                  <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                    {onErrorRetryClick && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        startIcon={<RefreshIcon />}
+                        onClick={onErrorRetryClick}
+                        sx={{
+                          borderRadius: "8px",
+                          textTransform: "none",
+                          borderColor: "error.main",
+                          color: "error.main",
+                          // fontSize: "0.7rem",
+                          px: 1.2,
+                          py: 0.3,
+                          minWidth: "80px",
+                          whiteSpace: "nowrap",
+                          height: "28px",
+                          "& .MuiButton-startIcon": {
+                            marginRight: 0.5,
+                            // "& .MuiSvgIcon-root": {
+                            //   fontSize: "0.8rem",
+                            // },
+                          },
+                          "&:hover": {
+                            backgroundColor: "error.main",
+                            color: "white",
+                            borderColor: "error.main",
+                          },
+                        }}
+                      >
+                        {t.retryAction}
+                      </Button>
+                    )}
+                  </Box>
+                }
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    lineHeight: 1.4,
+                    color: "text.primary",
+                    textAlign: lang === "he" ? "right" : "left",
+                    direction: lang === "he" ? "rtl" : "ltr",
+                    fontWeight: 500,
+                  }}
+                >
+                  {errorOverlayText}
+                </Typography>
+              </Alert>
+            </Box>
+          )}
+
+          {/* Pending Banner */}
+          {pendingOverlayText && (
+            <Box
+              sx={{
+                px: 2,
+                pb: 2,
+                animation: "slideDown 0.3s ease-out",
+                "@keyframes slideDown": {
+                  "0%": {
+                    opacity: 0,
+                    transform: "translateY(-20px)",
+                  },
+                  "100%": {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  },
+                },
+              }}
+            >
+              <Alert
+                severity="info"
+                sx={{
+                  borderRadius: "16px",
+                  boxShadow: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                      : "0 8px 32px rgba(0, 0, 0, 0.1)",
+                  border: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      : "1px solid rgba(0, 0, 0, 0.1)",
+                  background: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
+                      : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  position: "relative",
+                  overflow: "hidden",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background:
+                      "linear-gradient(90deg, #2196f3, #21cbf3, #2196f3)",
+                    animation: "gradientShift 2s ease-in-out infinite",
+                    "@keyframes gradientShift": {
+                      "0%": {
+                        backgroundPosition: "0% 50%",
+                      },
+                      "50%": {
+                        backgroundPosition: "100% 50%",
+                      },
+                      "100%": {
+                        backgroundPosition: "0% 50%",
+                      },
+                    },
+                  },
+                  "& .MuiAlert-icon": {
+                    fontSize: "1.5rem",
+                    animation: "spin 2s linear infinite",
+                    "@keyframes spin": {
+                      "0%": {
+                        transform: "rotate(0deg)",
+                      },
+                      "100%": {
+                        transform: "rotate(360deg)",
+                      },
+                    },
+                  },
+                  "& .MuiAlert-message": {
+                    width: "100%",
+                  },
+                }}
+                icon={
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: "info.main",
+                      animation: "spin 1s linear infinite",
+                      "@keyframes spin": {
+                        "0%": {
+                          transform: "rotate(0deg)",
+                        },
+                        "100%": {
+                          transform: "rotate(360deg)",
+                        },
+                      },
+                    }}
+                  />
+                }
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    lineHeight: 1.4,
+                    color: "text.primary",
+                    textAlign: lang === "he" ? "right" : "left",
+                    direction: lang === "he" ? "rtl" : "ltr",
+                    fontWeight: 500,
+                  }}
+                >
+                  {pendingOverlayText}
+                </Typography>
+              </Alert>
+            </Box>
+          )}
+        </Box>
+
+        {/* Messages Content */}
         <Box sx={{ p: 2 }}>
           <MessageList
             messages={messages}
