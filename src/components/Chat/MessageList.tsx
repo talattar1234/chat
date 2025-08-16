@@ -84,7 +84,12 @@ const MessageList = React.memo<MessageListProps>(
         <Typography
           variant="body1"
           component="p"
-          sx={{ mb: 1, "&:last-child": { mb: 0 }, wordBreak: "break-word", overflowWrap: "break-word" }}
+          sx={{
+            mb: 1,
+            "&:last-child": { mb: 0 },
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+          }}
           {...props}
         >
           {children}
@@ -326,6 +331,7 @@ const MessageList = React.memo<MessageListProps>(
                 gap: 1,
                 maxWidth: "70%",
                 width: "100%",
+                justifyContent: "flex-start",
               }}
             >
               <Avatar sx={{ bgcolor: "primary.main", mt: 1 }}>
@@ -426,6 +432,8 @@ const MessageList = React.memo<MessageListProps>(
                 gap: 1,
                 maxWidth: "70%",
                 width: "100%",
+                justifyContent:
+                  message.sender === "user" ? "flex-end" : "flex-start",
               }}
             >
               {message.sender === "ai" && (

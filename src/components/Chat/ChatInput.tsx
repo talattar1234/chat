@@ -430,18 +430,13 @@ const ChatInput = React.memo<ChatInputProps>(
           sx={{
             mt: 1,
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-start",
             alignItems: "center",
           }}
         >
           <Typography variant="caption" sx={{ opacity: 0.7 }}>
             {supportedFilesLabel} {allowedFileTypes.join(", ")}
           </Typography>
-          {selectedFiles.length > 0 && (
-            <Typography variant="caption" sx={{ opacity: 0.7 }}>
-              {formatFileSize(totalFileSize)} / {formatFileSize(maxFileSize)}
-            </Typography>
-          )}
         </Box>
       </Box>
     );
