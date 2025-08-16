@@ -54,7 +54,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme === "dark" ? darkTheme : darkTheme;
+      const theme = context.globals.theme === "dark" ? darkTheme : lightTheme;
       return (
         <ThemeProvider theme={theme}>
           <CssBaseline />

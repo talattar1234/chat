@@ -11,6 +11,7 @@ import {
   DialogActions,
   LinearProgress,
   Alert,
+  useTheme,
 } from "@mui/material";
 import {
   Mic as MicIcon,
@@ -49,6 +50,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     onError: typeof onError,
     lang,
   });
+
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   const t = audioRecorderLabels[lang];
 
@@ -492,8 +496,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                   "50%": { transform: "scale(1.1)" },
                   "100%": { transform: "scale(1)" },
                 },
-                boxShadow: "0 0 20px rgba(244, 67, 54, 0.5)",
-                backgroundColor: "rgba(244, 67, 54, 0.1)",
+                boxShadow: isDark
+                  ? "0 0 20px rgba(244, 67, 54, 0.3)"
+                  : "0 0 20px rgba(244, 67, 54, 0.5)",
+                backgroundColor: isDark
+                  ? "rgba(244, 67, 54, 0.15)"
+                  : "rgba(244, 67, 54, 0.1)",
               }}
             >
               <CloseIcon />
@@ -513,8 +521,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                   "50%": { transform: "scale(1.1)" },
                   "100%": { transform: "scale(1)" },
                 },
-                boxShadow: "0 0 20px rgba(76, 175, 80, 0.5)",
-                backgroundColor: "rgba(76, 175, 80, 0.1)",
+                boxShadow: isDark
+                  ? "0 0 20px rgba(76, 175, 80, 0.3)"
+                  : "0 0 20px rgba(76, 175, 80, 0.5)",
+                backgroundColor: isDark
+                  ? "rgba(76, 175, 80, 0.15)"
+                  : "rgba(76, 175, 80, 0.1)",
               }}
             >
               <CheckCircleIcon />
@@ -524,7 +536,27 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       </Box>
 
       {/* Dialog להצגת האודיו */}
-      <Dialog open={showDialog} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog
+        open={showDialog}
+        onClose={handleClose}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            background: isDark
+              ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
+              : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: isDark
+              ? "1px solid rgba(255, 255, 255, 0.15)"
+              : "1px solid rgba(0, 0, 0, 0.1)",
+            boxShadow: isDark
+              ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+              : "0 8px 32px rgba(0, 0, 0, 0.1)",
+          },
+        }}
+      >
         <DialogTitle>{t.audioRecording}</DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
@@ -538,9 +570,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                       width: "100%",
                       height: "100%",
                       border: "1px solid",
-                      borderColor: "divider",
+                      borderColor: isDark
+                        ? "rgba(255, 255, 255, 0.15)"
+                        : theme.palette.divider,
                       borderRadius: "4px",
                       overflow: "hidden",
+                      backgroundColor: isDark
+                        ? "rgba(255, 255, 255, 0.05)"
+                        : "rgba(0, 0, 0, 0.02)",
                     }}
                   />
                 </Box>

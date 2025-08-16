@@ -210,7 +210,17 @@ const ChatInput = React.memo<ChatInputProps>(
                   onDelete={() => removeFile(index)}
                   color="primary"
                   variant="outlined"
-                  sx={{ flexShrink: 0 }}
+                  sx={{
+                    flexShrink: 0,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(25, 118, 210, 0.15)"
+                        : "rgba(25, 118, 210, 0.1)",
+                    borderColor: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(25, 118, 210, 0.3)"
+                        : "rgba(25, 118, 210, 0.3)",
+                  }}
                 />
               ))}
             </Box>
@@ -278,7 +288,10 @@ const ChatInput = React.memo<ChatInputProps>(
                 sx={{
                   height: 6,
                   borderRadius: 3,
-                  backgroundColor: "grey.200",
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.1)"
+                      : "grey.200",
                   "& .MuiLinearProgress-bar": {
                     borderRadius: 3,
                     backgroundColor:
@@ -313,6 +326,31 @@ const ChatInput = React.memo<ChatInputProps>(
             onKeyPress={handleKeyPress}
             placeholder={placeholder}
             disabled={disabled}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.08)"
+                    : "rgba(255, 255, 255, 0.9)",
+                backdropFilter: "blur(10px)",
+                borderRadius: "12px",
+                "& fieldset": {
+                  borderColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.15)"
+                      : "rgba(0, 0, 0, 0.15)",
+                },
+                "&:hover fieldset": {
+                  borderColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.25)"
+                      : "rgba(0, 0, 0, 0.25)",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "primary.main",
+                },
+              },
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -320,6 +358,15 @@ const ChatInput = React.memo<ChatInputProps>(
                     <IconButton
                       onClick={() => fileInputRef.current?.click()}
                       disabled={disabled}
+                      sx={{
+                        color: "text.secondary",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "rgba(255, 255, 255, 0.12)"
+                              : "rgba(0, 0, 0, 0.08)",
+                        },
+                      }}
                     >
                       <AttachFileIcon />
                     </IconButton>

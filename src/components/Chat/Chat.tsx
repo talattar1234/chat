@@ -200,7 +200,7 @@ const Chat: React.FC<ChatProps> = ({
                   : "1px solid rgba(0, 0, 0, 0.1)",
               background: (theme) =>
                 theme.palette.mode === "dark"
-                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
                   : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
@@ -332,7 +332,7 @@ const Chat: React.FC<ChatProps> = ({
                   : "1px solid rgba(0, 0, 0, 0.1)",
               background: (theme) =>
                 theme.palette.mode === "dark"
-                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
                   : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
@@ -409,13 +409,99 @@ const Chat: React.FC<ChatProps> = ({
         </Box>
       )}
 
-      {/* Messages Area with Top Toolbar */}
+      {/* Top Toolbar - Fixed Header */}
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          background: (theme) =>
+            theme.palette.mode === "dark"
+              ? "rgba(30, 30, 30, 0.65)"
+              : "rgba(255, 255, 255, 0.7)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: (theme) =>
+            theme.palette.mode === "dark"
+              ? "1px solid rgba(255, 255, 255, 0.08)"
+              : "1px solid rgba(0, 0, 0, 0.08)",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          gap: 1,
+          px: 2,
+          py: 1,
+          minHeight: "48px",
+          boxShadow: (theme) =>
+            theme.palette.mode === "dark"
+              ? "0 2px 20px rgba(0, 0, 0, 0.15)"
+              : "0 2px 20px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Tooltip title={t.exportChat}>
+          <IconButton
+            onClick={handleExportChat}
+            size="small"
+            sx={{
+              p: 1,
+              color: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.7)"
+                  : "text.secondary",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.08)"
+                    : "rgba(0, 0, 0, 0.08)",
+                color: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.9)"
+                    : "text.primary",
+              },
+            }}
+          >
+            <DownloadIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+        </Tooltip>
+
+        {onNewChatClick && (
+          <Tooltip title={t.newChat}>
+            <IconButton
+              onClick={handleNewChat}
+              size="small"
+              sx={{
+                p: 1,
+                color: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.7)"
+                    : "text.secondary",
+                borderRadius: "8px",
+                "&:hover": {
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.08)"
+                      : "rgba(0, 0, 0, 0.08)",
+                  color: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.9)"
+                      : "text.primary",
+                },
+              }}
+            >
+              <AddIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
+
+      {/* Messages Area */}
       <Box
         sx={{
           flex: 1,
           overflow: "auto",
           background: isDark
-            ? "linear-gradient(135deg, #0f0f0f 0%, #0a0a0a 30%, #0a0a0a 70%, #0f0f0f 100%), linear-gradient(45deg, #1a1a2e 0%, transparent 20%, transparent 80%, #16213e 100%)"
+            ? "linear-gradient(135deg, #121212 0%, #1e1e1e 30%, #1e1e1e 70%, #121212 100%), linear-gradient(45deg, #2d2d2d 0%, transparent 20%, transparent 80%, #2d2d2d 100%)"
             : "linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #fff8f0 100%)",
           position: "relative",
           "&::-webkit-scrollbar": {
@@ -424,24 +510,24 @@ const Chat: React.FC<ChatProps> = ({
           "&::-webkit-scrollbar-track": {
             background: (theme) =>
               theme.palette.mode === "dark"
-                ? "rgba(255, 255, 255, 0.05)"
+                ? "rgba(255, 255, 255, 0.08)"
                 : "rgba(0, 0, 0, 0.05)",
             borderRadius: "6px",
           },
           "&::-webkit-scrollbar-thumb": {
             background: (theme) =>
               theme.palette.mode === "dark"
-                ? "rgba(255, 255, 255, 0.3)"
+                ? "rgba(255, 255, 255, 0.25)"
                 : "rgba(0, 0, 0, 0.3)",
             borderRadius: "6px",
             border: (theme) =>
               theme.palette.mode === "dark"
-                ? "1px solid rgba(255, 255, 255, 0.2)"
+                ? "1px solid rgba(255, 255, 255, 0.15)"
                 : "1px solid rgba(0, 0, 0, 0.2)",
             "&:hover": {
               background: (theme) =>
                 theme.palette.mode === "dark"
-                  ? "rgba(255, 255, 255, 0.5)"
+                  ? "rgba(255, 255, 255, 0.4)"
                   : "rgba(0, 0, 0, 0.5)",
             },
           },
@@ -459,76 +545,6 @@ const Chat: React.FC<ChatProps> = ({
           },
         }}
       >
-        {/* Top Toolbar */}
-        <Box
-          sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            background: (theme) =>
-              theme.palette.mode === "dark"
-                ? "rgba(255, 255, 255, 0.05)"
-                : "rgba(255, 255, 255, 0.3)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            borderBottom: (theme) =>
-              theme.palette.mode === "dark"
-                ? "1px solid rgba(255, 255, 255, 0.1)"
-                : "1px solid rgba(0, 0, 0, 0.08)",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: 1,
-            px: 2,
-            py: 1,
-            minHeight: "48px",
-          }}
-        >
-          <Tooltip title={t.exportChat}>
-            <IconButton
-              onClick={handleExportChat}
-              size="small"
-              sx={{
-                p: 1,
-                color: "text.secondary",
-                borderRadius: "8px",
-                "&:hover": {
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.1)"
-                      : "rgba(0, 0, 0, 0.08)",
-                  color: "text.primary",
-                },
-              }}
-            >
-              <DownloadIcon sx={{ fontSize: 20 }} />
-            </IconButton>
-          </Tooltip>
-
-          {onNewChatClick && (
-            <Tooltip title={t.newChat}>
-              <IconButton
-                onClick={handleNewChat}
-                size="small"
-                sx={{
-                  p: 1,
-                  color: "text.secondary",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.1)"
-                        : "rgba(0, 0, 0, 0.08)",
-                    color: "text.primary",
-                  },
-                }}
-              >
-                <AddIcon sx={{ fontSize: 20 }} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
-
         {/* Messages Content */}
         <Box sx={{ p: 2 }}>
           <MessageList
@@ -574,18 +590,18 @@ const Chat: React.FC<ChatProps> = ({
                   gap: 1,
                   bgcolor: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.08)"
+                      ? "rgba(255, 255, 255, 0.12)"
                       : "rgba(255, 255, 255, 0.95)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
                   position: "relative",
                   border: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      ? "1px solid rgba(255, 255, 255, 0.15)"
                       : "1px solid rgba(0, 0, 0, 0.08)",
                   boxShadow: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                      ? "0 4px 20px rgba(0, 0, 0, 0.3)"
                       : "0 4px 20px rgba(0, 0, 0, 0.05)",
                   "&::before": {
                     content: '""',
@@ -595,7 +611,7 @@ const Chat: React.FC<ChatProps> = ({
                     padding: "1px",
                     background: (theme) =>
                       theme.palette.mode === "dark"
-                        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
                         : "linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.02))",
                     mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                     maskComposite: "exclude",
@@ -771,10 +787,10 @@ const Chat: React.FC<ChatProps> = ({
       <Box
         sx={{
           background: isDark
-            ? "linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%), linear-gradient(45deg, rgba(25, 118, 210, 0.05) 0%, rgba(156, 39, 176, 0.05) 50%, rgba(255, 193, 7, 0.05) 100%)"
+            ? "linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%), linear-gradient(45deg, rgba(25, 118, 210, 0.08) 0%, rgba(156, 39, 176, 0.08) 50%, rgba(255, 193, 7, 0.08) 100%)"
             : "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
           borderTop: isDark
-            ? "1px solid rgba(255,255,255,0.1)"
+            ? "1px solid rgba(255,255,255,0.15)"
             : "1px solid rgba(0,0,0,0.05)",
           position: "relative",
           "&::before": {
@@ -785,7 +801,7 @@ const Chat: React.FC<ChatProps> = ({
             right: 0,
             height: "1px",
             background: isDark
-              ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)"
+              ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)"
               : "linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)",
           },
         }}
@@ -818,7 +834,7 @@ const Chat: React.FC<ChatProps> = ({
             borderRadius: "16px",
             background: (theme) =>
               theme.palette.mode === "dark"
-                ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
                 : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",

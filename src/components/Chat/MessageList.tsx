@@ -81,37 +81,72 @@ const MessageList = React.memo<MessageListProps>(
     // Custom components for react-markdown that use Material-UI Typography
     const markdownComponents: any = {
       p: ({ children, ...props }: any) => (
-        <Typography variant="body1" component="p" sx={{ mb: 1, "&:last-child": { mb: 0 } }} {...props}>
+        <Typography
+          variant="body1"
+          component="p"
+          sx={{ mb: 1, "&:last-child": { mb: 0 } }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
       h1: ({ children, ...props }: any) => (
-        <Typography variant="h4" component="h1" sx={{ mb: 1, mt: 2 }} {...props}>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ mb: 1, mt: 2 }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
       h2: ({ children, ...props }: any) => (
-        <Typography variant="h5" component="h2" sx={{ mb: 1, mt: 2 }} {...props}>
+        <Typography
+          variant="h5"
+          component="h2"
+          sx={{ mb: 1, mt: 2 }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
       h3: ({ children, ...props }: any) => (
-        <Typography variant="h6" component="h3" sx={{ mb: 1, mt: 2 }} {...props}>
+        <Typography
+          variant="h6"
+          component="h3"
+          sx={{ mb: 1, mt: 2 }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
       h4: ({ children, ...props }: any) => (
-        <Typography variant="subtitle1" component="h4" sx={{ mb: 1, mt: 1, fontWeight: "bold" }} {...props}>
+        <Typography
+          variant="subtitle1"
+          component="h4"
+          sx={{ mb: 1, mt: 1, fontWeight: "bold" }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
       h5: ({ children, ...props }: any) => (
-        <Typography variant="subtitle2" component="h5" sx={{ mb: 1, mt: 1, fontWeight: "bold" }} {...props}>
+        <Typography
+          variant="subtitle2"
+          component="h5"
+          sx={{ mb: 1, mt: 1, fontWeight: "bold" }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
       h6: ({ children, ...props }: any) => (
-        <Typography variant="body2" component="h6" sx={{ mb: 1, mt: 1, fontWeight: "bold" }} {...props}>
+        <Typography
+          variant="body2"
+          component="h6"
+          sx={{ mb: 1, mt: 1, fontWeight: "bold" }}
+          {...props}
+        >
           {children}
         </Typography>
       ),
@@ -129,9 +164,10 @@ const MessageList = React.memo<MessageListProps>(
         <Typography
           component="code"
           sx={{
-            backgroundColor: (theme) => theme.palette.mode === "dark" 
-              ? "rgba(255, 255, 255, 0.1)" 
-              : "rgba(0, 0, 0, 0.1)",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.15)"
+                : "rgba(0, 0, 0, 0.1)",
             padding: "2px 4px",
             borderRadius: "4px",
             fontFamily: "monospace",
@@ -146,9 +182,10 @@ const MessageList = React.memo<MessageListProps>(
         <Box
           component="pre"
           sx={{
-            backgroundColor: (theme) => theme.palette.mode === "dark" 
-              ? "rgba(255, 255, 255, 0.05)" 
-              : "rgba(0, 0, 0, 0.05)",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.08)"
+                : "rgba(0, 0, 0, 0.05)",
             padding: 2,
             borderRadius: 1,
             overflow: "auto",
@@ -216,12 +253,10 @@ const MessageList = React.memo<MessageListProps>(
     const renderMessageContent = (text: string) => {
       // Check if the text contains markdown patterns
       const hasMarkdown = /[*_`#\[\]()>|]/.test(text);
-      
+
       if (hasMarkdown) {
         return (
-          <ReactMarkdown components={markdownComponents}>
-            {text}
-          </ReactMarkdown>
+          <ReactMarkdown components={markdownComponents}>{text}</ReactMarkdown>
         );
       } else {
         return (
@@ -293,7 +328,7 @@ const MessageList = React.memo<MessageListProps>(
                   p: 2,
                   bgcolor: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.08)"
+                      ? "rgba(255, 255, 255, 0.12)"
                       : "rgba(255, 255, 255, 0.95)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
@@ -302,11 +337,11 @@ const MessageList = React.memo<MessageListProps>(
                   maxWidth: "100%",
                   border: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.1)"
+                      ? "1px solid rgba(255, 255, 255, 0.15)"
                       : "1px solid rgba(0, 0, 0, 0.15)",
                   boxShadow: (theme) =>
                     theme.palette.mode === "dark"
-                      ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                      ? "0 4px 20px rgba(0, 0, 0, 0.3)"
                       : "0 4px 20px rgba(0, 0, 0, 0.15)",
                   position: "relative",
                   "&::before": {
@@ -317,7 +352,7 @@ const MessageList = React.memo<MessageListProps>(
                     padding: "1px",
                     background: (theme) =>
                       theme.palette.mode === "dark"
-                        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
                         : "linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.12))",
                     mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                     maskComposite: "exclude",
@@ -388,11 +423,11 @@ const MessageList = React.memo<MessageListProps>(
                   bgcolor: (theme) => {
                     if (message.sender === "user") {
                       return theme.palette.mode === "dark"
-                        ? "rgba(0, 122, 255, 0.15)"
+                        ? "rgba(25, 118, 210, 0.2)"
                         : "rgba(0, 122, 255, 0.25)";
                     } else {
                       return theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.08)"
+                        ? "rgba(255, 255, 255, 0.12)"
                         : "rgba(255, 255, 255, 0.95)";
                     }
                   },
@@ -409,22 +444,22 @@ const MessageList = React.memo<MessageListProps>(
                   border: (theme) => {
                     if (message.sender === "user") {
                       return theme.palette.mode === "dark"
-                        ? "1px solid rgba(0, 122, 255, 0.3)"
+                        ? "1px solid rgba(25, 118, 210, 0.35)"
                         : "1px solid rgba(0, 122, 255, 0.4)";
                     } else {
                       return theme.palette.mode === "dark"
-                        ? "1px solid rgba(255, 255, 255, 0.1)"
+                        ? "1px solid rgba(255, 255, 255, 0.15)"
                         : "1px solid rgba(0, 0, 0, 0.15)";
                     }
                   },
                   boxShadow: (theme) => {
                     if (message.sender === "user") {
                       return theme.palette.mode === "dark"
-                        ? "0 4px 20px rgba(0, 122, 255, 0.15)"
+                        ? "0 4px 20px rgba(25, 118, 210, 0.15)"
                         : "0 4px 20px rgba(0, 122, 255, 0.2)";
                     } else {
                       return theme.palette.mode === "dark"
-                        ? "0 4px 20px rgba(0, 0, 0, 0.2)"
+                        ? "0 4px 20px rgba(0, 0, 0, 0.3)"
                         : "0 4px 20px rgba(0, 0, 0, 0.15)";
                     }
                   },
@@ -438,11 +473,11 @@ const MessageList = React.memo<MessageListProps>(
                     background: (theme) => {
                       if (message.sender === "user") {
                         return theme.palette.mode === "dark"
-                          ? "linear-gradient(135deg, rgba(0, 122, 255, 0.3), rgba(0, 122, 255, 0.1))"
+                          ? "linear-gradient(135deg, rgba(25, 118, 210, 0.35), rgba(25, 118, 210, 0.15))"
                           : "linear-gradient(135deg, rgba(0, 122, 255, 0.4), rgba(0, 122, 255, 0.2))";
                       } else {
                         return theme.palette.mode === "dark"
-                          ? "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))"
+                          ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
                           : "linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.12))";
                       }
                     },

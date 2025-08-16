@@ -5,16 +5,56 @@ import {
   CssBaseline,
   Box,
   Button,
+  IconButton,
+  useTheme,
 } from "@mui/material";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 import Chat, { Message } from "./components/Chat/Chat";
 
-const theme = createTheme({
+const lightTheme = createTheme({
   palette: {
     mode: "light",
+    primary: {
+      main: "#1976d2",
+    },
+    secondary: {
+      main: "#dc004e",
+    },
+    background: {
+      default: "#f5f5f5",
+      paper: "#ffffff",
+    },
+  },
+  typography: {
+    fontFamily: ["Segoe UI", "Tahoma", "Arial", "sans-serif"].join(","),
+  },
+});
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#90caf9",
+    },
+    secondary: {
+      main: "#f48fb1",
+    },
+    background: {
+      default: "#121212",
+      paper: "#1e1e1e",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "rgba(255, 255, 255, 0.7)",
+    },
+  },
+  typography: {
+    fontFamily: ["Segoe UI", "Tahoma", "Arial", "sans-serif"].join(","),
   },
 });
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -26,6 +66,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState<string | undefined>(undefined);
   const [pendingText, setPendingText] = useState<string | undefined>(undefined);
+
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleMessageEnter = (message: string) => {
     // Simulate API call
@@ -81,6 +123,10 @@ function App() {
     console.log("Retrying operation...");
   };
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -95,8 +141,22 @@ function App() {
             display: "flex",
             gap: 1,
             flexWrap: "wrap",
+            alignItems: "center",
           }}
         >
+          <IconButton
+            onClick={toggleDarkMode}
+            color="inherit"
+            sx={{
+              bgcolor: "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(10px)",
+              "&:hover": {
+                bgcolor: "rgba(255, 255, 255, 0.2)",
+              },
+            }}
+          >
+            {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
           <Button
             variant="contained"
             color="error"
