@@ -139,7 +139,7 @@ const Chat: React.FC<ChatProps> = ({
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         position: "relative",
@@ -236,7 +236,7 @@ const Chat: React.FC<ChatProps> = ({
                       textTransform: "none",
                       borderColor: "error.main",
                       color: "error.main",
-                      fontSize: "0.7rem",
+                      // fontSize: "0.7rem",
                       px: 1.2,
                       py: 0.3,
                       minWidth: "80px",
@@ -244,9 +244,9 @@ const Chat: React.FC<ChatProps> = ({
                       height: "28px",
                       "& .MuiButton-startIcon": {
                         marginRight: 0.5,
-                        "& .MuiSvgIcon-root": {
-                          fontSize: "0.8rem",
-                        },
+                        // "& .MuiSvgIcon-root": {
+                        //   fontSize: "0.8rem",
+                        // },
                       },
                       "&:hover": {
                         backgroundColor: "error.main",
@@ -817,9 +817,9 @@ const Chat: React.FC<ChatProps> = ({
       >
         <DialogTitle
           sx={{
-            textAlign: lang === "he" ? "right" : "left",
+            textAlign: "start",
             direction: lang === "he" ? "rtl" : "ltr",
-            fontWeight: 600,
+            fontWeight: 400,
             fontSize: "1.1rem",
             pb: 1,
           }}

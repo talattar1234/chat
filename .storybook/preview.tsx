@@ -58,7 +58,9 @@ const preview: Preview = {
       return (
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Story />
+          <div style={{ height: "100vh", width: "100vw" }}>
+            <Story />
+          </div>
         </ThemeProvider>
       );
     },
