@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -83,7 +83,45 @@ const Chat: React.FC<ChatProps> = ({
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [showNewChatConfirmation, setShowNewChatConfirmation] = useState(false);
 
+  // Overlay animation states
+  const [showErrorOverlay, setShowErrorOverlay] = useState(false);
+  const [showPendingOverlay, setShowPendingOverlay] = useState(false);
+  const [isErrorExiting, setIsErrorExiting] = useState(false);
+  const [isPendingExiting, setIsPendingExiting] = useState(false);
+
   const t = chatLabels[lang];
+
+  // Handle error overlay animations
+  useEffect(() => {
+    if (errorOverlayText && !showErrorOverlay) {
+      setShowErrorOverlay(true);
+      setIsErrorExiting(false);
+    } else if (!errorOverlayText && showErrorOverlay) {
+      setIsErrorExiting(true);
+      // Wait for the slideUp animation to complete before hiding
+      const timer = setTimeout(() => {
+        setShowErrorOverlay(false);
+        setIsErrorExiting(false);
+      }, 300); // Match the exit animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [errorOverlayText, showErrorOverlay]);
+
+  // Handle pending overlay animations
+  useEffect(() => {
+    if (pendingOverlayText && !showPendingOverlay) {
+      setShowPendingOverlay(true);
+      setIsPendingExiting(false);
+    } else if (!pendingOverlayText && showPendingOverlay) {
+      setIsPendingExiting(true);
+      // Wait for the slideUp animation to complete before hiding
+      const timer = setTimeout(() => {
+        setShowPendingOverlay(false);
+        setIsPendingExiting(false);
+      }, 300); // Match the exit animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [pendingOverlayText, showPendingOverlay]);
 
   // Memoized callbacks
   const handleCopyMessage = useCallback((text: string, messageId: string) => {
@@ -340,12 +378,14 @@ const Chat: React.FC<ChatProps> = ({
           </Box>
 
           {/* Error Banner */}
-          {errorOverlayText && (
+          {showErrorOverlay && (
             <Box
               sx={{
                 px: 2,
                 pb: 2,
-                animation: "slideDown 0.3s ease-out",
+                animation: isErrorExiting
+                  ? "slideUp 0.3s ease-in forwards"
+                  : "slideDown 0.3s ease-out",
                 "@keyframes slideDown": {
                   "0%": {
                     opacity: 0,
@@ -354,6 +394,16 @@ const Chat: React.FC<ChatProps> = ({
                   "100%": {
                     opacity: 1,
                     transform: "translateY(0)",
+                  },
+                },
+                "@keyframes slideUp": {
+                  "0%": {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  },
+                  "100%": {
+                    opacity: 0,
+                    transform: "translateY(-20px)",
                   },
                 },
               }}
@@ -471,12 +521,14 @@ const Chat: React.FC<ChatProps> = ({
           )}
 
           {/* Pending Banner */}
-          {pendingOverlayText && (
+          {showPendingOverlay && (
             <Box
               sx={{
                 px: 2,
                 pb: 2,
-                animation: "slideDown 0.3s ease-out",
+                animation: isPendingExiting
+                  ? "slideUp 0.3s ease-in forwards"
+                  : "slideDown 0.3s ease-out",
                 "@keyframes slideDown": {
                   "0%": {
                     opacity: 0,
@@ -485,6 +537,16 @@ const Chat: React.FC<ChatProps> = ({
                   "100%": {
                     opacity: 1,
                     transform: "translateY(0)",
+                  },
+                },
+                "@keyframes slideUp": {
+                  "0%": {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  },
+                  "100%": {
+                    opacity: 0,
+                    transform: "translateY(-20px)",
                   },
                 },
               }}
