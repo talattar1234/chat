@@ -743,6 +743,34 @@ const MessageList = React.memo<MessageListProps>(
                     WebkitMaskComposite: "xor",
                     zIndex: -1,
                   },
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "18px",
+                    padding: "2px",
+                    background:
+                      "linear-gradient(45deg, #1976d2, #42a5f5, #9c27b0, #ff9800, #1976d2)",
+                    backgroundSize: "400% 400%",
+                    animation: "gradientRotate 3s ease-in-out infinite",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    zIndex: -2,
+                    "@keyframes gradientRotate": {
+                      "0%": {
+                        backgroundPosition: "0% 50%",
+                      },
+                      "50%": {
+                        backgroundPosition: "100% 50%",
+                      },
+                      "100%": {
+                        backgroundPosition: "0% 50%",
+                      },
+                    },
+                  },
                   animation: "slideIn 0.5s ease-out",
                   "@keyframes slideIn": {
                     "0%": {
