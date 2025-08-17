@@ -316,7 +316,7 @@ const ChatInput = React.memo<ChatInputProps>(
         )}
 
         {/* Input Field */}
-        <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "end" }}>
           <TextField
             fullWidth
             multiline
@@ -430,7 +430,7 @@ const ChatInput = React.memo<ChatInputProps>(
           sx={{
             mt: 1,
             display: "flex",
-            justifyContent: "flex-start",
+            justifyContent: "start",
             alignItems: "center",
           }}
         >

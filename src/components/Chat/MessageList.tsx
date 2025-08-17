@@ -42,9 +42,9 @@ const MessageList = React.memo<MessageListProps>(
 
     // Helper function to format date according to custom format
     const formatDate = useCallback((date: Date, format: string): string => {
-      const pad = (num: number): string => num.toString().padStart(2, '0');
-      const pad3 = (num: number): string => num.toString().padStart(3, '0');
-      
+      const pad = (num: number): string => num.toString().padStart(2, "0");
+      const pad3 = (num: number): string => num.toString().padStart(3, "0");
+
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
@@ -52,27 +52,27 @@ const MessageList = React.memo<MessageListProps>(
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
       const milliseconds = date.getMilliseconds();
-      
+
       return format
-        .replace('yyyy', year.toString())
-        .replace('yy', year.toString().slice(-2))
-        .replace('MM', pad(month))
-        .replace('M', month.toString())
-        .replace('dd', pad(day))
-        .replace('d', day.toString())
-        .replace('HH', pad(hours))
-        .replace('H', hours.toString())
-        .replace('hh', pad(hours % 12 || 12))
-        .replace('h', (hours % 12 || 12).toString())
-        .replace('mm', pad(minutes))
-        .replace('m', minutes.toString())
-        .replace('ss', pad(seconds))
-        .replace('s', seconds.toString())
-        .replace('SSS', pad3(milliseconds))
-        .replace('SS', pad(Math.floor(milliseconds / 10)))
-        .replace('S', Math.floor(milliseconds / 100).toString())
-        .replace('a', hours >= 12 ? 'PM' : 'AM')
-        .replace('A', hours >= 12 ? 'PM' : 'AM');
+        .replace("yyyy", year.toString())
+        .replace("yy", year.toString().slice(-2))
+        .replace("MM", pad(month))
+        .replace("M", month.toString())
+        .replace("dd", pad(day))
+        .replace("d", day.toString())
+        .replace("HH", pad(hours))
+        .replace("H", hours.toString())
+        .replace("hh", pad(hours % 12 || 12))
+        .replace("h", (hours % 12 || 12).toString())
+        .replace("mm", pad(minutes))
+        .replace("m", minutes.toString())
+        .replace("ss", pad(seconds))
+        .replace("s", seconds.toString())
+        .replace("SSS", pad3(milliseconds))
+        .replace("SS", pad(Math.floor(milliseconds / 10)))
+        .replace("S", Math.floor(milliseconds / 100).toString())
+        .replace("a", hours >= 12 ? "PM" : "AM")
+        .replace("A", hours >= 12 ? "PM" : "AM");
     }, []);
 
     const scrollToBottom = useCallback(() => {
@@ -245,8 +245,9 @@ const MessageList = React.memo<MessageListProps>(
         <Box
           component="blockquote"
           sx={{
-            borderLeft: (theme) => `4px solid ${theme.palette.primary.main}`,
-            paddingLeft: 2,
+            borderInlineStart: (theme) =>
+              `4px solid ${theme.palette.primary.main}`,
+            paddingInlineStart: 2,
             margin: "16px 0",
             fontStyle: "italic",
             color: "text.secondary",
@@ -357,18 +358,18 @@ const MessageList = React.memo<MessageListProps>(
           <ListItem
             sx={{
               flexDirection: "column",
-              alignItems: "flex-start",
+              alignItems: "start",
               mb: 2,
             }}
           >
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-start",
+                alignItems: "start",
                 gap: 1,
                 maxWidth: "70%",
                 width: "100%",
-                justifyContent: "flex-start",
+                justifyContent: "start",
               }}
             >
               <Avatar sx={{ bgcolor: "primary.main", mt: 1 }}>
@@ -439,7 +440,7 @@ const MessageList = React.memo<MessageListProps>(
                     variant="caption"
                     sx={{
                       opacity: 0.7,
-                      textAlign: "right",
+                      textAlign: "end",
                     }}
                   >
                     {formatDate(new Date(), timeFormat)}
@@ -455,19 +456,18 @@ const MessageList = React.memo<MessageListProps>(
             key={message.id}
             sx={{
               flexDirection: "column",
-              alignItems: message.sender === "user" ? "flex-end" : "flex-start",
+              alignItems: message.sender === "user" ? "end" : "start",
               mb: 2,
             }}
           >
             <Box
               sx={{
                 display: "flex",
-                alignItems: "flex-start",
+                alignItems: "start",
                 gap: 1,
                 maxWidth: "70%",
                 width: "100%",
-                justifyContent:
-                  message.sender === "user" ? "flex-end" : "flex-start",
+                justifyContent: message.sender === "user" ? "end" : "start",
               }}
             >
               {message.sender === "ai" && (
@@ -671,7 +671,7 @@ const MessageList = React.memo<MessageListProps>(
                     variant="caption"
                     sx={{
                       opacity: 0.7,
-                      textAlign: message.sender === "user" ? "left" : "right",
+                      textAlign: message.sender === "user" ? "start" : "end",
                     }}
                   >
                     {formatDate(message.timestamp, timeFormat)}

@@ -113,9 +113,9 @@ const Chat: React.FC<ChatProps> = ({
   const handleExportChat = useCallback(() => {
     // Helper function to format date according to custom format
     const formatDate = (date: Date, format: string): string => {
-      const pad = (num: number): string => num.toString().padStart(2, '0');
-      const pad3 = (num: number): string => num.toString().padStart(3, '0');
-      
+      const pad = (num: number): string => num.toString().padStart(2, "0");
+      const pad3 = (num: number): string => num.toString().padStart(3, "0");
+
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
@@ -123,27 +123,27 @@ const Chat: React.FC<ChatProps> = ({
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
       const milliseconds = date.getMilliseconds();
-      
+
       return format
-        .replace('yyyy', year.toString())
-        .replace('yy', year.toString().slice(-2))
-        .replace('MM', pad(month))
-        .replace('M', month.toString())
-        .replace('dd', pad(day))
-        .replace('d', day.toString())
-        .replace('HH', pad(hours))
-        .replace('H', hours.toString())
-        .replace('hh', pad(hours % 12 || 12))
-        .replace('h', (hours % 12 || 12).toString())
-        .replace('mm', pad(minutes))
-        .replace('m', minutes.toString())
-        .replace('ss', pad(seconds))
-        .replace('s', seconds.toString())
-        .replace('SSS', pad3(milliseconds))
-        .replace('SS', pad(Math.floor(milliseconds / 10)))
-        .replace('S', Math.floor(milliseconds / 100).toString())
-        .replace('a', hours >= 12 ? 'PM' : 'AM')
-        .replace('A', hours >= 12 ? 'PM' : 'AM');
+        .replace("yyyy", year.toString())
+        .replace("yy", year.toString().slice(-2))
+        .replace("MM", pad(month))
+        .replace("M", month.toString())
+        .replace("dd", pad(day))
+        .replace("d", day.toString())
+        .replace("HH", pad(hours))
+        .replace("H", hours.toString())
+        .replace("hh", pad(hours % 12 || 12))
+        .replace("h", (hours % 12 || 12).toString())
+        .replace("mm", pad(minutes))
+        .replace("m", minutes.toString())
+        .replace("ss", pad(seconds))
+        .replace("s", seconds.toString())
+        .replace("SSS", pad3(milliseconds))
+        .replace("SS", pad(Math.floor(milliseconds / 10)))
+        .replace("S", Math.floor(milliseconds / 100).toString())
+        .replace("a", hours >= 12 ? "PM" : "AM")
+        .replace("A", hours >= 12 ? "PM" : "AM");
     };
 
     // Create a text file with chat history
@@ -314,7 +314,7 @@ const Chat: React.FC<ChatProps> = ({
           <Box
             sx={{
               display: "flex",
-              justifyContent: "flex-end",
+              justifyContent: "end",
               alignItems: "center",
               gap: 1,
               px: 2,
@@ -476,7 +476,7 @@ const Chat: React.FC<ChatProps> = ({
                           whiteSpace: "nowrap",
                           height: "28px",
                           "& .MuiButton-startIcon": {
-                            marginRight: 0.5,
+                            marginInlineEnd: 0.5,
                             // "& .MuiSvgIcon-root": {
                             //   fontSize: "0.8rem",
                             // },
@@ -499,7 +499,7 @@ const Chat: React.FC<ChatProps> = ({
                   sx={{
                     lineHeight: 1.4,
                     color: "text.primary",
-                    textAlign: lang === "he" ? "right" : "left",
+                    textAlign: lang === "he" ? "end" : "start",
                     direction: lang === "he" ? "rtl" : "ltr",
                     fontWeight: 500,
                   }}
@@ -610,7 +610,7 @@ const Chat: React.FC<ChatProps> = ({
                   sx={{
                     lineHeight: 1.4,
                     color: "text.primary",
-                    textAlign: lang === "he" ? "right" : "left",
+                    textAlign: lang === "he" ? "end" : "start",
                     direction: lang === "he" ? "rtl" : "ltr",
                     fontWeight: 500,
                   }}
@@ -952,7 +952,7 @@ const Chat: React.FC<ChatProps> = ({
         </DialogTitle>
         <DialogContent
           sx={{
-            textAlign: lang === "he" ? "right" : "left",
+            textAlign: lang === "he" ? "end" : "start",
             direction: lang === "he" ? "rtl" : "ltr",
             pb: 2,
           }}
@@ -963,7 +963,7 @@ const Chat: React.FC<ChatProps> = ({
         </DialogContent>
         <DialogActions
           sx={{
-            justifyContent: "flex-end",
+            justifyContent: "end",
             gap: 1,
             px: 3,
             pb: 3,

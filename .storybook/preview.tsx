@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
 const lightTheme = createTheme({
-  direction: "rtl",
+  direction: "ltr",
   palette: {
     mode: "light",
     primary: {
@@ -20,7 +20,7 @@ const lightTheme = createTheme({
 });
 
 const darkTheme = createTheme({
-  direction: "rtl",
+  direction: "ltr",
   palette: {
     mode: "dark",
     primary: {
@@ -54,7 +54,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme === "dark" ? darkTheme : darkTheme;
+      const theme = context.globals.theme === "dark" ? darkTheme : lightTheme;
       return (
         <ThemeProvider theme={theme}>
           <CssBaseline />

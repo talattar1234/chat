@@ -129,7 +129,13 @@ function App() {
   };
 
   const toggleTimeFormat = () => {
-    const formats = ["HH:mm", "HH:mm:ss", "dd/MM/yyyy HH:mm", "MM/dd/yyyy hh:mm a", "yyyy-MM-dd HH:mm:ss"];
+    const formats = [
+      "HH:mm",
+      "HH:mm:ss",
+      "dd/MM/yyyy HH:mm",
+      "MM/dd/yyyy hh:mm a",
+      "yyyy-MM-dd HH:mm:ss",
+    ];
     const currentIndex = formats.indexOf(timeFormat);
     const nextIndex = (currentIndex + 1) % formats.length;
     setTimeFormat(formats[nextIndex]);
