@@ -788,14 +788,14 @@ const MessageList = React.memo<MessageListProps>(
                   <Box sx={{ display: "flex", gap: 0.5 }}>
                     <Box
                       sx={{
-                        width: 6,
-                        height: 6,
+                        width: 4,
+                        height: 4,
                         borderRadius: "50%",
                         background: "linear-gradient(45deg, #1976d2, #42a5f5)",
                         animation:
                           "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
                         animationDelay: "0s, 0s, 0s, 0s",
-                        boxShadow: "0 0 8px rgba(25, 118, 210, 0.3)",
+                        boxShadow: "0 0 6px rgba(25, 118, 210, 0.3)",
                         "@keyframes colorShift": {
                           "0%, 100%": {
                             background:
@@ -826,14 +826,14 @@ const MessageList = React.memo<MessageListProps>(
                     />
                     <Box
                       sx={{
-                        width: 6,
-                        height: 6,
+                        width: 4,
+                        height: 4,
                         borderRadius: "50%",
                         background: "linear-gradient(45deg, #1976d2, #42a5f5)",
                         animation:
                           "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
                         animationDelay: "0.3s, 0s, 0.5s, 0.3s",
-                        boxShadow: "0 0 8px rgba(25, 118, 210, 0.3)",
+                        boxShadow: "0 0 6px rgba(25, 118, 210, 0.3)",
                         "@keyframes colorShift": {
                           "0%, 100%": {
                             background:
@@ -864,14 +864,14 @@ const MessageList = React.memo<MessageListProps>(
                     />
                     <Box
                       sx={{
-                        width: 6,
-                        height: 6,
+                        width: 4,
+                        height: 4,
                         borderRadius: "50%",
                         background: "linear-gradient(45deg, #1976d2, #42a5f5)",
                         animation:
                           "pulse 1.5s ease-in-out infinite, colorShift 3s ease-in-out infinite, rotate 2s linear infinite, zoom 1.5s ease-in-out infinite",
                         animationDelay: "0.6s, 0s, 1s, 0.6s",
-                        boxShadow: "0 0 8px rgba(25, 118, 210, 0.3)",
+                        boxShadow: "0 0 6px rgba(25, 118, 210, 0.3)",
                         "@keyframes colorShift": {
                           "0%, 100%": {
                             background:
