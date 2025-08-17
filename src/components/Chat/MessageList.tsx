@@ -16,6 +16,7 @@ import {
   ContentCopy as CopyIcon,
 } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
+import { format } from "date-fns";
 import { Message } from "./Chat";
 
 interface MessageListProps {
@@ -40,40 +41,13 @@ const MessageList = React.memo<MessageListProps>(
   }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // Helper function to format date according to custom format
-    const formatDate = useCallback((date: Date, format: string): string => {
-      const pad = (num: number): string => num.toString().padStart(2, "0");
-      const pad3 = (num: number): string => num.toString().padStart(3, "0");
-
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-      const milliseconds = date.getMilliseconds();
-
-      return format
-        .replace("yyyy", year.toString())
-        .replace("yy", year.toString().slice(-2))
-        .replace("MM", pad(month))
-        .replace("M", month.toString())
-        .replace("dd", pad(day))
-        .replace("d", day.toString())
-        .replace("HH", pad(hours))
-        .replace("H", hours.toString())
-        .replace("hh", pad(hours % 12 || 12))
-        .replace("h", (hours % 12 || 12).toString())
-        .replace("mm", pad(minutes))
-        .replace("m", minutes.toString())
-        .replace("ss", pad(seconds))
-        .replace("s", seconds.toString())
-        .replace("SSS", pad3(milliseconds))
-        .replace("SS", pad(Math.floor(milliseconds / 10)))
-        .replace("S", Math.floor(milliseconds / 100).toString())
-        .replace("a", hours >= 12 ? "PM" : "AM")
-        .replace("A", hours >= 12 ? "PM" : "AM");
-    }, []);
+    // Helper function to format date using date-fns
+    const formatDate = useCallback(
+      (date: Date, formatString: string): string => {
+        return format(date, formatString);
+      },
+      []
+    );
 
     const scrollToBottom = useCallback(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

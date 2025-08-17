@@ -26,6 +26,7 @@ import {
   Refresh as RefreshIcon,
   Cancel as CancelIcon,
 } from "@mui/icons-material";
+import { format } from "date-fns";
 import { chatLabels } from "./Chat.labels";
 import ChatInput from "./ChatInput";
 import MessageList from "./MessageList";
@@ -111,39 +112,9 @@ const Chat: React.FC<ChatProps> = ({
   }, []);
 
   const handleExportChat = useCallback(() => {
-    // Helper function to format date according to custom format
-    const formatDate = (date: Date, format: string): string => {
-      const pad = (num: number): string => num.toString().padStart(2, "0");
-      const pad3 = (num: number): string => num.toString().padStart(3, "0");
-
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-      const milliseconds = date.getMilliseconds();
-
-      return format
-        .replace("yyyy", year.toString())
-        .replace("yy", year.toString().slice(-2))
-        .replace("MM", pad(month))
-        .replace("M", month.toString())
-        .replace("dd", pad(day))
-        .replace("d", day.toString())
-        .replace("HH", pad(hours))
-        .replace("H", hours.toString())
-        .replace("hh", pad(hours % 12 || 12))
-        .replace("h", (hours % 12 || 12).toString())
-        .replace("mm", pad(minutes))
-        .replace("m", minutes.toString())
-        .replace("ss", pad(seconds))
-        .replace("s", seconds.toString())
-        .replace("SSS", pad3(milliseconds))
-        .replace("SS", pad(Math.floor(milliseconds / 10)))
-        .replace("S", Math.floor(milliseconds / 100).toString())
-        .replace("a", hours >= 12 ? "PM" : "AM")
-        .replace("A", hours >= 12 ? "PM" : "AM");
+    // Helper function to format date using date-fns
+    const formatDate = (date: Date, formatString: string): string => {
+      return format(date, formatString);
     };
 
     // Create a text file with chat history
@@ -163,8 +134,8 @@ const Chat: React.FC<ChatProps> = ({
 
     // Create filename with date and time
     const now = new Date();
-    const dateStr = now.toISOString().split("T")[0];
-    const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-");
+    const dateStr = format(now, "yyyy-MM-dd");
+    const timeStr = format(now, "HH-mm-ss");
     a.download = `chat-history-${dateStr}-${timeStr}.txt`;
 
     document.body.appendChild(a);
