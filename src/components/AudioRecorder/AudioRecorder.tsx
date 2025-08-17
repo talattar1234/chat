@@ -502,6 +502,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                 backgroundColor: isDark
                   ? "rgba(244, 67, 54, 0.15)"
                   : "rgba(244, 67, 54, 0.1)",
+                border: "2px solid",
+                borderColor: "error.main",
+                "&:hover": {
+                  borderColor: "error.dark",
+                  backgroundColor: isDark
+                    ? "rgba(244, 67, 54, 0.25)"
+                    : "rgba(244, 67, 54, 0.2)",
+                },
               }}
             >
               <CloseIcon />
@@ -527,6 +535,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                 backgroundColor: isDark
                   ? "rgba(76, 175, 80, 0.15)"
                   : "rgba(76, 175, 80, 0.1)",
+                border: "2px solid",
+                borderColor: "success.main",
+                "&:hover": {
+                  borderColor: "success.dark",
+                  backgroundColor: isDark
+                    ? "rgba(76, 175, 80, 0.25)"
+                    : "rgba(76, 175, 80, 0.2)",
+                },
               }}
             >
               <CheckCircleIcon />
