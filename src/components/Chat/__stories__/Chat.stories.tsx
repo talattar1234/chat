@@ -344,6 +344,10 @@ export const WithPendingOverlay: Story = {
     allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
     maxFileSize: 10 * 1024 * 1024, // 10MB
     pendingOverlayText: "מתחבר לשרת... אנא המתן.",
+    onThemeModeChange: (mode: "light" | "dark") => {
+      console.log("Theme changed to:", mode);
+    },
+    themeMode: "light",
   },
   parameters: {
     docs: {
@@ -605,6 +609,45 @@ console.log("Hello World!");
     docs: {
       description: {
         story: "צ'אט עם תערובת של הודעות רגילות והודעות עם Markdown.",
+      },
+    },
+  },
+};
+
+export const WithThemeSelector: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    onThemeModeChange: (mode: "light" | "dark") => {
+      console.log("Theme changed to:", mode);
+    },
+    themeMode: "light",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "צ'אט עם כפתורי בחירת theme בצד שמאל של ה-toolbar. הכפתור הפעיל מודגש בצבע primary.",
+      },
+    },
+  },
+};
+
+export const WithThemeSelectorDark: Story = {
+  args: {
+    messages: sampleMessages,
+    allowedFileTypes: [".txt", ".csv", ".pdf", ".doc", ".docx"],
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    onThemeModeChange: (mode: "light" | "dark") => {
+      console.log("Theme changed to:", mode);
+    },
+    themeMode: "dark",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "צ'אט עם כפתורי בחירת theme במצב כהה. כפתור ה-dark mode מודגש.",
       },
     },
   },

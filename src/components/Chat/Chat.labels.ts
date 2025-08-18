@@ -24,6 +24,8 @@ export interface ChatLabels {
   newChatConfirmationMessage: string;
   newChatConfirmationOK: string;
   newChatConfirmationCancel: string;
+  toggleDarkMode: string;
+  toggleLightMode: string;
 }
 
 export const chatLabels: Record<"he" | "en", ChatLabels> = {
@@ -55,6 +57,8 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     newChatConfirmationMessage: "האם ברצונך ליצור צ'אט חדש?",
     newChatConfirmationOK: "אישור",
     newChatConfirmationCancel: "ביטול",
+    toggleDarkMode: "מצב כהה",
+    toggleLightMode: "מצב בהיר",
   },
   en: {
     placeholder: "Type a message...",
@@ -84,5 +88,7 @@ export const chatLabels: Record<"he" | "en", ChatLabels> = {
     newChatConfirmationMessage: "Do you want to create a new chat?",
     newChatConfirmationOK: "OK",
     newChatConfirmationCancel: "Cancel",
+    toggleDarkMode: "Dark Mode",
+    toggleLightMode: "Light Mode",
   },
 };

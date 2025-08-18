@@ -25,6 +25,9 @@ import {
   Close as CloseIcon,
   Refresh as RefreshIcon,
   Cancel as CancelIcon,
+  DarkMode as DarkModeIcon,
+  LightMode as LightModeIcon,
+  Palette as PaletteIcon,
 } from "@mui/icons-material";
 import { format } from "date-fns";
 import { chatLabels } from "./Chat.labels";
@@ -61,6 +64,8 @@ export interface ChatProps {
   onErrorRetryClick?: () => void; // optional - callback when retry is clicked
   pendingOverlayText?: string; // optional - pending message to display as overlay
   timeFormat?: string; // optional - custom time format string. Supported tokens: yyyy/yy (year), MM/M (month), dd/d (day), HH/H (24h), hh/h (12h), mm/m (minutes), ss/s (seconds), SSS/SS/S (milliseconds), a/A (AM/PM). Defaults to "HH:mm"
+  themeMode?: "light" | "dark"; // optional - current theme mode
+  onThemeModeChange?: (mode: "light" | "dark") => void; // optional - callback when theme mode is changed
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -77,6 +82,8 @@ const Chat: React.FC<ChatProps> = ({
   onErrorRetryClick,
   pendingOverlayText,
   timeFormat = "HH:mm",
+  themeMode,
+  onThemeModeChange,
 }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -314,7 +321,7 @@ const Chat: React.FC<ChatProps> = ({
           <Box
             sx={{
               display: "flex",
-              justifyContent: "end",
+              justifyContent: "space-between",
               alignItems: "center",
               gap: 1,
               px: 2,
@@ -323,37 +330,77 @@ const Chat: React.FC<ChatProps> = ({
             }}
             className="bf-mgaic-chat__toolbar"
           >
-            <Tooltip title={t.exportChat}>
-              <IconButton
-                onClick={handleExportChat}
-                size="small"
-                sx={{
-                  p: 1,
-                  color: (theme) =>
-                    theme.palette.mode === "dark"
-                      ? "rgba(255, 255, 255, 0.7)"
-                      : "text.secondary",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.08)"
-                        : "rgba(0, 0, 0, 0.08)",
-                    color: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.9)"
-                        : "text.primary",
-                  },
-                }}
-              >
-                <DownloadIcon sx={{ fontSize: 20 }} />
-              </IconButton>
-            </Tooltip>
+            {/* Left side - Theme selector */}
+            {onThemeModeChange && (
+              <Box sx={{ display: "flex", gap: 0.5 }}>
+                <Tooltip title={t.toggleLightMode}>
+                  <IconButton
+                    onClick={() => onThemeModeChange("light")}
+                    size="small"
+                    sx={{
+                      p: 1,
+                      color: (theme) =>
+                        themeMode === "light"
+                          ? theme.palette.primary.main
+                          : theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.5)"
+                          : "text.secondary",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.08)"
+                            : "rgba(0, 0, 0, 0.08)",
+                        color: (theme) =>
+                          themeMode === "light"
+                            ? theme.palette.primary.main
+                            : theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.9)"
+                            : "text.primary",
+                      },
+                    }}
+                  >
+                    <LightModeIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={t.toggleDarkMode}>
+                  <IconButton
+                    onClick={() => onThemeModeChange("dark")}
+                    size="small"
+                    sx={{
+                      p: 1,
+                      color: (theme) =>
+                        themeMode === "dark"
+                          ? theme.palette.primary.main
+                          : theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.5)"
+                          : "text.secondary",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.08)"
+                            : "rgba(0, 0, 0, 0.08)",
+                        color: (theme) =>
+                          themeMode === "dark"
+                            ? theme.palette.primary.main
+                            : theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.9)"
+                            : "text.primary",
+                      },
+                    }}
+                  >
+                    <DarkModeIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            )}
 
-            {onNewChatClick && (
-              <Tooltip title={t.newChat}>
+            {/* Right side - Export and New Chat buttons */}
+            <Box sx={{ display: "flex", gap: 1, marginLeft: "auto" }}>
+              <Tooltip title={t.exportChat}>
                 <IconButton
-                  onClick={handleNewChat}
+                  onClick={handleExportChat}
                   size="small"
                   sx={{
                     p: 1,
@@ -374,10 +421,39 @@ const Chat: React.FC<ChatProps> = ({
                     },
                   }}
                 >
-                  <AddIcon sx={{ fontSize: 20 }} />
+                  <DownloadIcon sx={{ fontSize: 20 }} />
                 </IconButton>
               </Tooltip>
-            )}
+
+              {onNewChatClick && (
+                <Tooltip title={t.newChat}>
+                  <IconButton
+                    onClick={handleNewChat}
+                    size="small"
+                    sx={{
+                      p: 1,
+                      color: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "rgba(255, 255, 255, 0.7)"
+                          : "text.secondary",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.08)"
+                            : "rgba(0, 0, 0, 0.08)",
+                        color: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(255, 255, 255, 0.9)"
+                            : "text.primary",
+                      },
+                    }}
+                  >
+                    <AddIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
           </Box>
 
           {/* Error Banner */}
