@@ -9,7 +9,7 @@ const meta: Meta<typeof BubbleBackground> = {
     layout: "fullscreen",
     docs: {
       description: {
-        component: "רקע עם אנימציה של כוכבים/בועות נעים",
+        component: "Background with animation of moving stars/bubbles",
       },
     },
   },
@@ -56,10 +56,10 @@ export const WithContent: Story = {
               textShadow: "0 0 20px rgba(255,255,255,0.5)",
             }}
           >
-            תוכן מעל הרקע
+            Content over background
           </h1>
           <p style={{ fontSize: "1.2rem", opacity: 0.8 }}>
-            הרקע עם האנימציה נראה מאחורי התוכן
+            The background with animation appears behind the content
           </p>
         </Box>
       </Box>

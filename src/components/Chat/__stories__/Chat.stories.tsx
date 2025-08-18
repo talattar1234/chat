@@ -232,7 +232,7 @@ export const BeautifulBackground: Story = {
     docs: {
       description: {
         story:
-          "צ'אט עם רקע עדין וציורים דקים כמו בוואטסאפ, כולל גרדיאנט עדין וציורי SVG של עיגולים וכוכבים. תומך ב-light ו-dark theme.",
+          "Chat with subtle background and thin drawings like WhatsApp, including a gentle gradient and SVG drawings of circles and stars. Supports light and dark theme.",
       },
     },
   },
@@ -279,7 +279,7 @@ export const DarkThemeBackground: Story = {
     docs: {
       description: {
         story:
-          "צ'אט עם רקע עדין ב-dark theme, כולל גרדיאנט כהה וציורי SVG עדינים יותר.",
+          "Chat with subtle background in dark theme, including a dark gradient and more subtle SVG drawings.",
       },
     },
   },
@@ -297,7 +297,7 @@ export const WithErrorOverlay: Story = {
     docs: {
       description: {
         story:
-          "צ'אט עם חיווי שגיאה בראש הצ'אט. השגיאה מוצגת כבאנר עם אנימציות יפות וכפתור 'נסה שוב'.",
+          "Chat with error banner at the top. The error is displayed with beautiful animations and retry button.",
       },
     },
   },
@@ -332,7 +332,7 @@ export const WithErrorOverlayNoRetry: Story = {
   parameters: {
     docs: {
       description: {
-        story: "צ'אט עם חיווי שגיאה ללא כפתור 'נסה שוב'.",
+        story: "Chat with error banner without retry button.",
       },
     },
   },
@@ -352,7 +352,8 @@ export const WithPendingOverlay: Story = {
   parameters: {
     docs: {
       description: {
-        story: "צ'אט עם חיווי pending בראש הצ'אט. מוצג עם ספינר בלבד.",
+        story:
+          "Chat with pending banner at the top. Displayed with spinner only.",
       },
     },
   },
@@ -530,7 +531,7 @@ export const WithMarkdown: Story = {
     docs: {
       description: {
         story:
-          "צ'אט עם תמיכה ב-Markdown. הודעות ה-AI יכולות לכלול כותרות, טקסט מודגש, קוד, ציטוטים ועוד.",
+          "Chat with Markdown support. AI messages can include headings, bold text, code, quotes and more.",
       },
     },
   },
@@ -563,7 +564,7 @@ export const ComplexMarkdown: Story = {
     docs: {
       description: {
         story:
-          "דוגמה מורכבת של Markdown עם קוד TypeScript, רשימות, ציטוטים וקישורים.",
+          "Complex Markdown example with TypeScript code, lists, quotes and links.",
       },
     },
   },
@@ -608,7 +609,8 @@ console.log("Hello World!");
   parameters: {
     docs: {
       description: {
-        story: "צ'אט עם תערובת של הודעות רגילות והודעות עם Markdown.",
+        story:
+          "Chat with a mix of regular messages and messages with Markdown.",
       },
     },
   },
@@ -628,7 +630,7 @@ export const WithThemeSelector: Story = {
     docs: {
       description: {
         story:
-          "צ'אט עם כפתורי בחירת theme בצד שמאל של ה-toolbar. הכפתור הפעיל מודגש בצבע primary.",
+          "Chat with theme selection buttons on the left side of the toolbar. The active button is highlighted with primary color.",
       },
     },
   },
@@ -647,7 +649,8 @@ export const WithThemeSelectorDark: Story = {
   parameters: {
     docs: {
       description: {
-        story: "צ'אט עם כפתורי בחירת theme במצב כהה. כפתור ה-dark mode מודגש.",
+        story:
+          "Chat with theme selection buttons in dark mode. The dark mode button is highlighted.",
       },
     },
   },
