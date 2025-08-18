@@ -190,6 +190,7 @@ const Chat: React.FC<ChatProps> = ({
         flexDirection: "column",
         position: "relative",
       }}
+      className="bf-mgaic-chat"
     >
       {/* <div
         style={{
@@ -285,6 +286,7 @@ const Chat: React.FC<ChatProps> = ({
               : "linear-gradient(45deg, transparent 30%, rgba(233, 30, 99, 0.02) 50%, transparent 70%), linear-gradient(-45deg, transparent 30%, rgba(0, 150, 136, 0.02) 50%, transparent 70%)",
           },
         }}
+        className="bf-mgaic-chat__messages-area"
       >
         {/* Sticky Toolbar inside Messages Area */}
         <Box
@@ -319,6 +321,7 @@ const Chat: React.FC<ChatProps> = ({
               py: 1,
               minHeight: "48px",
             }}
+            className="bf-mgaic-chat__toolbar"
           >
             <Tooltip title={t.exportChat}>
               <IconButton
@@ -407,6 +410,7 @@ const Chat: React.FC<ChatProps> = ({
                   },
                 },
               }}
+              className="bf-mgaic-chat__error-overlay"
             >
               <Alert
                 severity="error"
@@ -550,6 +554,7 @@ const Chat: React.FC<ChatProps> = ({
                   },
                 },
               }}
+              className="bf-mgaic-chat__pending-overlay"
             >
               <Alert
                 severity="info"
@@ -682,6 +687,7 @@ const Chat: React.FC<ChatProps> = ({
               : "linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)",
           },
         }}
+        className="bf-mgaic-chat__input-area"
       >
         <ChatInput
           onMessageEnter={onMessageEnter || (() => {})}
@@ -727,6 +733,7 @@ const Chat: React.FC<ChatProps> = ({
             maxWidth: "400px",
           },
         }}
+        className="bf-mgaic-chat__new-chat-confirmation-dialog"
       >
         <DialogTitle
           sx={{
@@ -736,6 +743,7 @@ const Chat: React.FC<ChatProps> = ({
             fontSize: "1.1rem",
             pb: 1,
           }}
+          className="bf-mgaic-chat__new-chat-confirmation-dialog-title"
         >
           {t.newChatConfirmationTitle}
         </DialogTitle>
@@ -745,6 +753,7 @@ const Chat: React.FC<ChatProps> = ({
             direction: lang === "he" ? "rtl" : "ltr",
             pb: 2,
           }}
+          className="bf-mgaic-chat__new-chat-confirmation-dialog-content"
         >
           <Typography variant="body1">
             {t.newChatConfirmationMessage}

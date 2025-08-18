@@ -201,6 +201,7 @@ const ChatInput = React.memo<ChatInputProps>(
                   "&:hover": { background: "text.primary" },
                 },
               }}
+              className="bf-mgaic-chat__selected-files"
             >
               {selectedFiles.map((file, index) => (
                 <Chip
@@ -226,7 +227,10 @@ const ChatInput = React.memo<ChatInputProps>(
             </Box>
 
             {/* File size progress bar */}
-            <Box sx={{ mb: 1 }}>
+            <Box
+              sx={{ mb: 1 }}
+              className="bf-mgaic-chat__file-size-progress-bar"
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -308,7 +312,11 @@ const ChatInput = React.memo<ChatInputProps>(
             </Box>
 
             {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
+              <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+                className="bf-mgaic-chat__files-error-alert"
+              >
                 {error}
               </Alert>
             )}
@@ -316,7 +324,10 @@ const ChatInput = React.memo<ChatInputProps>(
         )}
 
         {/* Input Field */}
-        <Box sx={{ display: "flex", gap: 1, alignItems: "end" }}>
+        <Box
+          sx={{ display: "flex", gap: 1, alignItems: "end" }}
+          className="bf-magic-chat__input-field"
+        >
           <TextField
             fullWidth
             multiline
@@ -392,6 +403,7 @@ const ChatInput = React.memo<ChatInputProps>(
 
           <Tooltip title={isLoading ? stopGenerationLabel : placeholder}>
             <IconButton
+              className="bf-magic-chat__send-button"
               color={isLoading ? "error" : "primary"}
               onClick={isLoading ? handleStopClick : handleSendMessage}
               disabled={

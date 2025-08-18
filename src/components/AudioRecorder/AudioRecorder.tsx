@@ -27,9 +27,6 @@ import { speechToText } from "../../utils/speechToText";
 import WaveSurfer from "wavesurfer.js";
 import { audioRecorderLabels } from "./AudioRecorder.labels";
 
-// Check if the function is loaded
-console.log("speechToText function loaded:", typeof speechToText);
-
 interface AudioRecorderProps {
   onTextResult: (text: string) => void;
   onError?: (error: string) => void;
@@ -45,12 +42,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   lang = "he",
   disabled = false,
 }) => {
-  console.log("AudioRecorder props:", {
-    onTextResult: typeof onTextResult,
-    onError: typeof onError,
-    lang,
-  });
-
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -263,22 +254,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       return;
     }
 
-    console.log("Starting speech to text conversion...");
-    console.log("Audio blob size:", audioBlob.size);
     setIsProcessing(true);
     setSpeechError(null); // Reset previous errors when trying again
 
     try {
-      console.log("Calling speechToText...");
       const text = await speechToText(audioBlob);
-      console.log("Speech to text result:", text);
 
-      console.log("Calling onTextResult...");
       onTextResult(text);
-      console.log("Text sent to parent component");
 
-      // Only if successful - close the dialog
-      console.log("Calling handleClose...");
       handleClose();
     } catch (error) {
       console.error("Speech to text error:", error);
@@ -288,13 +271,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       onError?.(errorMessage);
       // Don't close the dialog - let the user try again or cancel
     } finally {
-      console.log("Setting isProcessing to false");
       setIsProcessing(false);
     }
   };
 
   const handleClose = () => {
-    console.log("Closing dialog...");
     setShowDialog(false);
     setAudioBlob(null);
     if (audioUrl) {
@@ -310,7 +291,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       wavesurferRef.current.destroy();
       wavesurferRef.current = null;
     }
-    console.log("Dialog closed");
   };
 
   const formatTime = (seconds: number) => {
@@ -395,6 +375,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           display: "flex",
           alignItems: "center",
         }}
+        className="bf-mgaic-chat-audio-recorder__live-waveform"
       >
         <Box
           sx={{
@@ -406,6 +387,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             px: 1,
             width: "100%",
           }}
+          className="bf-mgaic-chat-audio-recorder__live-waveform-box"
         >
           {audioLevels.map((level, index) => (
             <Box
@@ -431,7 +413,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <Box
+        className="bf-mgaic-chat-audio-recorder__button-container"
+        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+      >
         {!isRecording ? (
           /* כפתור מיקרופון להתחלת הקלטה */
           <IconButton
@@ -449,7 +434,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           /* בזמן הקלטה - טיימר, waveform, וכפתורים */
           <>
             {/* טיימר בזמן הקלטה */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+              className="bf-mgaic-chat-audio-recorder__timer-box"
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
               <Typography
                 variant="body2"
                 sx={{ minWidth: 60, fontWeight: "bold" }}
@@ -457,7 +445,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                 {formatTime(recordingTime)}
               </Typography>
 
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box
+                className="bf-mgaic-chat-audio-recorder__recording-status-box"
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
                 {/* עיגול אדום מהבהב */}
                 <Box
                   sx={{
@@ -484,6 +475,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
             {/* כפתור ביטול */}
             <IconButton
+              className="bf-mgaic-chat-audio-recorder__cancel-button"
               color="error"
               onClick={cancelRecording}
               disabled={isProcessing}
@@ -517,6 +509,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
             {/* כפתור אישור */}
             <IconButton
+              className="bf-mgaic-chat-audio-recorder__confirm-button"
               color="success"
               onClick={confirmRecording}
               disabled={isProcessing}
@@ -553,6 +546,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       {/* Dialog להצגת האודיו */}
       <Dialog
+        className="bf-mgaic-chat-audio-recorder__dialog"
         open={showDialog}
         onClose={handleClose}
         maxWidth="md"
@@ -573,9 +567,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           },
         }}
       >
-        <DialogTitle>{t.audioRecording}</DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 2 }}>
+        <DialogTitle className="bf-mgaic-chat-audio-recorder__dialog-title">
+          {t.audioRecording}
+        </DialogTitle>
+        <DialogContent className="bf-mgaic-chat-audio-recorder__dialog-content">
+          <Box
+            className="bf-mgaic-chat-audio-recorder__dialog-content-box"
+            sx={{ mt: 2 }}
+          >
             {audioUrl && (
               <>
                 {/* Waveform של האודיו המוקלט */}
@@ -600,6 +599,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
                 {/* כפתורי נגינה */}
                 <Box
+                  className="bf-mgaic-chat-audio-recorder__play-pause-button"
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -619,7 +619,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                   </Button>
 
                   {/* אינדיקטור סטטוס */}
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box
+                    className="bf-mgaic-chat-audio-recorder__status-box"
+                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  >
                     <Box
                       sx={{
                         width: 8,
@@ -649,26 +652,38 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             )}
 
             {isProcessing && (
-              <Alert severity="info" sx={{ mt: 2 }}>
+              <Alert
+                className="bf-mgaic-chat-audio-recorder__processing-alert"
+                severity="info"
+                sx={{ mt: 2 }}
+              >
                 <LinearProgress sx={{ mb: 1 }} />
                 {t.convertingAudio}
               </Alert>
             )}
 
             {speechError && (
-              <Alert severity="error" sx={{ mt: 2 }}>
+              <Alert
+                className="bf-mgaic-chat-audio-recorder__speech-error-alert"
+                severity="error"
+                sx={{ mt: 2 }}
+              >
                 {speechError}
               </Alert>
             )}
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} startIcon={<CloseIcon />}>
+          <Button
+            className="bf-mgaic-chat-audio-recorder__cancel-button"
+            onClick={handleClose}
+            startIcon={<CloseIcon />}
+          >
             {t.cancel}
           </Button>
           <Button
+            className="bf-mgaic-chat-audio-recorder__confirm-button"
             onClick={() => {
-              console.log("Confirm button clicked");
               handleConfirm();
             }}
             variant="contained"

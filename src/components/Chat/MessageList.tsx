@@ -297,6 +297,7 @@ const MessageList = React.memo<MessageListProps>(
 
     return (
       <List
+        className="bf-mgaic-chat__messages-list"
         sx={{
           overflowX: "hidden",
           "&::-webkit-scrollbar": {
@@ -334,6 +335,7 @@ const MessageList = React.memo<MessageListProps>(
         {/* Welcome message if no messages */}
         {messages.length === 0 && (
           <ListItem
+            className="bf-mgaic-chat__welcome-message"
             sx={{
               flexDirection: "column",
               alignItems: "start",
@@ -341,6 +343,7 @@ const MessageList = React.memo<MessageListProps>(
             }}
           >
             <Box
+              className="bf-mgaic-chat__welcome-message-box"
               sx={{
                 display: "flex",
                 alignItems: "start",
@@ -431,6 +434,7 @@ const MessageList = React.memo<MessageListProps>(
 
         {messages.map((message) => (
           <ListItem
+            className="bf-mgaic-chat__message"
             key={message.id}
             sx={{
               flexDirection: "column",
@@ -439,6 +443,7 @@ const MessageList = React.memo<MessageListProps>(
             }}
           >
             <Box
+              className="bf-mgaic-chat__message-box"
               sx={{
                 display: "flex",
                 alignItems: "start",
@@ -532,6 +537,7 @@ const MessageList = React.memo<MessageListProps>(
                 {/* Display attached files */}
                 {message.files && message.files.length > 0 && (
                   <Box
+                    className="bf-mgaic-chat__message-files"
                     sx={{
                       mt: 1,
                       maxHeight: "80px",
@@ -592,6 +598,7 @@ const MessageList = React.memo<MessageListProps>(
                   >
                     {message.files.map((file, index) => (
                       <Chip
+                        className="bf-mgaic-chat__message-file-chip"
                         key={index}
                         icon={<span>{getFileIcon(file.name)}</span>}
                         label={`${file.name} (${formatFileSize(file.size)})`}
