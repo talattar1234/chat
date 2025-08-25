@@ -36,6 +36,7 @@ interface MessageListProps {
   copiedToClipboardLabel: string;
   isLoading?: boolean;
   aiThinkingLabel?: string;
+  showWelcomeMessage?: boolean;
 }
 
 const MessageList = React.memo<MessageListProps>(
@@ -49,6 +50,7 @@ const MessageList = React.memo<MessageListProps>(
     copiedToClipboardLabel,
     isLoading = false,
     aiThinkingLabel = "AI is thinking...",
+    showWelcomeMessage = true,
   }) => {
     const theme = useTheme();
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -490,8 +492,9 @@ const MessageList = React.memo<MessageListProps>(
           },
         }}
       >
-        {/* Welcome message if no messages */}
-        {messages.length === 0 && (
+        {/* Welcome message if no messages and showWelcomeMessage is true */}
+        {/* {messages.length === 0 && showWelcomeMessage && ( */}
+        {showWelcomeMessage && (
           <ListItem
             className="bf-mgaic-chat__welcome-message"
             sx={{

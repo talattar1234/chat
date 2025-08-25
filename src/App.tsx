@@ -56,14 +56,8 @@ const darkTheme = createTheme({
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [timeFormat, setTimeFormat] = useState<string>("HH:mm");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      text: "שלום! איך אני יכול לעזור לך היום?",
-      sender: "ai",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState<string | undefined>(undefined);
   const [pendingText, setPendingText] = useState<string | undefined>(undefined);
@@ -215,6 +209,15 @@ function App() {
             sx={{ fontSize: "0.75rem" }}
           >
             {timeFormat}
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            onClick={() => setShowWelcomeMessage(!showWelcomeMessage)}
+            sx={{ fontSize: "0.75rem" }}
+          >
+            {showWelcomeMessage ? "הסתר הודעת פתיחה" : "הצג הודעת פתיחה"}
           </Button>
         </Box>
 

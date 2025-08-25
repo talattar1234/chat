@@ -66,6 +66,7 @@ export interface ChatProps {
   timeFormat?: string; // optional - custom time format string. Supported tokens: yyyy/yy (year), MM/M (month), dd/d (day), HH/H (24h), hh/h (12h), mm/m (minutes), ss/s (seconds), SSS/SS/S (milliseconds), a/A (AM/PM). Defaults to "HH:mm"
   themeMode?: "light" | "dark"; // optional - current theme mode
   onThemeModeChange?: (mode: "light" | "dark") => void; // optional - callback when theme mode is changed
+  showWelcomeMessage?: boolean; // optional - whether to show the welcome message when no messages exist. Defaults to true
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -84,6 +85,7 @@ const Chat: React.FC<ChatProps> = ({
   timeFormat = "HH:mm",
   themeMode,
   onThemeModeChange,
+  showWelcomeMessage = true,
 }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -737,6 +739,7 @@ const Chat: React.FC<ChatProps> = ({
             copiedToClipboardLabel={t.copiedToClipboard}
             isLoading={isLoading}
             aiThinkingLabel={t.aiThinking}
+            showWelcomeMessage={showWelcomeMessage}
           />
         </Box>
       </Box>
