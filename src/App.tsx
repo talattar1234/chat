@@ -135,6 +135,10 @@ function App() {
     setTimeFormat(formats[nextIndex]);
   };
 
+  const clearMessages = () => {
+    setMessages([]);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -231,6 +235,7 @@ function App() {
           onErrorRetryClick={handleErrorRetry}
           pendingOverlayText={pendingText}
           timeFormat={timeFormat}
+          showWelcomeMessage={showWelcomeMessage}
         />
       </Box>
     </ThemeProvider>
