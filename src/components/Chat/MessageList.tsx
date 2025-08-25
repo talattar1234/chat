@@ -9,6 +9,7 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  useTheme,
 } from "@mui/material";
 import {
   Person as PersonIcon,
@@ -16,6 +17,12 @@ import {
   ContentCopy as CopyIcon,
 } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {
+  oneDark,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
 import { format } from "date-fns";
 import { Message } from "./Chat";
 
@@ -43,6 +50,7 @@ const MessageList = React.memo<MessageListProps>(
     isLoading = false,
     aiThinkingLabel = "AI is thinking...",
   }) => {
+    const theme = useTheme();
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Helper function to format date using date-fns
@@ -180,24 +188,88 @@ const MessageList = React.memo<MessageListProps>(
           {children}
         </Typography>
       ),
-      code: ({ children, ...props }: any) => (
-        <Typography
-          component="code"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "dark"
-                ? "rgba(255, 255, 255, 0.15)"
-                : "rgba(0, 0, 0, 0.1)",
-            padding: "2px 4px",
-            borderRadius: "4px",
-            fontFamily: "monospace",
-            fontSize: "0.875em",
-          }}
-          {...props}
-        >
-          {children}
-        </Typography>
-      ),
+      code: ({ node, inline, className, children, ...props }: any) => {
+        const match = /language-(\w+)/.exec(className || "");
+        const language = match ? match[1] : "";
+
+        if (inline) {
+          return (
+            <Typography
+              component="code"
+              sx={{
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.15)"
+                    : "rgba(0, 0, 0, 0.1)",
+                padding: "2px 4px",
+                borderRadius: "4px",
+                fontFamily: "monospace",
+                fontSize: "0.875em",
+              }}
+              {...props}
+            >
+              {children}
+            </Typography>
+          );
+        }
+
+        return (
+          <Box
+            sx={{
+              position: "relative",
+              mb: 2,
+              borderRadius: 1,
+              overflow: "hidden",
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            {language && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  zIndex: 1,
+                  px: 1.5,
+                  py: 0.5,
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  color: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.8)"
+                      : "rgba(0, 0, 0, 0.7)",
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.15)"
+                      : "rgba(0, 0, 0, 0.08)",
+                  borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                  borderLeft: (theme) => `1px solid ${theme.palette.divider}`,
+                  borderBottomLeftRadius: 4,
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                }}
+              >
+                {language.toUpperCase()}
+              </Box>
+            )}
+            <SyntaxHighlighter
+              style={theme.palette.mode === "dark" ? oneDark : oneLight}
+              language={language || "text"}
+              PreTag="div"
+              customStyle={{
+                margin: 0,
+                padding: "16px",
+                fontSize: "0.875rem",
+                lineHeight: 1.5,
+                borderRadius: 0,
+              }}
+              {...props}
+            >
+              {String(children).replace(/\n$/, "")}
+            </SyntaxHighlighter>
+          </Box>
+        );
+      },
       pre: ({ children, ...props }: any) => (
         <Box
           component="pre"
@@ -268,6 +340,87 @@ const MessageList = React.memo<MessageListProps>(
           {children}
         </Typography>
       ),
+      table: ({ children, ...props }: any) => (
+        <Box
+          component="table"
+          sx={{
+            width: "100%",
+            borderCollapse: "collapse",
+            mb: 2,
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+            overflow: "hidden",
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
+      thead: ({ children, ...props }: any) => (
+        <Box
+          component="thead"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.08)"
+                : "rgba(0, 0, 0, 0.05)",
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
+      tbody: ({ children, ...props }: any) => (
+        <Box component="tbody" {...props}>
+          {children}
+        </Box>
+      ),
+      tr: ({ children, ...props }: any) => (
+        <Box
+          component="tr"
+          sx={{
+            borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            "&:last-child": {
+              borderBottom: "none",
+            },
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
+      th: ({ children, ...props }: any) => (
+        <Box
+          component="th"
+          sx={{
+            padding: 1,
+            textAlign: "start",
+            fontWeight: "bold",
+            borderRight: (theme) => `1px solid ${theme.palette.divider}`,
+            "&:last-child": {
+              borderRight: "none",
+            },
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
+      td: ({ children, ...props }: any) => (
+        <Box
+          component="td"
+          sx={{
+            padding: 1,
+            borderRight: (theme) => `1px solid ${theme.palette.divider}`,
+            "&:last-child": {
+              borderRight: "none",
+            },
+          }}
+          {...props}
+        >
+          {children}
+        </Box>
+      ),
     };
 
     // Function to render message content with markdown support
@@ -277,7 +430,12 @@ const MessageList = React.memo<MessageListProps>(
 
       if (hasMarkdown) {
         return (
-          <ReactMarkdown components={markdownComponents}>{text}</ReactMarkdown>
+          <ReactMarkdown
+            components={markdownComponents}
+            remarkPlugins={[remarkGfm]}
+          >
+            {text}
+          </ReactMarkdown>
         );
       } else {
         return (
