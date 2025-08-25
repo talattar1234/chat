@@ -786,27 +786,30 @@ const Chat: React.FC<ChatProps> = ({
 
       {/* New Chat Confirmation Dialog */}
       <Dialog
+        sx={{ zIndex: 100000 }}
         open={showNewChatConfirmation}
         onClose={handleCancelNewChat}
-        PaperProps={{
-          sx: {
-            borderRadius: "16px",
-            background: (theme) =>
-              theme.palette.mode === "dark"
-                ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
-                : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: (theme) =>
-              theme.palette.mode === "dark"
-                ? "1px solid rgba(255, 255, 255, 0.1)"
-                : "1px solid rgba(0, 0, 0, 0.1)",
-            boxShadow: (theme) =>
-              theme.palette.mode === "dark"
-                ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-                : "0 8px 32px rgba(0, 0, 0, 0.1)",
-            minWidth: "300px",
-            maxWidth: "400px",
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: "16px",
+              background: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
+                  : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  : "1px solid rgba(0, 0, 0, 0.1)",
+              boxShadow: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.1)",
+              minWidth: "300px",
+              maxWidth: "400px",
+            },
           },
         }}
         className="bf-mgaic-chat__new-chat-confirmation-dialog"

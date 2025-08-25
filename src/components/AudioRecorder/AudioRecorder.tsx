@@ -546,24 +546,27 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
       {/* Dialog להצגת האודיו */}
       <Dialog
+        sx={{ zIndex: 100000 }}
         className="bf-mgaic-chat-audio-recorder__dialog"
         open={showDialog}
         onClose={handleClose}
         maxWidth="md"
         fullWidth
-        PaperProps={{
-          sx: {
-            background: isDark
-              ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
-              : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: isDark
-              ? "1px solid rgba(255, 255, 255, 0.15)"
-              : "1px solid rgba(0, 0, 0, 0.1)",
-            boxShadow: isDark
-              ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-              : "0 8px 32px rgba(0, 0, 0, 0.1)",
+        slotProps={{
+          paper: {
+            sx: {
+              background: isDark
+                ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))"
+                : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9))",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: isDark
+                ? "1px solid rgba(255, 255, 255, 0.15)"
+                : "1px solid rgba(0, 0, 0, 0.1)",
+              boxShadow: isDark
+                ? "0 8px 32px rgba(0, 0, 0, 0.3)"
+                : "0 8px 32px rgba(0, 0, 0, 0.1)",
+            },
           },
         }}
       >
