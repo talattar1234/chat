@@ -22,6 +22,10 @@ import {
   AttachFile as AttachFileIcon,
   DeleteSweep as DeleteSweepIcon,
   Warning as WarningIcon,
+  PictureAsPdf,
+  Article,
+  TableChart,
+  Description,
 } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder/AudioRecorder";
 
@@ -140,14 +144,14 @@ const ChatInput = React.memo<ChatInputProps>(
       const extension = fileName.split(".").pop()?.toLowerCase();
       switch (extension) {
         case "pdf":
-          return "📄";
+          return <PictureAsPdf />;
         case "doc":
         case "docx":
-          return "📝";
+          return <Article />;
         case "txt":
-          return "📄";
+          return <Description />;
         case "csv":
-          return "📊";
+          return <TableChart />;
         default:
           return "📎";
       }

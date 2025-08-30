@@ -83,14 +83,14 @@ const MessageList = React.memo<MessageListProps>(
       const extension = fileName.split(".").pop()?.toLowerCase();
       switch (extension) {
         case "pdf":
-          return "📄";
+          return <PictureAsPdf />;
         case "doc":
         case "docx":
-          return "📝";
+          return <Article />;
         case "txt":
-          return "📄";
+          return <Description />;
         case "csv":
-          return "📊";
+          return <TableChart />;
         default:
           return "📎";
       }

@@ -822,7 +822,7 @@ const Chat: React.FC<ChatProps> = ({
             textAlign: "start",
             direction: lang === "he" ? "rtl" : "ltr",
             fontWeight: 400,
-            fontSize: "1.1rem",
+            // fontSize: "1.1rem",
             pb: 1,
           }}
           className="bf-mgaic-chat__new-chat-confirmation-dialog-title"
