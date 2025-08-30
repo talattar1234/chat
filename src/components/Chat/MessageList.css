@@ -1,0 +1,22 @@
+/* MessageList Styles */
+.bf-mgaic-chat__welcome-list-item {
+  flex-direction: column !important;
+  align-items: start !important;
+}
+
+.bf-mgaic-chat__message-list-item {
+  flex-direction: column !important;
+}
+
+.bf-mgaic-chat__message-list-item--user {
+  align-items: end !important;
+}
+
+.bf-mgaic-chat__message-list-item--ai {
+  align-items: start !important;
+}
+
+.bf-mgaic-chat__typing-list-item {
+  flex-direction: column !important;
+  align-items: start !important;
+}
