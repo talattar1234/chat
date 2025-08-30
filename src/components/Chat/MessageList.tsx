@@ -15,6 +15,10 @@ import {
   Person as PersonIcon,
   SupportAgent as AIIcon,
   ContentCopy as CopyIcon,
+  PictureAsPdf,
+  Article,
+  Description,
+  TableChart,
 } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
